@@ -1,0 +1,56 @@
+CACHE MANIFEST
+# Last Updated: 2015-05-23 13:21
+
+# Make files available offline
+index.html
+images/appblue.png
+images/poweroffw.png
+images/poweroff.png
+images/apps.png
+images/b1.jpg
+images/apps57.png
+images/apps72.png
+images/apps80.png
+images/apps114.png
+images/app512.png
+images/appsIconPreComposed.png
+images/appsIconStartUp320by460.png
+images/accept.png
+images/asterisk_red.png
+images/asterisk_yellow.png
+images/exclamation.png
+images/exportexcel.png
+images/records.png
+css/toastr.min.css
+css/jqm-datebox.css
+css/animate.css
+css/addtohomescreen.css
+css/jquery.mobile-1.4.5.min.css
+js/jquery.min.js
+js/jquery.mobile-1.4.5.min.js
+js/navbar.js
+js/jqm-datebox.core.js
+js/jqm-datebox.mode.slidebox.js
+js/jqm-datebox.mode.flipbox.js
+js/jqm-datebox.mode.datebox.js
+js/jqm-datebox.mode.customflip.js
+js/jqm-datebox.mode.custombox.js
+js/jqm-datebox.mode.calbox.js
+js/toastr.min.js
+js/fastclick.js
+js/html5.js
+js/stanfordcryptolibrary.js
+js/excellentexport.min.js
+js/d3.min.js
+js/d3tree.js
+js/addtohomescreen.min.js
+js/remoteserver.js
+js/support.js
+js/app.js
+js/toastr.js.map
+js/jquery.min.map
+js/jquery.mobile-1.4.5.min.map
+savepng.php
+
+#These files require network connection
+NETWORK
