@@ -4,7 +4,7 @@ $(function() {
     //variables to hold the indexedDB database.
     var dbDatabase;
     var dbNome = "Database";
-    var dbVersion = 1;
+    var dbVersion = 2;
     var pgtransition = 'slide';
     (function(app) {
         // variable definitions go here
@@ -37,6 +37,9 @@ $(function() {
                     // thisDB.createObjectStore("Categoria", { autoIncrement: true });
                     // create index to 'Nome' for conditional search
                     // store.createIndex('Nome', 'Nome', {unique: false });
+                }
+                if (!thisDB.objectStoreNomes.contains("Lancamento")) {
+                    store = thisDB.createObjectStore("Lancamento", { keyPath: "LancamentoID" });
                 }
             };
             //the database was opened successfully
