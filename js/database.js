@@ -7,6 +7,7 @@ var dbVersion = 1;
 var pgtransition = 'slide';
 //window.indexedDB.deleteDatabase(dbNome);
 
+var request = indexedDB.open(dbNome, dbVersion);
 
 request.onupgradeneeded = function(e) {
    var thisDB = e.target.result;
@@ -15,19 +16,16 @@ request.onupgradeneeded = function(e) {
    //create the necessary tables for the application
    // create an indexedDB for IndexedDB-Categoria
    if (!thisDB.objectStoreNames.contains("Categoria")) {
-	   // create objectStore for PrimaryKey as keyPath="Nome"
 	   store = thisDB.createObjectStore("Categoria", { keyPath: "Nome"});
-		//store = thisDB.createObjectStore("Categoria", { keyPath: "LancamentoID" },autoIncrement:true);
-	   // thisDB.createObjectStore("Categoria", { autoIncrement: true });
-	   // create index to 'Nome' for conditional search
-	   // store.createIndex('Nome', 'Nome', {unique: false });
    }
    if (!thisDB.objectStoreNames.contains("Lancamento")) {
-	   store = thisDB.createObjectStore("Lancamento", { keyPath: "Nome" });
+		store = thisDB.createObjectStore("Lancamento", { keyPath: "LancamentoID", autoIncrement:true });
+	    store.createIndex('Descricao', 'Descricao', {unique: false });
+		store.createIndex('Categoria', 'Categoria', {unique: false });
+		store.createIndex('Valor', 'Valor', {unique: false });
    }
 };
 
-var request = indexedDB.open(dbNome, dbVersion);
 
 //the database was opened successfully
 request.onsuccess = function(e) {
