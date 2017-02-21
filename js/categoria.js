@@ -1,19 +1,21 @@
+
+var Database = {};
+//variables to hold the indexedDB database.
+var dbDatabase;
+var dbNome = "dbCash";
+var dbVersion = 1;
+var pgtransition = 'slide';
+//window.indexedDB.deleteDatabase(dbNome);
 $(function() {
     // define the application
-    var Database = {};
-    //variables to hold the indexedDB database.
-    var dbDatabase;
-    var dbNome = "Database";
-    var dbVersion = 2;
-    var pgtransition = 'slide';
-    (function(app) {
+    (function(categoria) {
         // variable definitions go here
         var CategoriaLi = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
         //var CategoriaLi = '<li><a data-id="Z2"><h2>Z1</h2><p>DESCRIPTION</p><p><span class="ui-li-count">COUNTBUBBLE</span></p></a></li>';
         var CategoriaLiRi = '<li><a data-id="Z2">Z1</a></li>';
         var CategoriaHdr = '<li data-role="list-divider">Your Categorias</li>';
         var noCategoria = '<li id="noCategoria">You have no Categorias</li>';
-        app.init = function() {
+        categoria.init = function() {
             // hide the address bar when the window is ready
             window.addEventListener("load", function() {
                 setTimeout(function() { window.scrollTo(0, 1) }, 0);
@@ -29,30 +31,32 @@ $(function() {
             request.onupgradeneeded = function(e) {
                 var thisDB = e.target.result;
                 var store = null;
+				
                 //create the necessary tables for the application
                 // create an indexedDB for IndexedDB-Categoria
-                if (!thisDB.objectStoreNomes.contains("Categoria")) {
+                if (!thisDB.objectStoreNames.contains("Categoria")) {
                     // create objectStore for PrimaryKey as keyPath="Nome"
-                    store = thisDB.createObjectStore("Categoria", { keyPath: "Nome" });
+                    store = thisDB.createObjectStore("Categoria", { keyPath: "Nome"});
+					//store = thisDB.createObjectStore("Categoria", { keyPath: "LancamentoID" },autoIncrement:true);
                     // thisDB.createObjectStore("Categoria", { autoIncrement: true });
                     // create index to 'Nome' for conditional search
                     // store.createIndex('Nome', 'Nome', {unique: false });
                 }
-                if (!thisDB.objectStoreNomes.contains("Lancamento")) {
-                    store = thisDB.createObjectStore("Lancamento", { keyPath: "LancamentoID" });
+                if (!thisDB.objectStoreNames.contains("Lancamento")) {
+                    store = thisDB.createObjectStore("Lancamento", { keyPath: "Nome" });
                 }
             };
             //the database was opened successfully
             request.onsuccess = function(e) {
                 dbDatabase = e.target.result;
             }
-            app.CategoriaBindings();
+            categoria.CategoriaBindings();
             $('#msgboxyes').on('click', function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
                 var yesmethod = $('#msgboxyes').data('method');
                 var yesid = $('#msgboxyes').data('id');
-                app[yesmethod](yesid);
+                categoria[yesmethod](yesid);
             });
             $('#msgboxno').on('click', function(e) {
                 e.preventDefault();
@@ -62,7 +66,7 @@ $(function() {
                 var toPage = $('#msgboxno').data('topage');
                 // show the page to display after a record is deleted
                 $.mobile.changePage('#' + toPage, { transition: pgtransition });
-                app[nomethod](noid);
+                categoria[nomethod](noid);
             });
             $('#alertboxok').on('click', function(e) {
                 e.preventDefault();
@@ -72,8 +76,8 @@ $(function() {
                 $.mobile.changePage('#' + toPage, { transition: pgtransition });
             });
         };
-        // define events to be fired during app execution.
-        app.CategoriaBindings = function() {
+        // define events to be fired during categoria execution.
+        categoria.CategoriaBindings = function() {
             // code to run before showing the page that lists the records.
             //run before the page is shown
             $(document).on('pagebeforechange', function(e, data) {
@@ -83,13 +87,13 @@ $(function() {
                     case 'pgCategoria':
                         $('#pgRptCategoriaBack').data('from', 'pgCategoria');
                         // restart the storage check
-                        app.checkForCategoriaStorage();
+                        categoria.checkForCategoriaStorage();
                         break;
                     case 'pgReports':
                         $('#pgRptCategoriaBack').data('from', 'pgReports');
                         break;
                     case 'pgRptCategoria':
-                        app.CategoriaRpt();
+                        categoria.CategoriaRpt();
                         break;
                     case 'pgEditCategoria':
                         $('#pgRptCategoriaBack').data('from', 'pgEditCategoria');
@@ -98,14 +102,14 @@ $(function() {
                         //load related select menus before the page shows
                         var Nome = $('#pgEditCategoria').data('id');
                         //read record from IndexedDB and update screen.
-                        app.editCategoria(Nome);
-                        app.pgEditCategoriacheckForCategoriaStorageR();
+                        categoria.editCategoria(Nome);
+                        categoria.pgEditCategoriacheckForCategoriaStorageR();
                         break;
                     case 'pgAddCategoria':
                         $('#pgRptCategoriaBack').data('from', 'pgAddCategoria');
                         pgAddCategoriaClear();
                         //load related select menus before the page shows
-                        app.pgAddCategoriacheckForCategoriaStorageR();
+                        categoria.pgAddCategoriacheckForCategoriaStorageR();
                         break;
                 }
             });
@@ -151,7 +155,7 @@ $(function() {
                 //get form contents into an object
                 var CategoriaRec = pgAddCategoriaGetRec();
                 //save object to IndexedDB
-                app.addCategoria(CategoriaRec);
+                categoria.addCategoria(CategoriaRec);
             });
             // Save click event on Add Multiple page
             $('#pgAddMultCategoriaSave').on('click', function(e) {
@@ -160,7 +164,7 @@ $(function() {
                 //get form contents of multi entries
                 var multiNome = $('#pgAddMultCategoriaNome').val().trim();
                 //save multi Nome to IndexedDB
-                app.addMultCategoria(multiNome);
+                categoria.addMultCategoria(multiNome);
             });
             // code to run when a get location button is clicked on the Add page.
             //listview item click eventt.
@@ -171,7 +175,7 @@ $(function() {
                 var href = $(this).data('id');
                 href = href.split(' ').join('-');
                 //read record from IndexedDB and update screen.
-                app.pgAddCategoriaeditCategoria(href);
+                categoria.pgAddCategoriaeditCategoria(href);
             });
             //***** Add Page - End *****
             //***** Listing Page *****
@@ -219,7 +223,7 @@ $(function() {
                 //get contents of Edit page controls
                 var CategoriaRec = pgEditCategoriaGetRec();
                 //save updated records to IndexedDB
-                app.updateCategoria(CategoriaRec);
+                categoria.updateCategoria(CategoriaRec);
             });
             // code to run when the Delete button is clicked in the Edit Page.
             // delete button on Edit Page
@@ -248,7 +252,7 @@ $(function() {
                 var href = $(this).data('id');
                 href = href.split(' ').join('-');
                 //read record from IndexedDB and update screen.
-                app.pgEditCategoriaeditCategoria(href);
+                categoria.pgEditCategoriaeditCategoria(href);
             });
             //***** Edit Page - End *****
             //***** Report Page *****
@@ -278,7 +282,7 @@ $(function() {
         // this defines methods/procedures accessed by our events.
         // get existing records from IndexedDB
         //display records in table during runtime.
-        app.CategoriaRpt = function() {
+        categoria.CategoriaRpt = function() {
             $.mobile.loading("show", {
                 text: "Loading report...",
                 textVisible: true,
@@ -325,7 +329,7 @@ $(function() {
         };
         // save the defined Add page object to IndexedDB
         // add a new record to IndexedDB storage.
-        app.addCategoria = function(CategoriaRec) {
+        categoria.addCategoria = function(CategoriaRec) {
             $.mobile.loading("show", {
                 text: "Creating record...",
                 textVisible: true,
@@ -365,7 +369,7 @@ $(function() {
             $.mobile.loading("hide");
         };
         // add a new record to IndexedDB storage.
-        app.addMultCategoria = function(multiNome) {
+        categoria.addMultCategoria = function(multiNome) {
             $.mobile.loading("show", {
                 text: "Creating records...",
                 textVisible: true,
@@ -417,7 +421,7 @@ $(function() {
         };
         // save the defined Edit page object to IndexedDB
         //update an existing record and save to IndexedDB
-        app.updateCategoria = function(CategoriaRec) {
+        categoria.updateCategoria = function(CategoriaRec) {
             $.mobile.loading("show", {
                 text: "Update record...",
                 textVisible: true,
@@ -453,7 +457,7 @@ $(function() {
         };
         // delete record from IndexedDB
         //delete a record from IndexedDB using record key
-        app.deleteCategoria = function(Nome) {
+        categoria.deleteCategoria = function(Nome) {
             $.mobile.loading("show", {
                 text: "Deleting record...",
                 textVisible: true,
@@ -482,7 +486,7 @@ $(function() {
         // display existing records in listview of Records listing.
         //***** List Page *****
         //display records in listview during runtime.
-        app.displayCategoria = function(CategoriaObj) {
+        categoria.displayCategoria = function(CategoriaObj) {
             $.mobile.loading("show", {
                 text: "Displaying records...",
                 textVisible: true,
@@ -529,7 +533,7 @@ $(function() {
         };
         // check IndexedDB for Records. This initializes IndexedDB if there are no records
         //display records if they exist or tell user no records exist.
-        app.checkForCategoriaStorage = function() {
+        categoria.checkForCategoriaStorage = function() {
             $.mobile.loading("show", {
                 text: "Checking storage...",
                 textVisible: true,
@@ -556,7 +560,7 @@ $(function() {
                 // are there existing Categoria records?
                 if (!$.isEmptyObject(CategoriaObj)) {
                     // yes there are. pass them off to be displayed
-                    app.displayCategoria(CategoriaObj);
+                    categoria.displayCategoria(CategoriaObj);
                 } else {
                     // nope, just show the placeholder
                     $('#pgCategoriaList').html(CategoriaHdr + noCategoria).listview('refresh');
@@ -589,7 +593,7 @@ $(function() {
         }
         // display content of selected record on Edit Page
         //read record from IndexedDB and display it on edit page.
-        app.editCategoria = function(Nome) {
+        categoria.editCategoria = function(Nome) {
             $.mobile.loading("show", {
                 text: "Reading record...",
                 textVisible: true,
@@ -635,7 +639,7 @@ $(function() {
             $.mobile.loading("hide");
         };
         //display records in listview during runtime on right panel.
-        app.pgEditCategoriadisplayCategoriaR = function(CategoriaObj) {
+        categoria.pgEditCategoriadisplayCategoriaR = function(CategoriaObj) {
             $.mobile.loading("show", {
                 text: "Displaying records...",
                 textVisible: true,
@@ -671,7 +675,7 @@ $(function() {
             $.mobile.loading("hide");
         };
         //display records if they exist or tell user no records exist.
-        app.pgEditCategoriacheckForCategoriaStorageR = function() {
+        categoria.pgEditCategoriacheckForCategoriaStorageR = function() {
             $.mobile.loading("show", {
                 text: "Checking storage...",
                 textVisible: true,
@@ -698,7 +702,7 @@ $(function() {
                 // are there existing Categoria records?
                 if (!$.isEmptyObject(CategoriaObj)) {
                     // yes there are. pass them off to be displayed
-                    app.pgEditCategoriadisplayCategoriaR(CategoriaObj);
+                    categoria.pgEditCategoriadisplayCategoriaR(CategoriaObj);
                 } else {
                     // nope, just show the placeholder
                     $('#pgEditCategoriaRightPnlLV').html(CategoriaHdr + noCategoria).listview('refresh');
@@ -713,7 +717,7 @@ $(function() {
             }
         };
         //read record from IndexedDB and display it on edit page.
-        app.pgEditCategoriaeditCategoria = function(Nome) {
+        categoria.pgEditCategoriaeditCategoria = function(Nome) {
             $.mobile.loading("show", {
                 text: "Reading record...",
                 textVisible: true,
@@ -758,7 +762,7 @@ $(function() {
         };
         // ***** Add Page *****
         //display records in listview during runtime on right panel.
-        app.pgAddCategoriadisplayCategoriaR = function(CategoriaObj) {
+        categoria.pgAddCategoriadisplayCategoriaR = function(CategoriaObj) {
             $.mobile.loading("show", {
                 text: "Displaying records...",
                 textVisible: true,
@@ -794,7 +798,7 @@ $(function() {
             $.mobile.loading("hide");
         };
         //display records if they exist or tell user no records exist.
-        app.pgAddCategoriacheckForCategoriaStorageR = function() {
+        categoria.pgAddCategoriacheckForCategoriaStorageR = function() {
             $.mobile.loading("show", {
                 text: "Checking storage...",
                 textVisible: true,
@@ -821,7 +825,7 @@ $(function() {
                 // are there existing Categoria records?
                 if (!$.isEmptyObject(CategoriaObj)) {
                     // yes there are. pass them off to be displayed
-                    app.pgAddCategoriadisplayCategoriaR(CategoriaObj);
+                    categoria.pgAddCategoriadisplayCategoriaR(CategoriaObj);
                 } else {
                     // nope, just show the placeholder
                     $('#pgAddCategoriaRightPnlLV').html(CategoriaHdr + noCategoria).listview('refresh');
@@ -836,7 +840,7 @@ $(function() {
             }
         };
         //read record from IndexedDB and display it on edit page.
-        app.pgAddCategoriaeditCategoria = function(Nome) {
+        categoria.pgAddCategoriaeditCategoria = function(Nome) {
             $.mobile.loading("show", {
                 text: "Reading record...",
                 textVisible: true,
@@ -896,6 +900,6 @@ $(function() {
             $('#pgAddCategoriaNome').val('');
         }
 
-        app.init();
+        categoria.init();
     })(Database);
 });

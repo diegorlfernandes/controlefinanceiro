@@ -26,6 +26,7 @@ css/jqm-datebox.css
 css/animate.css
 css/addtohomescreen.css
 css/jquery.mobile-1.4.5.min.css
+css/images/ajax-loader.gif
 js/jquery.min.js
 js/jquery.mobile-1.4.5.min.js
 js/navbar.js
@@ -47,10 +48,11 @@ js/addtohomescreen.min.js
 js/remoteserver.js
 js/support.js
 js/app.js
+js/lancamento.js
 js/toastr.js.map
 js/jquery.min.map
 js/jquery.mobile-1.4.5.min.map
-savepng.php
+#savepng.php
 
 #These files require network connection
-NETWORK
+#NETWORK

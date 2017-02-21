@@ -1,19 +1,13 @@
+
 $(function() {
-    // define the application
-    var Database = {};
-    //variables to hold the indexedDB database.
-    var dbDatabase;
-    var dbNome = "Database";
-    var dbVersion = 2;
-    var pgtransition = 'slide';
-    (function(lanc) {
+    (function(lancamento) {
         // variable definitions go here
         var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
         //var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2><p>DESCRIPTION</p><p><span class="ui-li-count">COUNTBUBBLE</span></p></a></li>';
         var LancamentoLiRi = '<li><a data-id="Z2">Z1</a></li>';
         var LancamentoHdr = '<li data-role="list-divider">Your Lancamentos</li>';
         var noLancamento = '<li id="noLancamento">You have no Lancamentos</li>';
-        lanc.init = function() {
+        lancamento.init = function() {
             // hide the address bar when the window is ready
             window.addEventListener("load", function() {
                 setTimeout(function() { window.scrollTo(0, 1) }, 0);
@@ -25,16 +19,12 @@ $(function() {
             var addToHomeConfig = { returningVisitor: true, expire: 720, autostart: false };
             // open the indexedDB database
             var request = indexedDB.open(dbNome, dbVersion);
-            //check if an upgrade is needed, this due to a version change
-            request.onupgradeneeded = function(e) {
-                var thisDB = e.target.result;
-                var store = null;
-            };
+
             //the database was opened successfully
             request.onsuccess = function(e) {
                 dbDatabase = e.target.result;
             }
-            lanc.LancamentoBindings();
+            lancamento.LancamentoBindings();
             $('#msgboxyes').on('click', function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
@@ -61,7 +51,7 @@ $(function() {
             });
         };
         // define events to be fired during app execution.
-        lanc.LancamentoBindings = function() {
+        lancamento.LancamentoBindings = function() {
             // code to run before showing the page that lists the records.
             //run before the page is shown
             $(document).on('pagebeforechange', function(e, data) {
@@ -71,13 +61,13 @@ $(function() {
                     case 'pgLancamento':
                         $('#pgRptLancamentoBack').data('from', 'pgLancamento');
                         // restart the storage check
-                        lanc.checkForLancamentoStorage();
+                        lancamento.checkForLancamentoStorage();
                         break;
                     case 'pgReports':
                         $('#pgRptLancamentoBack').data('from', 'pgReports');
                         break;
                     case 'pgRptLancamento':
-                        lanc.LancamentoRpt();
+                        lancamento.LancamentoRpt();
                         break;
                     case 'pgEditLancamento':
                         $('#pgRptLancamentoBack').data('from', 'pgEditLancamento');
@@ -86,14 +76,14 @@ $(function() {
                         //load related select menus before the page shows
                         var Nome = $('#pgEditLancamento').data('id');
                         //read record from IndexedDB and update screen.
-                        lanc.editLancamento(Nome);
-                        lanc.pgEditLancamentocheckForLancamentoStorageR();
+                        lancamento.editLancamento(Nome);
+                        lancamento.pgEditLancamentocheckForLancamentoStorageR();
                         break;
                     case 'pgAddLancamento':
                         $('#pgRptLancamentoBack').data('from', 'pgAddLancamento');
                         pgAddLancamentoClear();
                         //load related select menus before the page shows
-                        lanc.pgAddLancamentocheckForLancamentoStorageR();
+                        lancamento.pgAddLancamentocheckForLancamentoStorageR();
                         break;
                 }
             });
@@ -139,7 +129,7 @@ $(function() {
                 //get form contents into an object
                 var LancamentoRec = pgAddLancamentoGetRec();
                 //save object to IndexedDB
-                lanc.addLancamento(LancamentoRec);
+                lancamento.addLancamento(LancamentoRec);
             });
             // Save click event on Add Multiple page
             $('#pgAddMultLancamentoSave').on('click', function(e) {
@@ -148,7 +138,7 @@ $(function() {
                 //get form contents of multi entries
                 var multiNome = $('#pgAddMultLancamentoNome').val().trim();
                 //save multi Nome to IndexedDB
-                lanc.addMultLancamento(multiNome);
+                lancamento.addMultLancamento(multiNome);
             });
             // code to run when a get location button is clicked on the Add page.
             //listview item click eventt.
@@ -159,7 +149,7 @@ $(function() {
                 var href = $(this).data('id');
                 href = href.split(' ').join('-');
                 //read record from IndexedDB and update screen.
-                lanc.pgAddLancamentoeditLancamento(href);
+                lancamento.pgAddLancamentoeditLancamento(href);
             });
             //***** Add Page - End *****
             //***** Listing Page *****
@@ -207,7 +197,7 @@ $(function() {
                 //get contents of Edit page controls
                 var LancamentoRec = pgEditLancamentoGetRec();
                 //save updated records to IndexedDB
-                lanc.updateLancamento(LancamentoRec);
+                lancamento.updateLancamento(LancamentoRec);
             });
             // code to run when the Delete button is clicked in the Edit Page.
             // delete button on Edit Page
@@ -236,7 +226,7 @@ $(function() {
                 var href = $(this).data('id');
                 href = href.split(' ').join('-');
                 //read record from IndexedDB and update screen.
-                lanc.pgEditLancamentoeditLancamento(href);
+                lancamento.pgEditLancamentoeditLancamento(href);
             });
             //***** Edit Page - End *****
             //***** Report Page *****
@@ -266,7 +256,7 @@ $(function() {
         // this defines methods/procedures accessed by our events.
         // get existing records from IndexedDB
         //display records in table during runtime.
-        lanc.LancamentoRpt = function() {
+        lancamento.LancamentoRpt = function() {
             $.mobile.loading("show", {
                 text: "Loading report...",
                 textVisible: true,
@@ -313,7 +303,7 @@ $(function() {
         };
         // save the defined Add page object to IndexedDB
         // add a new record to IndexedDB storage.
-        lanc.addLancamento = function(LancamentoRec) {
+        lancamento.addLancamento = function(LancamentoRec) {
             $.mobile.loading("show", {
                 text: "Creating record...",
                 textVisible: true,
@@ -353,7 +343,7 @@ $(function() {
             $.mobile.loading("hide");
         };
         // add a new record to IndexedDB storage.
-        lanc.addMultLancamento = function(multiNome) {
+        lancamento.addMultLancamento = function(multiNome) {
             $.mobile.loading("show", {
                 text: "Creating records...",
                 textVisible: true,
@@ -405,7 +395,7 @@ $(function() {
         };
         // save the defined Edit page object to IndexedDB
         //update an existing record and save to IndexedDB
-        lanc.updateLancamento = function(LancamentoRec) {
+        lancamento.updateLancamento = function(LancamentoRec) {
             $.mobile.loading("show", {
                 text: "Update record...",
                 textVisible: true,
@@ -441,7 +431,7 @@ $(function() {
         };
         // delete record from IndexedDB
         //delete a record from IndexedDB using record key
-        lanc.deleteLancamento = function(Nome) {
+        lancamento.deleteLancamento = function(Nome) {
             $.mobile.loading("show", {
                 text: "Deleting record...",
                 textVisible: true,
@@ -470,7 +460,7 @@ $(function() {
         // display existing records in listview of Records listing.
         //***** List Page *****
         //display records in listview during runtime.
-        lanc.displayLancamento = function(LancamentoObj) {
+        lancamento.displayLancamento = function(LancamentoObj) {
             $.mobile.loading("show", {
                 text: "Displaying records...",
                 textVisible: true,
@@ -517,7 +507,7 @@ $(function() {
         };
         // check IndexedDB for Records. This initializes IndexedDB if there are no records
         //display records if they exist or tell user no records exist.
-        lanc.checkForLancamentoStorage = function() {
+        lancamento.checkForLancamentoStorage = function() {
             $.mobile.loading("show", {
                 text: "Checking storage...",
                 textVisible: true,
@@ -544,7 +534,7 @@ $(function() {
                 // are there existing Lancamento records?
                 if (!$.isEmptyObject(LancamentoObj)) {
                     // yes there are. pass them off to be displayed
-                    lanc.displayLancamento(LancamentoObj);
+                    lancamento.displayLancamento(LancamentoObj);
                 } else {
                     // nope, just show the placeholder
                     $('#pgLancamentoList').html(LancamentoHdr + noLancamento).listview('refresh');
@@ -577,7 +567,7 @@ $(function() {
         }
         // display content of selected record on Edit Page
         //read record from IndexedDB and display it on edit page.
-        lanc.editLancamento = function(Nome) {
+        lancamento.editLancamento = function(Nome) {
             $.mobile.loading("show", {
                 text: "Reading record...",
                 textVisible: true,
@@ -623,7 +613,7 @@ $(function() {
             $.mobile.loading("hide");
         };
         //display records in listview during runtime on right panel.
-        lanc.pgEditLancamentodisplayLancamentoR = function(LancamentoObj) {
+        lancamento.pgEditLancamentodisplayLancamentoR = function(LancamentoObj) {
             $.mobile.loading("show", {
                 text: "Displaying records...",
                 textVisible: true,
@@ -659,7 +649,7 @@ $(function() {
             $.mobile.loading("hide");
         };
         //display records if they exist or tell user no records exist.
-        lanc.pgEditLancamentocheckForLancamentoStorageR = function() {
+        lancamento.pgEditLancamentocheckForLancamentoStorageR = function() {
             $.mobile.loading("show", {
                 text: "Checking storage...",
                 textVisible: true,
@@ -686,7 +676,7 @@ $(function() {
                 // are there existing Lancamento records?
                 if (!$.isEmptyObject(LancamentoObj)) {
                     // yes there are. pass them off to be displayed
-                    lanc.pgEditLancamentodisplayLancamentoR(LancamentoObj);
+                    lancamento.pgEditLancamentodisplayLancamentoR(LancamentoObj);
                 } else {
                     // nope, just show the placeholder
                     $('#pgEditLancamentoRightPnlLV').html(LancamentoHdr + noLancamento).listview('refresh');
@@ -701,7 +691,7 @@ $(function() {
             }
         };
         //read record from IndexedDB and display it on edit page.
-        lanc.pgEditLancamentoeditLancamento = function(Nome) {
+        lancamento.pgEditLancamentoeditLancamento = function(Nome) {
             $.mobile.loading("show", {
                 text: "Reading record...",
                 textVisible: true,
@@ -746,7 +736,7 @@ $(function() {
         };
         // ***** Add Page *****
         //display records in listview during runtime on right panel.
-        lanc.pgAddLancamentodisplayLancamentoR = function(LancamentoObj) {
+        lancamento.pgAddLancamentodisplayLancamentoR = function(LancamentoObj) {
             $.mobile.loading("show", {
                 text: "Displaying records...",
                 textVisible: true,
@@ -782,7 +772,7 @@ $(function() {
             $.mobile.loading("hide");
         };
         //display records if they exist or tell user no records exist.
-        lanc.pgAddLancamentocheckForLancamentoStorageR = function() {
+        lancamento.pgAddLancamentocheckForLancamentoStorageR = function() {
             $.mobile.loading("show", {
                 text: "Checking storage...",
                 textVisible: true,
@@ -809,7 +799,7 @@ $(function() {
                 // are there existing Lancamento records?
                 if (!$.isEmptyObject(LancamentoObj)) {
                     // yes there are. pass them off to be displayed
-                    lanc.pgAddLancamentodisplayLancamentoR(LancamentoObj);
+                    lancamento.pgAddLancamentodisplayLancamentoR(LancamentoObj);
                 } else {
                     // nope, just show the placeholder
                     $('#pgAddLancamentoRightPnlLV').html(LancamentoHdr + noLancamento).listview('refresh');
@@ -824,7 +814,7 @@ $(function() {
             }
         };
         //read record from IndexedDB and display it on edit page.
-        lanc.pgAddLancamentoeditLancamento = function(Nome) {
+        lancamento.pgAddLancamentoeditLancamento = function(Nome) {
             $.mobile.loading("show", {
                 text: "Reading record...",
                 textVisible: true,
@@ -884,6 +874,6 @@ $(function() {
             $('#pgAddLancamentoNome').val('');
         }
 
-        lanc.init();
+        lancamento.init();
     })(Database);
 });
