@@ -49,6 +49,7 @@ $(function() {
                 // show the page to display after ok is clicked
                 $.mobile.changePage('#' + toPage, { transition: pgtransition });
             });
+			
         };
         // define events to be fired during app execution.
         lancamento.LancamentoBindings = function() {
@@ -81,7 +82,8 @@ $(function() {
                         break;
                     case 'pgAddLancamento':
                         $('#pgRptLancamentoBack').data('from', 'pgAddLancamento');
-                        pgAddLancamentoClear();
+						pgAddLancamentoValidar();                        
+						pgAddLancamentoClear();
                         //load related select menus before the page shows
                         lancamento.pgAddLancamentocheckForLancamentoStorageR();
                         break;
@@ -548,9 +550,25 @@ $(function() {
                 $('#pgLancamentoList').html(LancamentoHdr + noLancamento).listview('refresh');
             }
         };
-        // ***** Edit Page *****
+		
+
+		// ***** Edit Page *****
+		//Validar campo da tela de Editar Lancamento
+		function pgAddLancamentoValidar() 
+		{
+			// $( "#pgAddLancamentoValor" ).keyup(function() {
+				// alert( "Handler for .keyup() called." );
+			// });
+			
+			$('#pgAddLancamentoValor').on('keyup', function(e) 
+			{
+				var ValorFormatado = formataValorNCasasMilhar(5, $('#pgAddLancamentoValor').val());
+				$('#pgAddLancamentoValor').val(ValorFormatado);
+			});			
+        }     
         // clear the contents of the Edit Page controls
         //clear the form controls for data entry
+				
         function pgEditLancamentoClear() {
             $('#pgEditLancamentoNome').val('');
         }
@@ -821,8 +839,10 @@ $(function() {
                 textonly: false,
                 html: ""
             });
+			
             // clear the form fields
             pgAddLancamentoClear();
+
             Nome = Nome.split(' ').join('-');
             var LancamentoRec = {};
             //define a transaction to read the record from the table
@@ -859,7 +879,9 @@ $(function() {
             }
             $.mobile.loading("hide");
         };
-        // get the contents of the add screen controls and store them in an object.
+        
+		
+		// get the contents of the add screen controls and store them in an object.
         //get the record to be saved and put it in a record array
         //read contents of each form input
         function pgAddLancamentoGetRec() {

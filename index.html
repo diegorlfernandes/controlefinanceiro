@@ -57,6 +57,7 @@
     <script src="js/remoteserver.js" type="text/javascript"></script>
     <script src="js/support.js" type="text/javascript"></script>
     <script src="js/database.js" type="text/javascript"></script>
+    <script src="js/funcoes.js" type="text/javascript"></script>
     <script src="js/categoria.js" type="text/javascript"></script>
     <script src="js/lancamento.js" type="text/javascript"></script>
     <style>
@@ -216,16 +217,9 @@
         </footer>
     </div>
     <div id="pgCategoria" data-role="page">
-        <div data-position="left" data-display="overlay" data-position-fixed="true" id="pgCategoriaLeftPnl" data-role="panel">
-            <ul data-role="listview" id="pgCategoriaLeftPnlLV">
-                <li><a data-transition="slide" href="#pgAddMultCategoria" class="ui-btn ui-icon-plus ui-btn-icon-left">New Multiple</a></li>
-                <li><a data-transition="slide" href="#pgRptCategoria" class="ui-btn ui-icon-eye ui-btn-icon-left">Report</a></li>
-                <li><a data-transition="slide" href="#pgMenu" class="ui-btn ui-icon-carat-l ui-btn-icon-left">Back</a></li>
-            </ul>
-        </div>
         <header id="pgCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
-            <a data-role="button" id="pgCategoriaMenu" data-icon="bars" data-transition="slide" href="#pgCategoriaLeftPnl" class="ui-btn-left">Menu</a>
+            <a data-role="button" id="pgCategoriaBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>
             <a data-role="button" id="pgCategoriaNew" data-icon="plus" data-theme="b" class="ui-btn-right">Novo</a>
         </header>
         <div id="pgCategoriaCnt" data-role="content">
@@ -252,7 +246,6 @@
         <header id="pgAddCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
             <a data-role="button" id="pgAddCategoriaMenu" data-icon="bars" href="#pgAddCategoriaLeftPnl" class="ui-btn-left">Menu</a>
-            <!-- <a data-role="button" id="pgAddCategoriaRightMenu" data-icon="records" href="#pgAddCategoriaRightPnl" class="ui-btn-right">Records</a> -->
         </header>
         <div id="pgAddCategoriaCnt" data-role="content">
             <h3>Adicionar Categoria</h3>
@@ -266,9 +259,9 @@
         <footer id="pgAddCategoriaFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div id="pgAddCategoriaFtrNavBar" data-role="navbar">
                 <ul>
-                    <li><a id="pgAddCategoriaBack" data-icon="carat-l">Cancel</a>
+                    <li><a id="pgAddCategoriaBack" data-icon="carat-l">Cancelar</a>
                     </li>
-                    <li><a type="submit" id="pgAddCategoriaSave" data-icon="action">Save</a>
+                    <li><a type="submit" id="pgAddCategoriaSave" data-icon="action">Salvar</a>
                     </li>
                 </ul>
             </div>
@@ -290,9 +283,9 @@
         <footer id="pgAddMultCategoriaFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div id="pgAddMultCategoriaFtrNavBar" data-role="navbar">
                 <ul>
-                    <li><a id="pgAddMultCategoriaBack" data-icon="carat-l">Cancel</a>
+                    <li><a id="pgAddMultCategoriaBack" data-icon="carat-l">Cancelar</a>
                     </li>
-                    <li><a type="submit" id="pgAddMultCategoriaSave" data-icon="action">Save</a>
+                    <li><a type="submit" id="pgAddMultCategoriaSave" data-icon="action">Salvar</a>
                     </li>
                 </ul>
             </div>
@@ -314,7 +307,6 @@
         <header id="pgEditCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
             <a data-role="button" id="pgEditCategoriaMenu" data-icon="bars" href="#pgEditCategoriaLeftPnl" class="ui-btn-left">Menu</a>
-            <!-- <a data-role="button" id="pgAddCategoriaRightMenu" data-icon="records" href="#pgEditCategoriaRightPnl" class="ui-btn-right">Records</a> -->
         </header>
         <div id="pgEditCategoriaCnt" data-role="content">
             <h3>Editar Categoria</h3>
@@ -328,7 +320,7 @@
         <footer id="pgEditCategoriaFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div id="pgEditCategoriaFtrNavBar" data-role="navbar">
                 <ul>
-                    <li><a data-transition="slide" id="pgEditCategoriaBack" data-icon="carat-l" href="#pgCategoria">Cancel</a>
+                    <li><a data-transition="slide" id="pgEditCategoriaBack" data-icon="carat-l" href="#pgCategoria">Cancelar</a>
                     </li>
                     <li><a type="submit" id="pgEditCategoriaUpdate" data-icon="action">Update</a>
                     </li>
@@ -338,48 +330,7 @@
             </div>
         </footer>
     </div>
-    <div data-dismissible="false" data-close-btn="none" data-transition="pop" id="msgbox" data-role="popup">
-        <header id="msgboxHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-            <h1>Confirm</h1>
-        </header>
-        <div id="msgboxCnt" data-role="content">
-            <div id="msgboxtitle">
-            </div>
-            <br>
-            <div id="msgboxprompt">
-                <p>Are you sure you want to delete this record?</p>
-            </div>
-            <br>
-            <div id="msgboxbuttons" class="centertext ui-grid-a">
-                <div class="ui-block-a">
-                    <a data-method="" data-id="" data-topage="" id="msgboxyes" data-role="button" data-icon="check">Yes</a>
-                </div>
-                <div class="ui-block-b">
-                    <a data-method="" data-id="" data-topage="" id="msgboxno" data-role="button" data-icon="delete" data-theme="b">No</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div data-dismissible="false" data-close-btn="none" data-transition="pop" id="alertbox" data-role="popup">
 
-        <header id="alertboxHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-            <h1>Error</h1>
-        </header>
-        <div id="alertboxCnt" data-role="content">
-            <div id="alertboxtitle">
-            </div>
-            <br>
-            <div id="alertboxprompt">
-                <p>An error has been encountered!</p>
-            </div>
-            <br>
-            <div id="alertboxbuttons" class="centertext ui-grid-solo">
-                <div class="ui-block-a">
-                    <a data-method="" data-id="" data-topage="" id="alertboxok" data-role="button" data-icon="check" data-theme="b">Ok</a>
-                </div>
-            </div>
-        </div>
-    </div>
 	<!-- Lançamentos -->
     <div id="pg" data-role="page" data-theme="b" class="backpicture">
         <header id="pgHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
@@ -393,35 +344,20 @@
         </footer>
     </div>
     <div id="pgLancamento" data-role="page">
-        <div data-position="left" data-display="overlay" data-position-fixed="true" id="pgLancamentoLeftPnl" data-role="panel">
-            <ul data-role="listview" id="pgLancamentoLeftPnlLV">
-                <li><a data-transition="slide" href="#pgAddMultLancamento" class="ui-btn ui-icon-plus ui-btn-icon-left">New Multiple</a></li>
-                <li><a data-transition="slide" href="#pgRptLancamento" class="ui-btn ui-icon-eye ui-btn-icon-left">Report</a></li>
-                <li><a data-transition="slide" href="#pgMenu" class="ui-btn ui-icon-carat-l ui-btn-icon-left">Back</a></li>
-            </ul>
-        </div>
         <header id="pgLancamentoHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
-            <a data-role="button" id="pgLancamentoMenu" data-icon="bars" data-transition="slide" href="#pgLancamentoLeftPnl" class="ui-btn-left">Menu</a>
+            <a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>
             <a data-role="button" id="pgLancamentoNew" data-icon="plus" data-theme="b" class="ui-btn-right">Novo</a>
         </header>
         <div id="pgLancamentoCnt" data-role="content">
-            <h3>Lancamentos</h3>
-            <ul data-role="listview" data-inset="true" id="pgLancamentoList" data-autodividers="true" data-filter="true" data-filter-placeholder="Search Lancamentos">
-                <li data-role="list-divider">Suas Lancamentos</li>
+            <h3>Lançamentos</h3>
+            <ul data-role="listview" data-inset="true" id="pgLancamentoList" data-autodividers="true" data-filter="true" data-filter-placeholder="Pesquisar Lancamentos">
+                <li data-role="list-divider">Seus Lancamentos</li>
                 <li id="noLancamento">Você não tem Lancamentos</li>
             </ul>
         </div>
     </div>
     <div id="pgAddLancamento" data-role="page">
-        <div data-position="left" data-display="overlay" data-position-fixed="true" id="pgAddLancamentoLeftPnl" data-role="panel">
-            <ul data-role="listview" id="pgAddLancamentoLeftPnlLV">
-                <li><a data-transition="slide" href="#pgAddLancamento" class="ui-btn ui-icon-plus ui-btn-icon-left">Novo</a></li>
-                <li><a data-transition="slide" href="#pgAddMultLancamento" class="ui-btn ui-icon-plus ui-btn-icon-left">Novo Vários</a></li>
-                <li><a data-transition="slide" href="#pgRptLancamento" class="ui-btn ui-icon-eye ui-btn-icon-left">Relatórios</a></li>
-                <li><a data-transition="slide" href="#pgLancamento" class="ui-btn ui-icon-carat-l ui-btn-icon-left">Voltar</a></li>
-            </ul>
-        </div>
         <div data-position="right" data-display="overlay" data-position-fixed="true" id="pgAddLancamentoRightPnl" data-role="panel">
             <ul data-role="listview" id="pgAddLancamentoRightPnlLV">
             </ul>
@@ -429,83 +365,69 @@
         <header id="pgAddLancamentoHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
             <a data-role="button" id="pgAddLancamentoMenu" data-icon="bars" href="#pgAddLancamentoLeftPnl" class="ui-btn-left">Menu</a>
-            <!-- <a data-role="button" id="pgAddLancamentoRightMenu" data-icon="records" href="#pgAddLancamentoRightPnl" class="ui-btn-right">Records</a> -->
         </header>
         <div id="pgAddLancamentoCnt" data-role="content">
             <h3>Adicionar Lancamento</h3>
             <div id="pgAddLancamentoForm">
+				<div class="ui-field-contain">
+					<label for="pgAddLancamentoCategoria">Categoria<span class='red'>*</span></label>
+					<select name="pgAddLancamentoCategoria" id="pgAddLancamentoCategoria">
+						<option value="1">1st</option>
+						<option value="1">2st</option>
+						<option value="1">3st</option>
+					</select>
+				</div>
+                <!-- <div data-role="fieldcontain"> -->
+                    <!-- <label for="pgAddLancamentoCategoria">Categoria<span class='red'>*</span></label> -->
+                    <!-- <input required name="pgAddLancamentoCategoria" title="Digite a categoria aqui." type="text" id="pgAddLancamentoCategoria" placeholder="Digite a categoria aqui." autocomplete="off" data-clear-btn="true"></input> -->
+                <!-- </div> -->
                 <div data-role="fieldcontain">
-                    <label for="pgAddLancamentoLancamentoNome">Nome<span class='red'>*</span></label>
-                    <input required name="pgAddLancamentoNome" title="Enter Lancamento name here." type="text" id="pgAddLancamentoNome" placeholder="Digite o nome da Lancamento aqui." autocomplete="off" data-clear-btn="true"></input>
+                    <label for="pgAddLancamentoDescricao">Descrição<span class='red'>*</span></label>
+                    <input required name="pgAddLancamentoDescricao" title="Digite a descrição aqui." type="text" id="pgAddLancamentoDescricao" placeholder="Digite a descrição aqui." autocomplete="off" data-clear-btn="true"></input>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="pgAddLancamentoValor">Valor<span class='red'>*</span></label>
+                    <input required name="pgAddLancamentoValor" title="Digite o valor aqui." type="text" id="pgAddLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
                 </div>
             </div>
         </div>
         <footer id="pgAddLancamentoFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div id="pgAddLancamentoFtrNavBar" data-role="navbar">
                 <ul>
-                    <li><a id="pgAddLancamentoBack" data-icon="carat-l">Cancel</a>
+                    <li><a id="pgAddLancamentoBack" data-icon="carat-l">Cancelar</a>
                     </li>
-                    <li><a type="submit" id="pgAddLancamentoSave" data-icon="action">Save</a>
-                    </li>
-                </ul>
-            </div>
-        </footer>
-    </div>
-    <div id="pgAddMultLancamento" data-role="page">
-        <header id="pgAddMultLancamentoHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-            <h1>Controle Financeiro</h1>
-        </header>
-        <div id="pgAddMultLancamentoCnt" data-role="content">
-            <h3>Add Multiple Lancamentos (separate by ;)</h3>
-            <div id="pgAddMultLancamentoForm">
-                <div data-role="fieldcontain">
-                    <label for="pgAddMultLancamentoLancamentoNome">Lancamento Names<span class='red'>*</span></label>
-                    <textarea required name="pgAddMultLancamentoNome" id="pgAddMultLancamentoNome" placeholder="Enter Lancamento Names here." title="Enter Lancamento Names here."></textarea>
-                </div>
-            </div>
-        </div>
-        <footer id="pgAddMultLancamentoFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
-            <div id="pgAddMultLancamentoFtrNavBar" data-role="navbar">
-                <ul>
-                    <li><a id="pgAddMultLancamentoBack" data-icon="carat-l">Cancel</a>
-                    </li>
-                    <li><a type="submit" id="pgAddMultLancamentoSave" data-icon="action">Save</a>
+                    <li><a type="submit" id="pgAddLancamentoSave" data-icon="action">Salvar</a>
                     </li>
                 </ul>
             </div>
         </footer>
     </div>
     <div data-url="LancamentoNome" id="pgEditLancamento" data-role="page">
-        <div data-position="left" data-display="overlay" data-position-fixed="true" id="pgEditLancamentoLeftPnl" data-role="panel">
-            <ul data-role="listview" id="pgEditLancamentoLeftPnlLV">
-                <li><a data-transition="slide" href="#pgAddLancamento" class="ui-btn ui-icon-plus ui-btn-icon-left">New</a></li>
-                <li><a data-transition="slide" href="#pgAddMultLancamento" class="ui-btn ui-icon-plus ui-btn-icon-left">New Multiple</a></li>
-                <li><a data-transition="slide" href="#pgRptLancamento" class="ui-btn ui-icon-eye ui-btn-icon-left">Report</a></li>
-                <li><a data-transition="slide" href="#pgLancamento" class="ui-btn ui-icon-carat-l ui-btn-icon-left">Back</a></li>
-            </ul>
-        </div>
-        <div data-position="right" data-display="overlay" data-position-fixed="true" id="pgEditLancamentoRightPnl" data-role="panel">
-            <ul data-role="listview" id="pgEditLancamentoRightPnlLV">
-            </ul>
-        </div>
         <header id="pgEditLancamentoHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
             <a data-role="button" id="pgEditLancamentoMenu" data-icon="bars" href="#pgEditLancamentoLeftPnl" class="ui-btn-left">Menu</a>
-            <!-- <a data-role="button" id="pgAddLancamentoRightMenu" data-icon="records" href="#pgEditLancamentoRightPnl" class="ui-btn-right">Records</a> -->
         </header>
         <div id="pgEditLancamentoCnt" data-role="content">
             <h3>Editar Lancamento</h3>
             <div id="pgEditLancamentoForm">
                 <div data-role="fieldcontain">
-                    <label for="pgEditLancamentoNome">Nome<span class='red'>*</span></label>
-                    <input required readonly="readonly" data-clear-btn="true" autofocus="true" name="pgEditLancamentoNome" title="Digite o nome da Lancamento aqui." type="text" id="pgEditLancamentoNome" placeholder="Enter Lancamento name here." autocomplete="off"></input>
+                    <label for="pgEditLancamentoCategoria">Categoria<span class='red'>*</span></label>
+                    <input required name="pgEditLancamentoCategoria" title="Digite a categoria aqui." type="text" id="pgEditLancamentoCategoria" placeholder="Digite a categoria aqui." autocomplete="off" data-clear-btn="true"></input>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="pgEditLancamentoDescricao">Descrição<span class='red'>*</span></label>
+                    <input required name="pgEditLancamentoDescricao" title="Digite a descrição aqui." type="text" id="pgEditLancamentoDescricao" placeholder="Digite a descrição aqui." autocomplete="off" data-clear-btn="true"></input>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="pgEditLancamentoValor">Descrição<span class='red'>*</span></label>
+                    <input required name="pgEditLancamentoValor" title="Digite o valor aqui." type="text" id="pgEditLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
                 </div>
             </div>
         </div>
         <footer id="pgEditLancamentoFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div id="pgEditLancamentoFtrNavBar" data-role="navbar">
                 <ul>
-                    <li><a data-transition="slide" id="pgEditLancamentoBack" data-icon="carat-l" href="#pgLancamento">Cancel</a>
+                    <li><a data-transition="slide" id="pgEditLancamentoBack" data-icon="carat-l" href="#pgLancamento">Cancelar</a>
                     </li>
                     <li><a type="submit" id="pgEditLancamentoUpdate" data-icon="action">Update</a>
                     </li>
@@ -538,7 +460,6 @@
         </div>
     </div>
     <div data-dismissible="false" data-close-btn="none" data-transition="pop" id="alertbox" data-role="popup">
-
         <header id="alertboxHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Error</h1>
         </header>
@@ -559,5 +480,4 @@
     </div>
 	
 </body>
-
 </html>
