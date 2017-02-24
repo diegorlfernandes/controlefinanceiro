@@ -653,7 +653,7 @@ $(function() {
             }
         };
         //read record from IndexedDB and display it on edit page.
-        lancamento.pgEditLancamentoeditLancamento = function(Nome) {
+        lancamento.pgEditLancamentoeditLancamento = function(LancamentoID) {
             $.mobile.loading("show", {
                 text: "Reading record...",
                 textVisible: true,
@@ -669,20 +669,22 @@ $(function() {
             //get the object store for the table
             var store = tx.objectStore("Lancamento");
             //get the record by primary key
-            var request = store.get(Nome);
+            var request = store.get(LancamentoID);
             request.onsuccess = function(e) {
                     LancamentoRec = e.target.result;
-                    //everything is fine, continue
-                    //make the record key read only
-                    $('#pgEditLancamentoNome').attr('readonly', 'readonly');
-                    //ensure the record key control cannot be clearable
-                    $('#pgEditLancamentoNome').attr('data-clear-btn', 'false');
-                    //update each control in the Edit page
-                    //clean the primary key
-                    var pkey = LancamentoRec.Nome;
-                    pkey = pkey.split('-').join(' ');
-                    LancamentoRec.Nome = pkey;
-                    $('#pgEditLancamentoNome').val(LancamentoRec.Nome);
+                    // //everything is fine, continue
+                    // //make the record key read only
+                    // $('#pgEditLancamentoNome').attr('readonly', 'readonly');
+                    // //ensure the record key control cannot be clearable
+                    // $('#pgEditLancamentoNome').attr('data-clear-btn', 'false');
+                    // //update each control in the Edit page
+                    // //clean the primary key
+                    // var pkey = LancamentoRec.Nome;
+                    // pkey = pkey.split('-').join(' ');
+                    // LancamentoRec.Nome = pkey;
+                    $('#pgEditLancamentoCategoria').val(LancamentoRec.Categoria);
+					$('#pgEditLancamentoValor').val(LancamentoRec.Valor);
+					$('#pgEditLancamentoDescricao').val(LancamentoRec.Descricao);
                 }
                 // an error was encountered
             request.onerror = function(e) {
@@ -781,9 +783,7 @@ $(function() {
             }
             $.mobile.loading("hide");
         };
-              // this defines methods/procedures accessed by our events.
-        // get existing records from IndexedDB
-        //display records in table during runtime.
+		//Preenche o Select de categorias na tela de Adicionar Lançamentos
         lancamento.CategoriaSelect = function() {
             $.mobile.loading("show", {
                 text: "Loading ...",
@@ -822,8 +822,6 @@ $(function() {
             }
             $.mobile.loading("hide");
         };
-
-		
 		// get the contents of the add screen controls and store them in an object.
         //get the record to be saved and put it in a record array
         //read contents of each form input
