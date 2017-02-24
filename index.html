@@ -360,27 +360,22 @@
     <div id="pgAddLancamento" data-role="page">
         <div data-position="right" data-display="overlay" data-position-fixed="true" id="pgAddLancamentoRightPnl" data-role="panel">
             <ul data-role="listview" id="pgAddLancamentoRightPnlLV">
+			<option value="1">1st</option>
             </ul>
         </div>
         <header id="pgAddLancamentoHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
-            <a data-role="button" id="pgAddLancamentoMenu" data-icon="bars" href="#pgAddLancamentoLeftPnl" class="ui-btn-left">Menu</a>
+            <a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>
+            <a data-role="button" id="pgLancamentoNew" data-icon="plus" data-theme="b" class="ui-btn-right">Novo</a>
         </header>
         <div id="pgAddLancamentoCnt" data-role="content">
             <h3>Adicionar Lancamento</h3>
             <div id="pgAddLancamentoForm">
 				<div class="ui-field-contain">
-					<label for="pgAddLancamentoCategoria">Categoria<span class='red'>*</span></label>
+					<label for="pgAddLancamentoCategoria" class="select">Categoria<span class='red'>*</span></label>
 					<select name="pgAddLancamentoCategoria" id="pgAddLancamentoCategoria">
-						<option value="1">1st</option>
-						<option value="1">2st</option>
-						<option value="1">3st</option>
 					</select>
 				</div>
-                <!-- <div data-role="fieldcontain"> -->
-                    <!-- <label for="pgAddLancamentoCategoria">Categoria<span class='red'>*</span></label> -->
-                    <!-- <input required name="pgAddLancamentoCategoria" title="Digite a categoria aqui." type="text" id="pgAddLancamentoCategoria" placeholder="Digite a categoria aqui." autocomplete="off" data-clear-btn="true"></input> -->
-                <!-- </div> -->
                 <div data-role="fieldcontain">
                     <label for="pgAddLancamentoDescricao">Descrição<span class='red'>*</span></label>
                     <input required name="pgAddLancamentoDescricao" title="Digite a descrição aqui." type="text" id="pgAddLancamentoDescricao" placeholder="Digite a descrição aqui." autocomplete="off" data-clear-btn="true"></input>
@@ -405,7 +400,8 @@
     <div data-url="LancamentoNome" id="pgEditLancamento" data-role="page">
         <header id="pgEditLancamentoHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
-            <a data-role="button" id="pgEditLancamentoMenu" data-icon="bars" href="#pgEditLancamentoLeftPnl" class="ui-btn-left">Menu</a>
+            <a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>
+            <a data-role="button" id="pgLancamentoNew" data-icon="plus" data-theme="b" class="ui-btn-right">Novo</a>
         </header>
         <div id="pgEditLancamentoCnt" data-role="content">
             <h3>Editar Lancamento</h3>

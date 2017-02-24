@@ -2,8 +2,8 @@
 $(function() {
     (function(lancamento) {
         // variable definitions go here
-        var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
-        //var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2><p>DESCRIPTION</p><p><span class="ui-li-count">COUNTBUBBLE</span></p></a></li>';
+        //var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
+        var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2><p>DESCRIPTION</p><p><span class="ui-li-count">COUNTBUBBLE</span></p></a></li>';
         var LancamentoLiRi = '<li><a data-id="Z2">Z1</a></li>';
         var LancamentoHdr = '<li data-role="list-divider">Your Lancamentos</li>';
         var noLancamento = '<li id="noLancamento">You have no Lancamentos</li>';
@@ -84,8 +84,9 @@ $(function() {
                         $('#pgRptLancamentoBack').data('from', 'pgAddLancamento');
 						pgAddLancamentoValidar();                        
 						pgAddLancamentoClear();
-                        //load related select menus before the page shows
-                        lancamento.pgAddLancamentocheckForLancamentoStorageR();
+						lancamento.CategoriaSelect();
+                        // //load related select menus before the page shows
+                        // lancamento.pgAddLancamentocheckForLancamentoStorageR();
                         break;
                 }
             });
@@ -312,16 +313,14 @@ $(function() {
                 textonly: false,
                 html: ""
             });
-            // clean the primary key to store
-            var Nome = LancamentoRec.Nome;
-            Nome = Nome.split(' ').join('-');
-            LancamentoRec.Nome = Nome;
+          
             // store the json object in the database
             //define a transaction to execute
             var tx = dbDatabase.transaction(["Lancamento"], "readwrite");
             //get the record store to create a record on
             var store = tx.objectStore("Lancamento");
             // add to store
+			//var request = store.add({Descricao:"note 1",Categoria:"this is the body ",Valor:10000,Teste:"teste"});
             var request = store.add(LancamentoRec);
             request.onsuccess = function(e) {
                 //show a toast message that the record has been added
@@ -342,57 +341,6 @@ $(function() {
                 //show a toast message that the record has not been added
                 toastr.error('Lancamento record NOT successfully added.', 'Lancamentos Database');
             }
-            $.mobile.loading("hide");
-        };
-        // add a new record to IndexedDB storage.
-        lancamento.addMultLancamento = function(multiNome) {
-            $.mobile.loading("show", {
-                text: "Creating records...",
-                textVisible: true,
-                textonly: false,
-                html: ""
-            });
-            //loop through each record and add it to the database
-            var NomeCnt, NomeTot, NomeItems, LancamentoRec, Nome;
-            var NomeItem, addedRec = 0,
-                addedRecNot = 0;
-            //split the items as they are delimited by ;
-            NomeItems = Split(multiNome, ";");
-            NomeTot = NomeItems.length - 1;
-            //define a transaction to execute
-            var tx = dbDatabase.transaction(["Lancamento"], "readwrite");
-            //get the record store to create a record on
-            var store = tx.objectStore("Lancamento");
-            //loop through each record and add it to the store
-            for (NomeCnt = 0; NomeCnt <= NomeTot; NomeCnt++) {
-                //get each record being added
-                NomeItem = NomeItems[NomeCnt];
-                NomeItem = NomeItem.trim();
-                if (Len(NomeItem) > 0) {
-                    NomeItem = NomeItem.split(' ').join('-');
-                    Nome = NomeItem;
-                    LancamentoRec = {};
-                    LancamentoRec.Nome = NomeItem;
-                    // add to store
-                    var request = store.add(LancamentoRec);
-                    request.onsuccess = function(e) {
-                        addedRec += 1;
-                    }
-                    request.onerror = function(e) {
-                        addedRecNot += 1;
-                    }
-                }
-            }
-            if (addedRec >= 1) {
-                //show a toast message that the record has not been added
-                toastr.success(addedRec + 'Lancamento record(s) successfully added.', 'Lancamentos Database');
-            }
-            if (addedRecNot >= 1) {
-                //show a toast message that the record has not been added
-                toastr.error(addedRecNot + 'Lancamento record(s) could NOT be successfully added.', 'Lancamentos Database');
-            }
-            $('#pgAddMultLancamentoNome').val('');
-            $.mobile.changePage('#pgLancamento', { transition: pgtransition });
             $.mobile.loading("hide");
         };
         // save the defined Edit page object to IndexedDB
@@ -478,27 +426,24 @@ $(function() {
             for (n in LancamentoObj) {
                 //get the record details
                 var LancamentoRec = LancamentoObj[n];
-                // clean the primary key
-                var pkey = LancamentoRec.Nome;
-                pkey = pkey.split('-').join(' ');
-                LancamentoRec.Nome = pkey;
                 //define a new line from what we have defined
                 var nItem = LancamentoLi;
-                 nItem = nItem.replace(/Z2/g, n);
+                 nItem = nItem.replace(/Z2/g, LancamentoRec.Descricao);
                 //update the title to display, this might be multi fields
                  var nTitle = '';
                 // assign cleaned title
-                nTitle = n.split('-').join(' ');
+                nTitle = LancamentoRec.Descricao.split('-').join(' ');
                 //replace the title;
                  nItem = nItem.replace(/Z1/g, nTitle);
                 //there is a count bubble, update list item
 	            var nCountBubble = '';
-	            nCountBubble += LancamentoRec.LancamentoYear;
+	            //nCountBubble += formataValorNCasasMilhar(2, String(LancamentoRec.Valor));
+				nCountBubble += LancamentoRec.Valor;
 	            //replace the countbubble
 	             nItem = nItem.replace(/COUNTBUBBLE/g, nCountBubble);
 	            //there is a description, update the list item
 	            var nDescription = '';
-	            nDescription += LancamentoRec.LancamentoGenre;
+	            nDescription += LancamentoRec.Categoria;
             	//replace the description;
                  nItem = nItem.replace(/DESCRIPTION/g, nDescription);
                 html += nItem;
@@ -551,7 +496,6 @@ $(function() {
             }
         };
 		
-
 		// ***** Edit Page *****
 		//Validar campo da tela de Editar Lancamento
 		function pgAddLancamentoValidar() 
@@ -562,7 +506,7 @@ $(function() {
 			
 			$('#pgAddLancamentoValor').on('keyup', function(e) 
 			{
-				var ValorFormatado = formataValorNCasasMilhar(5, $('#pgAddLancamentoValor').val());
+				var ValorFormatado = formataValorNCasasMilhar(2, $('#pgAddLancamentoValor').val());
 				$('#pgAddLancamentoValor').val(ValorFormatado);
 			});			
         }     
@@ -752,43 +696,9 @@ $(function() {
             }
             $.mobile.loading("hide");
         };
-        // ***** Add Page *****
-        //display records in listview during runtime on right panel.
-        lancamento.pgAddLancamentodisplayLancamentoR = function(LancamentoObj) {
-            $.mobile.loading("show", {
-                text: "Displaying records...",
-                textVisible: true,
-                textonly: false,
-                html: ""
-            });
-            // create an empty string to contain html
-            var html = '';
-            // make sure your iterators are properly scoped
-            var n;
-            // loop over records and create a new list item for each
-            //append the html to store the listitems.
-            for (n in LancamentoObj) {
-                //get the record details
-                var LancamentoRec = LancamentoObj[n];
-                // clean the primary key
-                var pkey = LancamentoRec.Nome;
-                pkey = pkey.split('-').join(' ');
-                LancamentoRec.Nome = pkey;
-                //define a new line from what we have defined
-                var nItem = LancamentoLiRi;
-                nItem = nItem.replace(/Z2/g, n);
-                //update the title to display, this might be multi fields
-                var nTitle = '';
-                //assign cleaned title
-                nTitle = n.split('-').join(' ');
-                //replace the title;
-                nItem = nItem.replace(/Z1/g, nTitle);
-                html += nItem;
-            }
-            //update the listview with the newly defined html structure.
-            $('#pgAddLancamentoRightPnlLV').html(html).listview('refresh');
-            $.mobile.loading("hide");
-        };
+        
+		
+		// ***** Add Page *****
         //display records if they exist or tell user no records exist.
         lancamento.pgAddLancamentocheckForLancamentoStorageR = function() {
             $.mobile.loading("show", {
@@ -813,14 +723,6 @@ $(function() {
                     LancamentoObj[cursor.key] = cursor.value;
                     // process another record
                     cursor.continue();
-                }
-                // are there existing Lancamento records?
-                if (!$.isEmptyObject(LancamentoObj)) {
-                    // yes there are. pass them off to be displayed
-                    lancamento.pgAddLancamentodisplayLancamentoR(LancamentoObj);
-                } else {
-                    // nope, just show the placeholder
-                    $('#pgAddLancamentoRightPnlLV').html(LancamentoHdr + noLancamento).listview('refresh');
                 }
             }
             $.mobile.loading("hide");
@@ -879,7 +781,48 @@ $(function() {
             }
             $.mobile.loading("hide");
         };
-        
+              // this defines methods/procedures accessed by our events.
+        // get existing records from IndexedDB
+        //display records in table during runtime.
+        lancamento.CategoriaSelect = function() {
+            $.mobile.loading("show", {
+                text: "Loading ...",
+                textVisible: true,
+                textonly: false,
+                html: ""
+            });
+            //clear the table and leave the header
+            $('pgAddLancamentoCategoria').empty();
+            // create an empty string to contain all rows of the table
+            var n, CategoriaRec;
+            //get records from IndexedDB.
+            //define a transaction to read the records from the table
+            var tx = dbDatabase.transaction(["Categoria"], "readonly");
+            //get the object store for the table
+            var store = tx.objectStore("Categoria");
+            //open a cursor to read all the records
+            var request = store.openCursor();
+            request.onsuccess = function(e) {
+                //return the resultset
+                var cursor = e.target.result;
+                if (cursor) {
+                    n = cursor.key;
+                    //clean primary keys
+                    n = n.split('-').join(' ');
+                    //get each record
+                    CategoriaRec = cursor.value;
+                    //append each row to the table;
+					var option = '<option value="'+CategoriaRec.Nome+'">'+CategoriaRec.Nome+'</option>';
+                    $('#pgAddLancamentoCategoria').append(option);
+                    // process another record
+                    cursor.continue();
+                }
+                // update the table
+				$('#pgAddLancamentoCategoria').trigger("chosen:updated");
+            }
+            $.mobile.loading("hide");
+        };
+
 		
 		// get the contents of the add screen controls and store them in an object.
         //get the record to be saved and put it in a record array
@@ -887,7 +830,9 @@ $(function() {
         function pgAddLancamentoGetRec() {
             //define the new record
             var LancamentoRec = {};
-            LancamentoRec.Nome = $('#pgAddLancamentoNome').val().trim();
+            LancamentoRec.Descricao = $('#pgAddLancamentoDescricao').val().trim();
+			LancamentoRec.Categoria = $('#pgAddLancamentoCategoria').val().trim();
+			LancamentoRec.Valor = $('#pgAddLancamentoValor').val().trim();
             return LancamentoRec;
         }
         // clear the contents of the Add page controls
