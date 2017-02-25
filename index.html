@@ -231,21 +231,9 @@
         </div>
     </div>
     <div id="pgAddCategoria" data-role="page">
-        <div data-position="left" data-display="overlay" data-position-fixed="true" id="pgAddCategoriaLeftPnl" data-role="panel">
-            <ul data-role="listview" id="pgAddCategoriaLeftPnlLV">
-                <li><a data-transition="slide" href="#pgAddCategoria" class="ui-btn ui-icon-plus ui-btn-icon-left">Novo</a></li>
-                <li><a data-transition="slide" href="#pgAddMultCategoria" class="ui-btn ui-icon-plus ui-btn-icon-left">Novo Vários</a></li>
-                <li><a data-transition="slide" href="#pgRptCategoria" class="ui-btn ui-icon-eye ui-btn-icon-left">Relatórios</a></li>
-                <li><a data-transition="slide" href="#pgCategoria" class="ui-btn ui-icon-carat-l ui-btn-icon-left">Voltar</a></li>
-            </ul>
-        </div>
-        <div data-position="right" data-display="overlay" data-position-fixed="true" id="pgAddCategoriaRightPnl" data-role="panel">
-            <ul data-role="listview" id="pgAddCategoriaRightPnlLV">
-            </ul>
-        </div>
         <header id="pgAddCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
-            <a data-role="button" id="pgAddCategoriaMenu" data-icon="bars" href="#pgAddCategoriaLeftPnl" class="ui-btn-left">Menu</a>
+            <a data-role="button" id="pgCategoriaBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>
         </header>
         <div id="pgAddCategoriaCnt" data-role="content">
             <h3>Adicionar Categoria</h3>
@@ -267,46 +255,10 @@
             </div>
         </footer>
     </div>
-    <div id="pgAddMultCategoria" data-role="page">
-        <header id="pgAddMultCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-            <h1>Controle Financeiro</h1>
-        </header>
-        <div id="pgAddMultCategoriaCnt" data-role="content">
-            <h3>Add Multiple Categorias (separate by ;)</h3>
-            <div id="pgAddMultCategoriaForm">
-                <div data-role="fieldcontain">
-                    <label for="pgAddMultCategoriaCategoriaNome">Categoria Names<span class='red'>*</span></label>
-                    <textarea required name="pgAddMultCategoriaNome" id="pgAddMultCategoriaNome" placeholder="Enter Categoria Names here." title="Enter Categoria Names here."></textarea>
-                </div>
-            </div>
-        </div>
-        <footer id="pgAddMultCategoriaFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
-            <div id="pgAddMultCategoriaFtrNavBar" data-role="navbar">
-                <ul>
-                    <li><a id="pgAddMultCategoriaBack" data-icon="carat-l">Cancelar</a>
-                    </li>
-                    <li><a type="submit" id="pgAddMultCategoriaSave" data-icon="action">Salvar</a>
-                    </li>
-                </ul>
-            </div>
-        </footer>
-    </div>
     <div data-url="CategoriaNome" id="pgEditCategoria" data-role="page">
-        <div data-position="left" data-display="overlay" data-position-fixed="true" id="pgEditCategoriaLeftPnl" data-role="panel">
-            <ul data-role="listview" id="pgEditCategoriaLeftPnlLV">
-                <li><a data-transition="slide" href="#pgAddCategoria" class="ui-btn ui-icon-plus ui-btn-icon-left">New</a></li>
-                <li><a data-transition="slide" href="#pgAddMultCategoria" class="ui-btn ui-icon-plus ui-btn-icon-left">New Multiple</a></li>
-                <li><a data-transition="slide" href="#pgRptCategoria" class="ui-btn ui-icon-eye ui-btn-icon-left">Report</a></li>
-                <li><a data-transition="slide" href="#pgCategoria" class="ui-btn ui-icon-carat-l ui-btn-icon-left">Back</a></li>
-            </ul>
-        </div>
-        <div data-position="right" data-display="overlay" data-position-fixed="true" id="pgEditCategoriaRightPnl" data-role="panel">
-            <ul data-role="listview" id="pgEditCategoriaRightPnlLV">
-            </ul>
-        </div>
         <header id="pgEditCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
-            <a data-role="button" id="pgEditCategoriaMenu" data-icon="bars" href="#pgEditCategoriaLeftPnl" class="ui-btn-left">Menu</a>
+            <a data-role="button" id="pgCategoriaBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>
         </header>
         <div id="pgEditCategoriaCnt" data-role="content">
             <h3>Editar Categoria</h3>
