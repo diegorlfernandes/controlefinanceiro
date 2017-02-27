@@ -16,7 +16,7 @@ $(function() {
         var CategoriaHdr = '<li data-role="list-divider">Your Categorias</li>';
         var noCategoria = '<li id="noCategoria">You have no Categorias</li>';
 
-		
+
         categoria.init = function() {
             // open the indexedDB database
             var request = indexedDB.open(dbNome, dbVersion);
@@ -24,7 +24,7 @@ $(function() {
             request.onupgradeneeded = function(e) {
                 var thisDB = e.target.result;
                 var store = null;
-				
+
                 //create the necessary tables for the application
                 // create an indexedDB for IndexedDB-Categoria
                 if (!thisDB.objectStoreNames.contains("Categoria")) {
@@ -501,7 +501,7 @@ $(function() {
             $('#pgAddCategoriaNome').val('');
         }
 
-		
+
 
         // ***** Edit Page *****
         // clear the contents of the Edit Page controls
@@ -615,7 +615,7 @@ $(function() {
 
 
 
-		
+
         categoria.init();
     })(Database);
 });

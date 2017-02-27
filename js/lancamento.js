@@ -348,8 +348,7 @@ $(function() {
                  nItem = nItem.replace(/Z1/g, nTitle);
                 //there is a count bubble, update list item
 	            var nCountBubble = '';
-	            //nCountBubble += formataValorNCasasMilhar(2, String(LancamentoRec.Valor));
-				nCountBubble += LancamentoRec.Valor;
+	    		nCountBubble += LancamentoRec.Valor;
 	            //replace the countbubble
 	             nItem = nItem.replace(/COUNTBUBBLE/g, nCountBubble);
 	            //there is a description, update the list item
