@@ -334,7 +334,8 @@
                 </div>
                 <div data-role="fieldcontain">
                     <label for="pgAddLancamentoValor">Valor<span class='red'>*</span></label>
-                    <input required name="pgAddLancamentoValor" title="Digite o valor aqui." type="number" pattern="[0-9.]*" step="0.01" min="0" id="pgAddLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
+                    <input required name="pgAddLancamentoValor" title="Digite o valor aqui." type="text"  id="pgAddLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
+					<!-- <input required name="pgAddLancamentoValor" title="Digite o valor aqui." type="number" pattern="[0-9.]*" step="0.01" min="0" id="pgAddLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input> -->
                 </div>
             </div>
         </div>
@@ -358,6 +359,9 @@
         <div id="pgEditLancamentoCnt" data-role="content">
             <h3>Editar Lancamento</h3>
             <div id="pgEditLancamentoForm">
+                <div data-role="fieldcontain">
+                    <input required name="pgEditLancamentoLancamentoID" type="text" id="pgEditLancamentoLancamentoID" visibility=false></input>
+                </div>
                 <div data-role="fieldcontain">
                     <label for="pgEditLancamentoCategoria">Categoria<span class='red'>*</span></label>
                     <input required name="pgEditLancamentoCategoria" title="Digite a categoria aqui." type="text" id="pgEditLancamentoCategoria" placeholder="Digite a categoria aqui." autocomplete="off" data-clear-btn="true"></input>

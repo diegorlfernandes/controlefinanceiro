@@ -43,7 +43,7 @@ $(function() {
                         //clear the edit page contents
                         pgEditLancamentoClear();
                         //load related select menus before the page shows
-                        var Nome = $('#pgEditLancamento').data('id');
+                        var LancamentoID = $('#pgEditLancamento').data('id');
                         //read record from IndexedDB and update screen.
                         lancamento.editLancamento(LancamentoID);
                         break;
@@ -128,7 +128,6 @@ $(function() {
                 e.stopImmediatePropagation();
                 //get href of selected listview item and cleanse it
                 var href = $(this).data('id');
-                href = href.split(' ').join('-');
                 //save id of record to edit;
                 $('#pgEditLancamento').data('id', href);
                 //change page to edit page.
@@ -339,7 +338,7 @@ $(function() {
                 var LancamentoRec = LancamentoObj[n];
                 //define a new line from what we have defined
                 var nItem = LancamentoLi;
-                 nItem = nItem.replace(/Z2/g, LancamentoRec.Descricao);
+                 nItem = nItem.replace(/Z2/g, LancamentoRec.LancamentoID);
                 //update the title to display, this might be multi fields
                  var nTitle = '';
                 // assign cleaned title
@@ -554,9 +553,6 @@ $(function() {
 		//Validar campo da tela de Editar Lancamento
 		function pgAddLancamentoValidar() 
 		{
-			// $( "#pgAddLancamentoValor" ).keyup(function() {
-				// alert( "Handler for .keyup() called." );
-			// });
 			
 			$('#pgAddLancamentoValor').on('keyup', function(e) 
 			{
@@ -583,7 +579,7 @@ $(function() {
         }
         // display content of selected record on Edit Page
         //read record from IndexedDB and display it on edit page.
-        lancamento.editLancamento = function(Nome) {
+        lancamento.editLancamento = function(LancamentoID) {
             $.mobile.loading("show", {
                 text: "Reading record...",
                 textVisible: true,
@@ -592,29 +588,24 @@ $(function() {
             });
             // clear the form fields
             pgEditLancamentoClear();
-            Nome = Nome.split(' ').join('-');
             var LancamentoRec = {};
             //define a transaction to read the record from the table
             var tx = dbDatabase.transaction(["Lancamento"], "readonly");
             //get the object store for the table
             var store = tx.objectStore("Lancamento");
             //get the record by primary key
-            var request = store.get(Nome);
+            var request = store.get(LancamentoID);
             request.onsuccess = function(e) {
                     LancamentoRec = e.target.result;
                     //everything is fine, continue
                     //make the record key read only
-                    $('#pgEditLancamentoNome').attr('readonly', 'readonly');
+                    $('#pgEditLancamentoLancamentoID').attr('readonly', 'readonly');
                     //ensure the record key control cannot be clearable
-                    $('#pgEditLancamentoNome').attr('data-clear-btn', 'false');
-                    //update each control in the Edit page
-                    //clean the primary key
-                    var pkey = LancamentoRec.Nome;
-                    pkey = pkey.split('-').join(' ');
-                    LancamentoRec.Nome = pkey;
-                    $('#pgEditLancamentoNome').val(LancamentoRec.Nome);
-                    $('#pgEditLancamentoLancamentoYear').val(LancamentoRec.LancamentoYear);
-                    $('#pgEditLancamentoLancamentoGenre').val(LancamentoRec.LancamentoGenre);
+                    $('#pgEditLancamentoLancamentoID').attr('data-clear-btn', 'false');
+                    LancamentoRec.LancamentoID = LancamentoRec.LancamentoID;
+                    $('#pgEditLancamentoDescricao').val(LancamentoRec.Descricao);
+                    $('#pgEditLancamentoCategoria').val(LancamentoRec.Categoria);
+                    $('#pgEditLancamentoValor').val(LancamentoRec.Valor);
                 }
                 // an error was encountered
             request.onerror = function(e) {
@@ -627,84 +618,6 @@ $(function() {
                 return;
             }
             $.mobile.loading("hide");
-        };
-        //display records in listview during runtime on right panel.
-        lancamento.pgEditLancamentodisplayLancamentoR = function(LancamentoObj) {
-            $.mobile.loading("show", {
-                text: "Displaying records...",
-                textVisible: true,
-                textonly: false,
-                html: ""
-            });
-            // create an empty string to contain html
-            var html = '';
-            // make sure your iterators are properly scoped
-            var n;
-            // loop over records and create a new list item for each
-            //append the html to store the listitems.
-            for (n in LancamentoObj) {
-                //get the record details
-                var LancamentoRec = LancamentoObj[n];
-                // clean the primary key
-                var pkey = LancamentoRec.Nome;
-                pkey = pkey.split('-').join(' ');
-                LancamentoRec.Nome = pkey;
-                //define a new line from what we have defined
-                var nItem = LancamentoLiRi;
-                nItem = nItem.replace(/Z2/g, n);
-                //update the title to display, this might be multi fields
-                var nTitle = '';
-                //assign cleaned title
-                nTitle = n.split('-').join(' ');
-                //replace the title;
-                nItem = nItem.replace(/Z1/g, nTitle);
-                html += nItem;
-            }
-            //update the listview with the newly defined html structure.
-            $('#pgEditLancamentoRightPnlLV').html(html).listview('refresh');
-            $.mobile.loading("hide");
-        };
-        //display records if they exist or tell user no records exist.
-        lancamento.pgEditLancamentocheckForLancamentoStorageR = function() {
-            $.mobile.loading("show", {
-                text: "Checking storage...",
-                textVisible: true,
-                textonly: false,
-                html: ""
-            });
-            //get records from IndexedDB.
-            //when returned, parse then as json object
-            var LancamentoObj = {};
-            //define a transaction to read the records from the table
-            var tx = dbDatabase.transaction(["Lancamento"], "readonly");
-            //get the object store for the table
-            var store = tx.objectStore("Lancamento");
-            //open a cursor to read all the records
-            var request = store.openCursor();
-            request.onsuccess = function(e) {
-                //return the resultset
-                var cursor = e.target.result;
-                if (cursor) {
-                    LancamentoObj[cursor.key] = cursor.value;
-                    // process another record
-                    cursor.continue();
-                }
-                // are there existing Lancamento records?
-                if (!$.isEmptyObject(LancamentoObj)) {
-                    // yes there are. pass them off to be displayed
-                    lancamento.pgEditLancamentodisplayLancamentoR(LancamentoObj);
-                } else {
-                    // nope, just show the placeholder
-                    $('#pgEditLancamentoRightPnlLV').html(LancamentoHdr + noLancamento).listview('refresh');
-                }
-            }
-            $.mobile.loading("hide");
-            // an error was encountered
-            request.onerror = function(e) {
-                $.mobile.loading("hide");
-                // just show the placeholder
-                $('#pgEditLancamentoRightPnlLV').html(LancamentoHdr + noLancamento).listview('refresh');
-            }
         };
         //read record from IndexedDB and display it on edit page.
         lancamento.pgEditLancamentoeditLancamento = function(LancamentoID) {

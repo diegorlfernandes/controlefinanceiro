@@ -25,19 +25,6 @@ $(function() {
                 var thisDB = e.target.result;
                 var store = null;
 
-                //create the necessary tables for the application
-                // create an indexedDB for IndexedDB-Categoria
-                if (!thisDB.objectStoreNames.contains("Categoria")) {
-                    // create objectStore for PrimaryKey as keyPath="Nome"
-                    store = thisDB.createObjectStore("Categoria", { keyPath: "Nome"});
-					//store = thisDB.createObjectStore("Categoria", { keyPath: "LancamentoID" },autoIncrement:true);
-                    // thisDB.createObjectStore("Categoria", { autoIncrement: true });
-                    // create index to 'Nome' for conditional search
-                    // store.createIndex('Nome', 'Nome', {unique: false });
-                }
-                if (!thisDB.objectStoreNames.contains("Lancamento")) {
-                    store = thisDB.createObjectStore("Lancamento", { keyPath: "Nome" });
-                }
             };
             //the database was opened successfully
             request.onsuccess = function(e) {
@@ -66,7 +53,6 @@ $(function() {
                         var Nome = $('#pgEditCategoria').data('id');
                         //read record from IndexedDB and update screen.
                         categoria.editCategoria(Nome);
-                        categoria.pgEditCategoriacheckForCategoriaStorageR();
                         break;
                     case 'pgAddCategoria':
                         $('#pgRptCategoriaBack').data('from', 'pgAddCategoria');
@@ -554,51 +540,6 @@ $(function() {
                     $('#pgEditCategoriaNome').val(CategoriaRec.Nome);
                     $('#pgEditCategoriaCategoriaYear').val(CategoriaRec.CategoriaYear);
                     $('#pgEditCategoriaCategoriaGenre').val(CategoriaRec.CategoriaGenre);
-                }
-                // an error was encountered
-            request.onerror = function(e) {
-                $('#alertboxheader h1').text('Categoria Error');
-                $('#alertboxtitle').text(Nome.split('-').join(' '));
-                $('#alertboxprompt').text('An error was encountered trying to read this record, please try again!');
-                $('#alertboxok').data('topage', 'pgEditCategoria');
-                $('#alertboxok').data('id', Nome.split(' ').join('-'));
-                $.mobile.changePage('#alertbox', { transition: 'pop' });
-                return;
-            }
-            $.mobile.loading("hide");
-        };
-        //display records in listview during runtime on right panel.
-        //read record from IndexedDB and display it on edit page.
-        categoria.pgEditCategoriaeditCategoria = function(Nome) {
-            $.mobile.loading("show", {
-                text: "Reading record...",
-                textVisible: true,
-                textonly: false,
-                html: ""
-            });
-            // clear the form fields
-            pgEditCategoriaClear();
-            Nome = Nome.split(' ').join('-');
-            var CategoriaRec = {};
-            //define a transaction to read the record from the table
-            var tx = dbDatabase.transaction(["Categoria"], "readonly");
-            //get the object store for the table
-            var store = tx.objectStore("Categoria");
-            //get the record by primary key
-            var request = store.get(Nome);
-            request.onsuccess = function(e) {
-                    CategoriaRec = e.target.result;
-                    //everything is fine, continue
-                    //make the record key read only
-                    $('#pgEditCategoriaNome').attr('readonly', 'readonly');
-                    //ensure the record key control cannot be clearable
-                    $('#pgEditCategoriaNome').attr('data-clear-btn', 'false');
-                    //update each control in the Edit page
-                    //clean the primary key
-                    var pkey = CategoriaRec.Nome;
-                    pkey = pkey.split('-').join(' ');
-                    CategoriaRec.Nome = pkey;
-                    $('#pgEditCategoriaNome').val(CategoriaRec.Nome);
                 }
                 // an error was encountered
             request.onerror = function(e) {
