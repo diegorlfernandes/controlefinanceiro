@@ -204,7 +204,8 @@
             <h1>Controle Financeiro Pessoal</h1>
         </footer>
     </div>
-	<!-- Categoria -->
+	
+	
     <div id="pg" data-role="page" data-theme="b" class="backpicture">
         <header id="pgHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro > </h1>
@@ -216,20 +217,26 @@
             <h1>Powered by Diego Fernandes 2017</h1>
         </footer>
     </div>
+
+	<!-- Categoria -->
     <div id="pgCategoria" data-role="page">
         <header id="pgCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
             <a data-role="button" id="pgCategoriaBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>
             <a data-role="button" id="pgCategoriaNew" data-icon="plus" data-theme="b" class="ui-btn-right">Novo</a>
         </header>
+		
+		<!-- Lista de categorias -->
         <div id="pgCategoriaCnt" data-role="content">
             <h3>Categorias</h3>
-            <ul data-role="listview" data-inset="true" id="pgCategoriaList" data-autodividers="true" data-filter="true" data-filter-placeholder="Search Categorias">
+            <ul data-role="listview" data-inset="true" id="pgCategoriaList" data-autodividers="false" data-filter="true" data-filter-placeholder="Search Categorias">
                 <li data-role="list-divider">Suas Categorias</li>
                 <li id="noCategoria">Você não tem Categorias</li>
             </ul>
-        </div>
+        </div>		
     </div>
+	
+	<!-- Adicionar categorias -->
     <div id="pgAddCategoria" data-role="page">
         <header id="pgAddCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
@@ -255,6 +262,8 @@
             </div>
         </footer>
     </div>
+	
+	<!-- editar Categoria -->
     <div data-url="CategoriaNome" id="pgEditCategoria" data-role="page">
         <header id="pgEditCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
@@ -265,25 +274,24 @@
             <div id="pgEditCategoriaForm">
                 <div data-role="fieldcontain">
                     <label for="pgEditCategoriaNome">Nome<span class='red'>*</span></label>
-                    <input required readonly="readonly" data-clear-btn="true" autofocus="true" name="pgEditCategoriaNome" title="Digite o nome da categoria aqui." type="text" id="pgEditCategoriaNome" placeholder="Enter Categoria name here." autocomplete="off"></input>
+                    <input required name="pgEditCategoriaNome" title="Digite o nome da categoria aqui." type="text" id="pgEditCategoriaNome" placeholder="Digite a categoria aqui." autocomplete="off"></input>
                 </div>
             </div>
         </div>
         <footer id="pgEditCategoriaFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <div id="pgEditCategoriaFtrNavBar" data-role="navbar">
                 <ul>
-                    <li><a data-transition="slide" id="pgEditCategoriaBack" data-icon="carat-l" href="#pgCategoria">Cancelar</a>
-                    </li>
-                    <li><a type="submit" id="pgEditCategoriaUpdate" data-icon="action">Update</a>
-                    </li>
-                    <li><a data-rel="popup" data-transition="pop" id="pgEditCategoriaDelete" data-icon="delete" href="#msgbox">Delete</a>
-                    </li>
+                    <li><a data-transition="slide" id="pgEditCategoriaBack" data-icon="carat-l" href="#pgCategoria">Cancelar</a></li>
+                    <!-- <li><a type="submit" id="pgEditCategoriaUpdate" data-icon="action">Atualizar</a></li> -->
+                    <li><a data-rel="popup" data-transition="pop" id="pgEditCategoriaDelete" data-icon="delete" href="#msgbox">Apagar</a></li>
                 </ul>
             </div>
         </footer>
     </div>
 
 	<!-- Lançamentos -->
+	
+	<!-- Listar Lançamentos -->
     <div id="pg" data-role="page" data-theme="b" class="backpicture">
         <header id="pgHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro > </h1>
@@ -303,12 +311,14 @@
         </header>
         <div id="pgLancamentoCnt" data-role="content">
             <h3>Lançamentos</h3>
-            <ul data-role="listview" data-inset="true" id="pgLancamentoList" data-autodividers="true" data-filter="true" data-filter-placeholder="Pesquisar Lancamentos">
+            <ul data-role="listview" data-inset="true" id="pgLancamentoList" data-autodividers="false" data-filter="true" data-filter-placeholder="Pesquisar Lancamentos">
                 <li data-role="list-divider">Seus Lancamentos</li>
                 <li id="noLancamento">Você não tem Lancamentos</li>
             </ul>
         </div>
     </div>
+	
+	<!-- Adicionar Lancamento -->
     <div id="pgAddLancamento" data-role="page">
         <div data-position="right" data-display="overlay" data-position-fixed="true" id="pgAddLancamentoRightPnl" data-role="panel">
             <ul data-role="listview" id="pgAddLancamentoRightPnlLV">
@@ -329,8 +339,8 @@
 					</select>
 				</div>
                 <div data-role="fieldcontain">
-                    <label for="pgAddLancamentoDescricao">Descrição<span class='red'>*</span></label>
-                    <input required name="pgAddLancamentoDescricao" title="Digite a descrição aqui." type="text" id="pgAddLancamentoDescricao" placeholder="Digite a descrição aqui." autocomplete="off" data-clear-btn="true"></input>
+                    <label for="pgAddLancamentoDescricao">Descrição<span class='red'></span></label>
+                    <input name="pgAddLancamentoDescricao" title="Digite a descrição aqui." type="text" id="pgAddLancamentoDescricao" placeholder="Digite a descrição aqui." autocomplete="off" data-clear-btn="true"></input>
                 </div>
                 <div data-role="fieldcontain">
                     <label for="pgAddLancamentoValor">Valor<span class='red'>*</span></label>
@@ -350,6 +360,8 @@
             </div>
         </footer>
     </div>
+	
+	<!-- editar Lancamento -->
     <div data-url="LancamentoNome" id="pgEditLancamento" data-role="page">
         <header id="pgEditLancamentoHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Controle Financeiro</h1>
@@ -360,18 +372,18 @@
             <h3>Editar Lancamento</h3>
             <div id="pgEditLancamentoForm">
                 <div data-role="fieldcontain">
-                    <input required name="pgEditLancamentoLancamentoID" type="text" id="pgEditLancamentoLancamentoID" visibility=false></input>
+                    <input  name="pgEditLancamentoLancamentoID" type="hidden" id="pgEditLancamentoLancamentoID" </input>
                 </div>
                 <div data-role="fieldcontain">
                     <label for="pgEditLancamentoCategoria">Categoria<span class='red'>*</span></label>
                     <input required name="pgEditLancamentoCategoria" title="Digite a categoria aqui." type="text" id="pgEditLancamentoCategoria" placeholder="Digite a categoria aqui." autocomplete="off" data-clear-btn="true"></input>
                 </div>
                 <div data-role="fieldcontain">
-                    <label for="pgEditLancamentoDescricao">Descrição<span class='red'>*</span></label>
-                    <input required name="pgEditLancamentoDescricao" title="Digite a descrição aqui." type="text" id="pgEditLancamentoDescricao" placeholder="Digite a descrição aqui." autocomplete="off" data-clear-btn="true"></input>
+                    <label for="pgEditLancamentoDescricao">Descrição<span class='red'></span></label>
+                    <input name="pgEditLancamentoDescricao" title="Digite a descrição aqui." type="text" id="pgEditLancamentoDescricao" placeholder="Digite a descrição aqui." autocomplete="off" data-clear-btn="true"></input>
                 </div>
                 <div data-role="fieldcontain">
-                    <label for="pgEditLancamentoValor">Descrição<span class='red'>*</span></label>
+                    <label for="pgEditLancamentoValor">Valor<span class='red'>*</span></label>
                     <input required name="pgEditLancamentoValor" title="Digite o valor aqui." type="text" id="pgEditLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
                 </div>
             </div>
@@ -381,14 +393,17 @@
                 <ul>
                     <li><a data-transition="slide" id="pgEditLancamentoBack" data-icon="carat-l" href="#pgLancamento">Cancelar</a>
                     </li>
-                    <li><a type="submit" id="pgEditLancamentoUpdate" data-icon="action">Update</a>
+                    <li><a type="submit" id="pgEditLancamentoUpdate" data-icon="action">Atualizar</a>
                     </li>
-                    <li><a data-rel="popup" data-transition="pop" id="pgEditLancamentoDelete" data-icon="delete" href="#msgbox">Delete</a>
+                    <li><a data-rel="popup" data-transition="pop" id="pgEditLancamentoDelete" data-icon="delete" href="#msgbox">Apagar</a>
                     </li>
                 </ul>
             </div>
         </footer>
     </div>
+	
+	
+	<!-- Mensagens -->
     <div data-dismissible="false" data-close-btn="none" data-transition="pop" id="msgbox" data-role="popup">
         <header id="msgboxHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
             <h1>Confirm</h1>

@@ -3,10 +3,11 @@ $(function() {
     (function(lancamento) {
         // variable definitions go here
         //var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
-        var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2><p>DESCRIPTION</p><p><span class="ui-li-count">COUNTBUBBLE</span></p></a></li>';
+        //var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2><p>DESCRIPTION</p><p><span class="ui-li-count">COUNTBUBBLE</span></p></a></li>';
+        var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2><p><span class="ui-li-count">COUNTBUBBLE</span></p></a></li>';
         var LancamentoLiRi = '<li><a data-id="Z2">Z1</a></li>';
-        var LancamentoHdr = '<li data-role="list-divider">Your Lancamentos</li>';
-        var noLancamento = '<li id="noLancamento">You have no Lancamentos</li>';
+        var LancamentoHdr = '<li data-role="list-divider">Seus Lancamentos</li>';
+        var noLancamento = '<li id="noLancamento">Você não tem Lancamentos</li>';
        
 
 
@@ -66,7 +67,7 @@ $(function() {
                     default:
                 }
             });
-            //***** Add Page *****
+		//{***** Add Page *****
             // code to run when back button is clicked on the add record page.
             // Back click event from Add Page
             $('#pgAddLancamentoBack').on('click', function(e) {
@@ -119,7 +120,7 @@ $(function() {
                 //read record from IndexedDB and update screen.
                 lancamento.pgAddLancamentoeditLancamento(href);
             });
-            //***** Add Page - End *****
+		//***** Add Page - End *****}
             //***** Listing Page *****
             // code to run when a listview item is clicked.
             //listview item click eventt.
@@ -172,15 +173,15 @@ $(function() {
                 e.preventDefault();
                 e.stopImmediatePropagation();
                 //read the record key from form control
-                var Nome = $('#pgEditLancamentoNome').val().trim();
+                var ID = $('#pgEditLancamentoLancamentoID').val().trim();
                 //show a confirm message box
                 $('#msgboxheader h1').text('Confirm Delete');
-                $('#msgboxtitle').text(Nome.split('-').join(' '));
+                $('#msgboxtitle').text(ID.split('-').join(' '));
                 $('#msgboxprompt').text('Are you sure that you want to delete this Lancamento? This action cannot be undone.');
                 $('#msgboxyes').data('method', 'deleteLancamento');
                 $('#msgboxno').data('method', 'editLancamento');
-                $('#msgboxyes').data('id', Nome.split(' ').join('-'));
-                $('#msgboxno').data('id', Nome.split(' ').join('-'));
+                $('#msgboxyes').data('id', ID.split(' ').join('-'));
+                $('#msgboxno').data('id', ID.split(' ').join('-'));
                 $('#msgboxyes').data('topage', 'pgEditLancamento');
                 $('#msgboxno').data('topage', 'pgEditLancamento');
                 $.mobile.changePage('#msgbox', { transition: 'pop' });
@@ -342,7 +343,9 @@ $(function() {
                 //update the title to display, this might be multi fields
                  var nTitle = '';
                 // assign cleaned title
-                nTitle = LancamentoRec.Descricao.split('-').join(' ');
+				nTitle = LancamentoRec.Categoria;
+				nTitle +=" ";
+                nTitle += LancamentoRec.Descricao;
                 //replace the title;
                  nItem = nItem.replace(/Z1/g, nTitle);
                 //there is a count bubble, update list item
@@ -572,9 +575,10 @@ $(function() {
         function pgEditLancamentoGetRec() {
             //define the new record
             var LancamentoRec = {};
-            LancamentoRec.Nome = $('#pgEditLancamentoNome').val().trim();
-            LancamentoRec.LancamentoYear = $('#pgEditLancamentoLancamentoYear').val().trim();
-            LancamentoRec.LancamentoGenre = $('#pgEditLancamentoLancamentoGenre').val().trim();
+            LancamentoRec.LancamentoID = $('#pgEditLancamentoLancamentoID');
+            LancamentoRec.LancamentoCategoria = $('#pgEditLancamentoCategoria');
+            LancamentoRec.LancamentoDescricao = $('#pgEditLancamentoDescricao');
+			LancamentoRec.LancamentoValor = $('#pgEditLancamentoValor');
             return LancamentoRec;
         }
         // display content of selected record on Edit Page
@@ -602,10 +606,10 @@ $(function() {
                     $('#pgEditLancamentoLancamentoID').attr('readonly', 'readonly');
                     //ensure the record key control cannot be clearable
                     $('#pgEditLancamentoLancamentoID').attr('data-clear-btn', 'false');
-                    LancamentoRec.LancamentoID = LancamentoRec.LancamentoID;
-                    $('#pgEditLancamentoDescricao').val(LancamentoRec.Descricao);
-                    $('#pgEditLancamentoCategoria').val(LancamentoRec.Categoria);
-                    $('#pgEditLancamentoValor').val(LancamentoRec.Valor);
+                    $('#pgEditLancamentoLancamentoID').val(LancamentoRec.LancamentoID);
+                    // $('#pgEditLancamentoDescricao').val(LancamentoRec.Descricao);
+                    // $('#pgEditLancamentoCategoria').val(LancamentoRec.Categoria);
+                    // $('#pgEditLancamentoValor').val(LancamentoRec.Valor);
                 }
                 // an error was encountered
             request.onerror = function(e) {
@@ -649,7 +653,7 @@ $(function() {
                     // var pkey = LancamentoRec.Nome;
                     // pkey = pkey.split('-').join(' ');
                     // LancamentoRec.Nome = pkey;
-                    $('#pgEditLancamentoCategoria').val(LancamentoRec.Categoria);
+					$('#pgEditLancamentoCategoria').val(LancamentoRec.Categoria);
 					$('#pgEditLancamentoValor').val(LancamentoRec.Valor);
 					$('#pgEditLancamentoDescricao').val(LancamentoRec.Descricao);
                 }

@@ -31,6 +31,34 @@ $(function() {
                 dbDatabase = e.target.result;
             }
             categoria.CategoriaBindings();
+			
+			$('#msgboxyes').on('click', function (e) 
+			{
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				var yesmethod = $('#msgboxyes').data('method');
+				var yesid = $('#msgboxyes').data('id');
+				categoria[yesmethod](yesid);
+			});
+			$('#msgboxno').on('click', function (e) 
+			{
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				var nomethod = $('#msgboxno').data('method');
+				var noid = $('#msgboxno').data('id');
+				var toPage = $('#msgboxno').data('topage');
+				// show the page to display after a record is deleted
+				$.mobile.changePage('#' + toPage, {transition: pgtransition});
+				categoria[nomethod](noid);
+			});
+			$('#alertboxok').on('click', function (e) 
+			{
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				var toPage = $('#alertboxok').data('topage');
+				// show the page to display after ok is clicked
+				$.mobile.changePage('#' + toPage, {transition: pgtransition});
+			});
         };
         // define events to be fired during categoria execution.
         categoria.CategoriaBindings = function() {
@@ -457,8 +485,6 @@ $(function() {
                     pkey = pkey.split('-').join(' ');
                     CategoriaRec.Nome = pkey;
                     $('#pgAddCategoriaNome').val(CategoriaRec.Nome);
-                    $('#pgAddCategoriaCategoriaYear').val(CategoriaRec.CategoriaYear);
-                    $('#pgAddCategoriaCategoriaGenre').val(CategoriaRec.CategoriaGenre);
                 }
                 // an error was encountered
             request.onerror = function(e) {
@@ -502,8 +528,6 @@ $(function() {
             //define the new record
             var CategoriaRec = {};
             CategoriaRec.Nome = $('#pgEditCategoriaNome').val().trim();
-            CategoriaRec.CategoriaYear = $('#pgEditCategoriaCategoriaYear').val().trim();
-            CategoriaRec.CategoriaGenre = $('#pgEditCategoriaCategoriaGenre').val().trim();
             return CategoriaRec;
         }
         // display content of selected record on Edit Page
@@ -538,8 +562,6 @@ $(function() {
                     pkey = pkey.split('-').join(' ');
                     CategoriaRec.Nome = pkey;
                     $('#pgEditCategoriaNome').val(CategoriaRec.Nome);
-                    $('#pgEditCategoriaCategoriaYear').val(CategoriaRec.CategoriaYear);
-                    $('#pgEditCategoriaCategoriaGenre').val(CategoriaRec.CategoriaGenre);
                 }
                 // an error was encountered
             request.onerror = function(e) {
