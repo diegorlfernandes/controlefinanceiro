@@ -41,10 +41,8 @@ $(function() {
                         break;
                     case 'pgEditLancamento':
                         $('#pgRptLancamentoBack').data('from', 'pgEditLancamento');
-                        //clear the edit page contents
-                        pgEditLancamentoClear();
                         //load related select menus before the page shows
-                        var LancamentoID = $('#pgEditLancamento').data('id');
+                        var LancamentoID = parseInt($('#pgEditLancamento').data('id'));
                         //read record from IndexedDB and update screen.
                         lancamento.editLancamento(LancamentoID);
                         break;
@@ -62,7 +60,7 @@ $(function() {
                     case 'pgAddLancamento':
 						pgAddLancamentoClear();
 						pgAddLancamentoValidar();                        
-						lancamento.CategoriaSelect();
+						lancamento.CategoriaSelectAdd();
                         break;
                     default:
                 }
@@ -194,7 +192,7 @@ $(function() {
                 var href = $(this).data('id');
                 href = href.split(' ').join('-');
                 //read record from IndexedDB and update screen.
-                lancamento.pgEditLancamentoeditLancamento(href);
+                lancamento.pgEditLancamento(href);
             });
             //***** Edit Page - End *****
             //***** Report Page *****
@@ -299,13 +297,12 @@ $(function() {
                 textonly: false,
                 html: ""
             });
-            Nome = Nome.split(' ').join('-');
             //define a transaction to execute
             var tx = dbDatabase.transaction(["Lancamento"], "readwrite");
             //get the record store to delete a record from
             var store = tx.objectStore("Lancamento");
             //delete record by primary key
-            var request = store.delete(Nome);
+            var request = store.delete(parseInt(LancamentoID));
             request.onsuccess = function(e) {
                 //record has been deleted
                 toastr.success('Lancamento record deleted.', 'Lancamentos Database');
@@ -339,13 +336,16 @@ $(function() {
                 var LancamentoRec = LancamentoObj[n];
                 //define a new line from what we have defined
                 var nItem = LancamentoLi;
-                 nItem = nItem.replace(/Z2/g, LancamentoRec.LancamentoID);
+                 nItem = nItem.replace(/Z2/g, String(LancamentoRec.LancamentoID));
                 //update the title to display, this might be multi fields
                  var nTitle = '';
                 // assign cleaned title
 				nTitle = LancamentoRec.Categoria;
-				nTitle +=" ";
-                nTitle += LancamentoRec.Descricao;
+				if(LancamentoRec.Descricao)
+				{
+					nTitle +=" --> ";
+					nTitle += LancamentoRec.Descricao;
+				}
                 //replace the title;
                  nItem = nItem.replace(/Z1/g, nTitle);
                 //there is a count bubble, update list item
@@ -410,7 +410,7 @@ $(function() {
 		
 		
 		
-		// ***** Add Page *****
+		//{ ***** Add Page *****
         //display records if they exist or tell user no records exist.
         lancamento.pgAddLancamentocheckForLancamentoStorageR = function() {
             $.mobile.loading("show", {
@@ -494,7 +494,7 @@ $(function() {
             $.mobile.loading("hide");
         };
 		//Preenche o Select de categorias na tela de Adicionar Lançamentos
-        lancamento.CategoriaSelect = function() {
+        lancamento.CategoriaSelectAdd = function() {
             $.mobile.loading("show", {
                 text: "Loading ...",
                 textVisible: true,
@@ -529,6 +529,10 @@ $(function() {
 				$('#pgAddLancamentoCategoria').trigger("chosen:updated");
             }
             $.mobile.loading("hide");
+			request.onerror = function(e) {
+                $.mobile.loading("hide");
+                // just show the placeholder
+            }
         };
 		// get the contents of the add screen controls and store them in an object.
         //get the record to be saved and put it in a record array
@@ -536,9 +540,11 @@ $(function() {
         function pgAddLancamentoGetRec() {
             //define the new record
             var LancamentoRec = {};
+			var DataAtual = new Date();
             LancamentoRec.Descricao = $('#pgAddLancamentoDescricao').val().trim();
 			LancamentoRec.Categoria = $('#pgAddLancamentoCategoria').val().trim();
 			LancamentoRec.Valor = $('#pgAddLancamentoValor').val().trim();
+			LancamentoRec.MesAno = String(DataAtual.getMonth()).padLeft("0",2)+String(DataAtual.getFullYear());
             return LancamentoRec;
         }
         // clear the contents of the Add page controls
@@ -548,11 +554,11 @@ $(function() {
 			$('#pgAddLancamentoDescricao').val('');
 			$('#pgAddLancamentoCategoria').empty();
         }
-
+		//}
 
 
 		
-		// ***** Edit Page *****
+		//{ ***** Edit Page *****
 		//Validar campo da tela de Editar Lancamento
 		function pgAddLancamentoValidar() 
 		{
@@ -575,10 +581,10 @@ $(function() {
         function pgEditLancamentoGetRec() {
             //define the new record
             var LancamentoRec = {};
-            LancamentoRec.LancamentoID = $('#pgEditLancamentoLancamentoID');
-            LancamentoRec.LancamentoCategoria = $('#pgEditLancamentoCategoria');
-            LancamentoRec.LancamentoDescricao = $('#pgEditLancamentoDescricao');
-			LancamentoRec.LancamentoValor = $('#pgEditLancamentoValor');
+            LancamentoRec.LancamentoID = parseInt($('#pgEditLancamentoLancamentoID').val());
+            LancamentoRec.Categoria = $('#pgEditLancamentoCategoria').val();
+            LancamentoRec.Descricao = $('#pgEditLancamentoDescricao').val();
+			LancamentoRec.Valor = $('#pgEditLancamentoValor').val();
             return LancamentoRec;
         }
         // display content of selected record on Edit Page
@@ -592,27 +598,30 @@ $(function() {
             });
             // clear the form fields
             pgEditLancamentoClear();
+			         				
+
             var LancamentoRec = {};
             //define a transaction to read the record from the table
             var tx = dbDatabase.transaction(["Lancamento"], "readonly");
             //get the object store for the table
             var store = tx.objectStore("Lancamento");
             //get the record by primary key
-            var request = store.get(LancamentoID);
-            request.onsuccess = function(e) {
+            var request1 = store.get(LancamentoID);
+            request1.onsuccess = function(e) {
                     LancamentoRec = e.target.result;
                     //everything is fine, continue
+					lancamento.CategoriaSelectEdit(LancamentoRec.Categoria);	
+
                     //make the record key read only
                     $('#pgEditLancamentoLancamentoID').attr('readonly', 'readonly');
                     //ensure the record key control cannot be clearable
-                    $('#pgEditLancamentoLancamentoID').attr('data-clear-btn', 'false');
-                    $('#pgEditLancamentoLancamentoID').val(LancamentoRec.LancamentoID);
-                    // $('#pgEditLancamentoDescricao').val(LancamentoRec.Descricao);
-                    // $('#pgEditLancamentoCategoria').val(LancamentoRec.Categoria);
-                    // $('#pgEditLancamentoValor').val(LancamentoRec.Valor);
+                     $('#pgEditLancamentoLancamentoID').attr('data-clear-btn', 'false');
+                     $('#pgEditLancamentoLancamentoID').val(LancamentoRec.LancamentoID);
+                     $('#pgEditLancamentoDescricao').val(LancamentoRec.Descricao);
+                     $('#pgEditLancamentoValor').val(LancamentoRec.Valor);
                 }
                 // an error was encountered
-            request.onerror = function(e) {
+            request1.onerror = function(e) {
                 $('#alertboxheader h1').text('Lancamento Error');
                 $('#alertboxtitle').text(Nome.split('-').join(' '));
                 $('#alertboxprompt').text('An error was encountered trying to read this record, please try again!');
@@ -623,53 +632,53 @@ $(function() {
             }
             $.mobile.loading("hide");
         };
-        //read record from IndexedDB and display it on edit page.
-        lancamento.pgEditLancamentoeditLancamento = function(LancamentoID) {
+		
+		//Preenche o Select de categorias na tela de editar Lançamentos
+        lancamento.CategoriaSelectEdit = function(Categoria) {
             $.mobile.loading("show", {
-                text: "Reading record...",
+                text: "Loading ...",
                 textVisible: true,
                 textonly: false,
                 html: ""
             });
-            // clear the form fields
-            pgEditLancamentoClear();
-            Nome = Nome.split(' ').join('-');
-            var LancamentoRec = {};
-            //define a transaction to read the record from the table
-            var tx = dbDatabase.transaction(["Lancamento"], "readonly");
+            //clear the table and leave the header
+            $('pgEditLancamentoCategoria').empty();
+            // create an empty string to contain all rows of the table
+            var n, CategoriaRec;
+            //get records from IndexedDB.
+            //define a transaction to read the records from the table
+            var tx = dbDatabase.transaction(["Categoria"], "readonly");
             //get the object store for the table
-            var store = tx.objectStore("Lancamento");
-            //get the record by primary key
-            var request = store.get(LancamentoID);
+            var store = tx.objectStore("Categoria");
+            //open a cursor to read all the records
+            var request = store.openCursor();
             request.onsuccess = function(e) {
-                    LancamentoRec = e.target.result;
-                    // //everything is fine, continue
-                    // //make the record key read only
-                    // $('#pgEditLancamentoNome').attr('readonly', 'readonly');
-                    // //ensure the record key control cannot be clearable
-                    // $('#pgEditLancamentoNome').attr('data-clear-btn', 'false');
-                    // //update each control in the Edit page
-                    // //clean the primary key
-                    // var pkey = LancamentoRec.Nome;
-                    // pkey = pkey.split('-').join(' ');
-                    // LancamentoRec.Nome = pkey;
-					$('#pgEditLancamentoCategoria').val(LancamentoRec.Categoria);
-					$('#pgEditLancamentoValor').val(LancamentoRec.Valor);
-					$('#pgEditLancamentoDescricao').val(LancamentoRec.Descricao);
+                //return the resultset
+                var cursor = e.target.result;
+                if (cursor) {
+                 
+                    //get each record
+                    CategoriaRec = cursor.value;
+                    //append each row to the table;
+					var option = '<option value="'+CategoriaRec.Nome+'">'+CategoriaRec.Nome+'</option>';
+                    $('#pgEditLancamentoCategoria').append(option);
+                    // process another record
+                    cursor.continue();
                 }
-                // an error was encountered
-            request.onerror = function(e) {
-                $('#alertboxheader h1').text('Lancamento Error');
-                $('#alertboxtitle').text(Nome.split('-').join(' '));
-                $('#alertboxprompt').text('An error was encountered trying to read this record, please try again!');
-                $('#alertboxok').data('topage', 'pgEditLancamento');
-                $('#alertboxok').data('id', Nome.split(' ').join('-'));
-                $.mobile.changePage('#alertbox', { transition: 'pop' });
-                return;
+				$('#pgEditLancamentoCategoria option[value="' + Categoria + '"]').attr({ selected : "selected" });	
+
+                // update the table
+				$('#pgEditLancamentoCategoria').selectmenu("refresh", true);
+				//$('#pgEditLancamentoCategoria').trigger("chosen:updated");
             }
             $.mobile.loading("hide");
+						request.onerror = function(e) {
+                $.mobile.loading("hide");
+                // just show the placeholder
+            }
+
         };
-        
+        //}
 		
 		
 

@@ -374,10 +374,17 @@
                 <div data-role="fieldcontain">
                     <input  name="pgEditLancamentoLancamentoID" type="hidden" id="pgEditLancamentoLancamentoID" </input>
                 </div>
-                <div data-role="fieldcontain">
-                    <label for="pgEditLancamentoCategoria">Categoria<span class='red'>*</span></label>
-                    <input required name="pgEditLancamentoCategoria" title="Digite a categoria aqui." type="text" id="pgEditLancamentoCategoria" placeholder="Digite a categoria aqui." autocomplete="off" data-clear-btn="true"></input>
-                </div>
+				<div class="ui-field-contain">
+					<label for="pgEditLancamentoCategoria" class="select">Categoria<span class='red'>*</span></label>
+					<select name="pgEditLancamentoCategoria" id="pgEditLancamentoCategoria">
+					</select>
+				</div>
+
+                <!-- <div data-role="fieldcontain"> -->
+                    <!-- <label for="pgEditLancamentoCategoria">Categoria<span class='red'>*</span></label> -->
+                    <!-- <input required name="pgEditLancamentoCategoria" title="Digite a categoria aqui." type="text" id="pgEditLancamentoCategoria" placeholder="Digite a categoria aqui." autocomplete="off" data-clear-btn="true"></input> -->
+                <!-- </div> -->
+				
                 <div data-role="fieldcontain">
                     <label for="pgEditLancamentoDescricao">Descrição<span class='red'></span></label>
                     <input name="pgEditLancamentoDescricao" title="Digite a descrição aqui." type="text" id="pgEditLancamentoDescricao" placeholder="Digite a descrição aqui." autocomplete="off" data-clear-btn="true"></input>
