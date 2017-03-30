@@ -59,7 +59,7 @@ $(function() {
                         break;
                     case 'pgAddLancamento':
 						pgAddLancamentoClear();
-						//pgAddLancamentoValidar();                        
+						pgAddLancamentoValidar();                        
 						lancamento.CategoriaSelectAdd();
                         break;
                     default:
@@ -560,15 +560,15 @@ $(function() {
 		
 		//{ ***** Edit Page *****
 		//Validar campo da tela de Editar Lancamento
-		// function pgAddLancamentoValidar() 
-		// {
+		function pgAddLancamentoValidar() 
+		{
 			
-			// $('#pgAddLancamentoValor').on('keyup', function(e) 
-			// {
-				// var ValorFormatado = formataValorNCasasMilhar(2, $('#pgAddLancamentoValor').val());
-				// $('#pgAddLancamentoValor').val(ValorFormatado);
-			// });			
-        // }     
+			$('#pgAddLancamentoValor').on('keyup', function(e) 
+			{
+				var ValorFormatado = formataValorNCasasMilhar(2, $('#pgAddLancamentoValor').val());
+				$('#pgAddLancamentoValor').val(ValorFormatado);
+			});			
+        }     
         // // clear the contents of the Edit Page controls
         //clear the form controls for data entry
 				
