@@ -46,6 +46,7 @@
     <script src="js/jqm/jqm-datebox.mode.calbox.js" type="text/javascript"></script>
     <script src="js/jqm/toastr.min.js" type="text/javascript"></script>
     <script src="js/jqm/fastclick.js" type="text/javascript"></script>
+	<script src="js/jqm/datepicker.js" type="text/javascript"></script>
     <!--[if IE]>
 		<script src="js/html5.js" type="text/javascript"></script>
 	<![endif]-->
@@ -60,6 +61,13 @@
     <script src="js/index.js" type="text/javascript"></script>
     <script src="js/categoria.js" type="text/javascript"></script>
     <script src="js/lancamento.js" type="text/javascript"></script>
+	
+
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"></script> -->
+    <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
+
+	
     <style>
 		body * {
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -185,6 +193,10 @@
         background-image: url("images/records.png");
         background-size: 14px 14px;
 		}
+		.ui-datepicker-calendar {
+		display: none;
+		}
+
 	</style>
 </head>
 
@@ -200,6 +212,7 @@
 			<li><a href="#pgCategoria">Categorias</a></li>
 			<li><a href="#pgLancamento">Lançamentos</a></li>
 			<li><a href="#pgRptResumoLancamentoCategoria">Resumo</a></li>
+			<li><a href="#pgConfiguracao">Configurações</a></li>
 		</ul>
         <footer id="pgMenuFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <h1 id="pgMenuFtrH1">Controle Financeiro Pessoal</h1>
@@ -407,6 +420,38 @@
 				</table>
 			</div>
 		</div>
+
+			<!-- Configurações -->
+    <div id="pgConfiguracao" data-role="page">
+        <header id="pgAddCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
+            <h1>Controle Financeiro</h1>
+            <a data-role="button" id="pgCategoriaBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>
+		</header>
+        <div id="pgAltConfiguracaoCnt" data-role="content">
+            <h3>Alterar Configurações</h3>
+            <div id="pgAltConfiguracaoForm">				
+                <div data-role="fieldcontain">
+				   <label for="pgAltConfiguracaoMesAno">Mês/Ano de Trabalho</label>
+					<input name="pgAltConfiguracaoMesAno" id="pgAltConfiguracaoMesAno" class="date-picker" />										
+				</div>	
+                <div data-role="fieldcontain">
+                    <label for="pgAltConfiguracaoSaldoInicial">Saldo Inicial<span class='red'></span></label>
+                    <input required name="pgAltConfiguracaoSaldoInicial"  type="text" id="pgAltConfiguracaoSaldoInicial" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
+				</div>				
+			</div>
+			
+        <footer id="pgAltConfiguracaoFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
+            <div id="pgAltConfiguracaoFtrNavBar" data-role="navbar">
+                <ul>
+                    <li><a id="pgAltConfiguracaoBack" data-icon="carat-l">Cancelar</a>
+					</li>
+                    <li><a type="submit" id="pgAltConfiguracaoSave" data-icon="action">Salvar</a>
+					</li>
+				</ul>
+			</div>
+		</footer>
+	</div>
+
 		
 		<!-- Mensagens -->
 		<div data-dismissible="false" data-close-btn="none" data-transition="pop" id="msgbox" data-role="popup">

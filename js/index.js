@@ -46,6 +46,20 @@ $(document).on('pagecontainershow', function(e, ui) {
 		case 'pgMenu':
 		$("#pgMenuFtrH1").html(MesAno);
 		break;
+		case 'pgConfiguracao':
+		$('.date-picker').datepicker( {
+			changeMonth: true,
+			changeYear: true,
+			showButtonPanel: true,
+			dateFormat: 'MM yy',
+			onClose: function(dateText, inst) { 
+				$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+			}
+		});
+		break;
 		default:
 	}
 });
+
+
+
