@@ -415,6 +415,7 @@ $(function() {
 			};
 			
 			
+<<<<<<< HEAD
 			
 			//{ ***** Add Page *****
 				//display records if they exist or tell user no records exist.
@@ -577,6 +578,16 @@ $(function() {
 				}     
 				// clear the contents of the Edit Page controls
 				//clear the form controls for data entry
+=======
+			$('#pgAddLancamentoValor').on('keyup', function(e) 
+			{
+				var ValorFormatado = formataValorNCasasMilhar(2, $('#pgAddLancamentoValor').val());
+				$('#pgAddLancamentoValor').val(ValorFormatado);
+			});			
+        }     
+        // // clear the contents of the Edit Page controls
+        //clear the form controls for data entry
+>>>>>>> ac3aee94c90f5d8af910776392cec3b5b2446324
 				
 				function pgEditLancamentoClear() {
 					$('#pgEditLancamentoNome').val('');
