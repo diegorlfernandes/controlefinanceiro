@@ -35,7 +35,11 @@ $(function() {
                 var toPage = data.toPage[0].id;
                 switch (toPage) {
                     case 'pgLancamento':
-					$('#pgRptLancamentoBack').data('from', 'pgLancamento');
+					 // $('#pgLancamentoHdr').html("<h1>"+MesAno+"</h1>");		
+			         // $('#pgLancamentoHdr').html('<a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>');
+				     // $('#pgLancamentoHdr').html('<a data-role="button" id="pgLancamentoNew" data-icon="plus" data-theme="b" class="ui-btn-right">Novo</a>');
+					 $('#pgRptLancamentoBack').data('from', 'pgLancamento');
+
 					// restart the storage check
 					lancamento.checkForLancamentoStorage();
 					break;
@@ -415,7 +419,6 @@ $(function() {
 			};
 			
 			
-<<<<<<< HEAD
 			
 			//{ ***** Add Page *****
 				//display records if they exist or tell user no records exist.
@@ -451,54 +454,6 @@ $(function() {
 						// just show the placeholder
 						$('#pgAddLancamentoRightPnlLV').html(LancamentoHdr + noLancamento).listview('refresh');
 					}
-				};
-				//read record from IndexedDB and display it on edit page.
-				lancamento.pgAddLancamentoeditLancamento = function(Nome) {
-					$.mobile.loading("show", {
-						text: "Reading record...",
-						textVisible: true,
-						textonly: false,
-						html: ""
-					});
-					
-					// clear the form fields
-					pgAddLancamentoClear();
-					
-					Nome = Nome.split(' ').join('-');
-					var LancamentoRec = {};
-					//define a transaction to read the record from the table
-					var tx = dbDatabase.transaction(["Lancamento"], "readonly");
-					//get the object store for the table
-					var store = tx.objectStore("Lancamento");
-					//get the record by primary key
-					var request = store.get(Nome);
-					request.onsuccess = function(e) {
-						LancamentoRec = e.target.result;
-						//everything is fine, continue
-						//make the record key read only
-						$('#pgAddLancamentoNome').attr('readonly', 'readonly');
-						//ensure the record key control cannot be clearable
-						$('#pgAddLancamentoNome').attr('data-clear-btn', 'false');
-						//update each control in the Edit page
-						//clean the primary key
-						var pkey = LancamentoRec.Nome;
-						pkey = pkey.split('-').join(' ');
-						LancamentoRec.Nome = pkey;
-						$('#pgAddLancamentoNome').val(LancamentoRec.Nome);
-						$('#pgAddLancamentoLancamentoYear').val(LancamentoRec.LancamentoYear);
-						$('#pgAddLancamentoLancamentoGenre').val(LancamentoRec.LancamentoGenre);
-					}
-					// an error was encountered
-					request.onerror = function(e) {
-						$('#alertboxheader h1').text('Lancamento Error');
-						$('#alertboxtitle').text(Nome.split('-').join(' '));
-						$('#alertboxprompt').text('An error was encountered trying to read this record, please try again!');
-						$('#alertboxok').data('topage', 'pgAddLancamento');
-						$('#alertboxok').data('id', Nome.split(' ').join('-'));
-						$.mobile.changePage('#alertbox', { transition: 'pop' });
-						return;
-					}
-					$.mobile.loading("hide");
 				};
 				//Preenche o Select de categorias na tela de Adicionar Lançamentos
 				lancamento.CategoriaSelectAdd = function() {
@@ -547,11 +502,10 @@ $(function() {
 				function pgAddLancamentoGetRec() {
 					//define the new record
 					var LancamentoRec = {};
-					var DataAtual = new Date();
 					LancamentoRec.Descricao = $('#pgAddLancamentoDescricao').val().trim();
 					LancamentoRec.Categoria = $('#pgAddLancamentoCategoria').val().trim();
 					LancamentoRec.Valor = $('#pgAddLancamentoValor').val().trim();
-					LancamentoRec.MesAno = String(DataAtual.getMonth()).padLeft("0",2)+String(DataAtual.getFullYear());
+					LancamentoRec.MesAno = MesAno;
 					return LancamentoRec;
 				}
 				// clear the contents of the Add page controls
@@ -562,7 +516,6 @@ $(function() {
 					$('#pgAddLancamentoCategoria').empty();
 				}
 			//}
-			
 			
 			
 			//{ ***** Edit Page *****
@@ -578,197 +531,200 @@ $(function() {
 				}     
 				// clear the contents of the Edit Page controls
 				//clear the form controls for data entry
-=======
-			$('#pgAddLancamentoValor').on('keyup', function(e) 
-			{
-				var ValorFormatado = formataValorNCasasMilhar(2, $('#pgAddLancamentoValor').val());
-				$('#pgAddLancamentoValor').val(ValorFormatado);
-			});			
-        }     
-        // // clear the contents of the Edit Page controls
-        //clear the form controls for data entry
->>>>>>> ac3aee94c90f5d8af910776392cec3b5b2446324
-				
-				function pgEditLancamentoClear() {
-					$('#pgEditLancamentoNome').val('');
-				}
-				// get the contents of the edit screen controls and store them in an object.
-				//get the record to be saved and put it in a record array
-				//read contents of each form input
-				function pgEditLancamentoGetRec() {
-					//define the new record
-					var LancamentoRec = {};
-					LancamentoRec.LancamentoID = parseInt($('#pgEditLancamentoLancamentoID').val());
-					LancamentoRec.Categoria = $('#pgEditLancamentoCategoria').val();
-					LancamentoRec.Descricao = $('#pgEditLancamentoDescricao').val();
-					LancamentoRec.Valor = $('#pgEditLancamentoValor').val();
-					return LancamentoRec;
-				}
-				// display content of selected record on Edit Page
-				//read record from IndexedDB and display it on edit page.
-				lancamento.editLancamento = function(LancamentoID) {
-					$.mobile.loading("show", {
-						text: "Reading record...",
-						textVisible: true,
-						textonly: false,
-						html: ""
-					});
-					// clear the form fields
-					pgEditLancamentoClear();
-					
-					
-					var LancamentoRec = {};
-					//define a transaction to read the record from the table
-					var tx = dbDatabase.transaction(["Lancamento"], "readonly");
-					//get the object store for the table
-					var store = tx.objectStore("Lancamento");
-					//get the record by primary key
-					var request1 = store.get(LancamentoID);
-					request1.onsuccess = function(e) {
-						LancamentoRec = e.target.result;
-						//everything is fine, continue
-						lancamento.CategoriaSelectEdit(LancamentoRec.Categoria);	
-						
-						//make the record key read only
-						$('#pgEditLancamentoLancamentoID').attr('readonly', 'readonly');
-						//ensure the record key control cannot be clearable
-						$('#pgEditLancamentoLancamentoID').attr('data-clear-btn', 'false');
-						$('#pgEditLancamentoLancamentoID').val(LancamentoRec.LancamentoID);
-						$('#pgEditLancamentoDescricao').val(LancamentoRec.Descricao);
-						$('#pgEditLancamentoValor').val(LancamentoRec.Valor);
-					}
-					// an error was encountered
-					request1.onerror = function(e) {
-						$('#alertboxheader h1').text('Lancamento Error');
-						$('#alertboxtitle').text(Nome.split('-').join(' '));
-						$('#alertboxprompt').text('An error was encountered trying to read this record, please try again!');
-						$('#alertboxok').data('topage', 'pgEditLancamento');
-						$('#alertboxok').data('id', Nome.split(' ').join('-'));
-						$.mobile.changePage('#alertbox', { transition: 'pop' });
-						return;
-					}
-					$.mobile.loading("hide");
-				};
-				
-				//Preenche o Select de categorias na tela de editar Lançamentos
-				lancamento.CategoriaSelectEdit = function(Categoria) {
-					$.mobile.loading("show", {
-						text: "Loading ...",
-						textVisible: true,
-						textonly: false,
-						html: ""
-					});
-					//clear the table and leave the header
-					$('pgEditLancamentoCategoria').empty();
-					// create an empty string to contain all rows of the table
-					var n, CategoriaRec;
-					//get records from IndexedDB.
-					//define a transaction to read the records from the table
-					var tx = dbDatabase.transaction(["Categoria"], "readonly");
-					//get the object store for the table
-					var store = tx.objectStore("Categoria");
-					//open a cursor to read all the records
-					var request = store.openCursor();
-					request.onsuccess = function(e) {
-						//return the resultset
-						var cursor = e.target.result;
-						if (cursor) {
-							
-							//get each record
-							CategoriaRec = cursor.value;
-							//append each row to the table;
-							var option = '<option value="'+CategoriaRec.Nome+'">'+CategoriaRec.Nome+'</option>';
-							$('#pgEditLancamentoCategoria').append(option);
-							// process another record
-							cursor.continue();
-						}
-						$('#pgEditLancamentoCategoria option[value="' + Categoria + '"]').attr({ selected : "selected" });	
-						
-						// update the table
-						$('#pgEditLancamentoCategoria').selectmenu("refresh", true);
-						//$('#pgEditLancamentoCategoria').trigger("chosen:updated");
-					}
-					$.mobile.loading("hide");
-					request.onerror = function(e) {
-						$.mobile.loading("hide");
-						// just show the placeholder
-					}
-					
-				};
-			//}
-			
-			//{******Relatórios**********
-				lancamento.ResumoLancamentoCategoriaRpt = function () {
-					$.mobile.loading("show", {
-						text: "Loading report...",
-						textVisible: true, 
-						textonly: false, 
-						html: ""
-					});
-					//clear the table and leave the header
-					$('#RptResumoLancamentoCategoria tbody tr').remove();
-					// create an empty string to contain all rows of the table
-					var n, Rec, total=0.00, categoria;
-					//get records from IndexedDB.
-					//define a transaction to read the records from the table
-					var tx = dbDatabase.transaction(["Lancamento"], "readonly");
-					//get the object store for the table
-					var store = tx.objectStore("Lancamento").index('Categoria');
-					//open a cursor to read all the records
-					var request = store.openCursor();
-					
-					
-					request.onsuccess = function(e) {
-						//return the resultset
-						
-						var cursor = e.target.result;
-						
-
-						if (cursor) {
-							n = cursor.key;
-							//get each record
-							Rec = cursor.value;
-							
-							if(!categoria)
-								categoria=Rec.Categoria;
-							
-							if(categoria == Rec.Categoria )
-							{
-								var valor = parseFloat(Rec.Valor.replace(",","."));
-								total+= valor;							}
-							else
-							{							
-								lancamento.ResumoLancamentoCategoriaRptGerarTable(categoria,total);
-								
-								categoria=Rec.Categoria;
-								total = parseFloat(Rec.Valor.replace(",","."));
-							}
-							// process another record
-							cursor.continue();
-						}
-						else
-						{
-							lancamento.ResumoLancamentoCategoriaRptGerarTable(categoria,total);
-						}
-					}
-					// refresh the table with new details
-					$('#RptResumoLancamentoCategoria').table('refresh');
-					$.mobile.loading("hide");
-				};
-				
-				lancamento.ResumoLancamentoCategoriaRptGerarTable = function (categoria,total) 
+				$('#pgAddLancamentoValor').on('keyup', function(e) 
 				{
-					//create each row
-					var eachrow = '<tr>';
-					// eachrow += '<td class="ui-body-c">' + n + '</td>';
-					eachrow += '<td class="ui-body-c">' + categoria + '</td>';
-					eachrow += '<td class="ui-body-c" style="text-align:right;">' + total.toFixed(2) + '</td>';
-					eachrow += '</tr>';
-					//append each row to the table;
-					$('#RptResumoLancamentoCategoria').append(eachrow);				
-				}
-			//}
+					var ValorFormatado = formataValorNCasasMilhar(2, $('#pgAddLancamentoValor').val());
+					$('#pgAddLancamentoValor').val(ValorFormatado);
+				});			
+			//}     
+			// // clear the contents of the Edit Page controls
+			//clear the form controls for data entry
 			
-			lancamento.init();
-		})(Database);
-	});
+			function pgEditLancamentoClear() 
+			{
+				$('#pgEditLancamentoDescricao').val("");
+				$('#pgEditLancamentoValor').val("");
+				
+			}
+			// get the contents of the edit screen controls and store them in an object.
+			//get the record to be saved and put it in a record array
+			//read contents of each form input
+			function pgEditLancamentoGetRec() 
+			{
+				//define the new record
+				var LancamentoRec = {};
+				LancamentoRec.LancamentoID = parseInt($('#pgEditLancamentoLancamentoID').val());
+				LancamentoRec.Categoria = $('#pgEditLancamentoCategoria').val();
+				LancamentoRec.Descricao = $('#pgEditLancamentoDescricao').val();
+				LancamentoRec.Valor = $('#pgEditLancamentoValor').val();
+				return LancamentoRec;
+			}
+			// display content of selected record on Edit Page
+			//read record from IndexedDB and display it on edit page.
+			lancamento.editLancamento = function(LancamentoID) 
+			{
+				$.mobile.loading("show", {
+					text: "Reading record...",
+					textVisible: true,
+					textonly: false,
+					html: ""
+				});
+				// clear the form fields
+				pgEditLancamentoClear();
+				
+				
+				var LancamentoRec = {};
+				//define a transaction to read the record from the table
+				var tx = dbDatabase.transaction(["Lancamento"], "readonly");
+				//get the object store for the table
+				var store = tx.objectStore("Lancamento");
+				//get the record by primary key
+				var request1 = store.get(LancamentoID);
+				request1.onsuccess = function(e) {
+					LancamentoRec = e.target.result;
+					//everything is fine, continue
+					lancamento.CategoriaSelectEdit(LancamentoRec.Categoria);	
+					
+					//make the record key read only
+					$('#pgEditLancamentoLancamentoID').attr('readonly', 'readonly');
+					//ensure the record key control cannot be clearable
+					$('#pgEditLancamentoLancamentoID').attr('data-clear-btn', 'false');
+					$('#pgEditLancamentoLancamentoID').val(LancamentoRec.LancamentoID);
+					$('#pgEditLancamentoDescricao').val(LancamentoRec.Descricao);
+					$('#pgEditLancamentoValor').val(LancamentoRec.Valor);
+				}
+				// an error was encountered
+				request1.onerror = function(e) {
+					$('#alertboxheader h1').text('Lancamento Error');
+					$('#alertboxtitle').text(Nome.split('-').join(' '));
+					$('#alertboxprompt').text('An error was encountered trying to read this record, please try again!');
+					$('#alertboxok').data('topage', 'pgEditLancamento');
+					$('#alertboxok').data('id', Nome.split(' ').join('-'));
+					$.mobile.changePage('#alertbox', { transition: 'pop' });
+					return;
+				}
+				$.mobile.loading("hide");
+			};
+			
+			//Preenche o Select de categorias na tela de editar Lançamentos
+			lancamento.CategoriaSelectEdit = function(Categoria) {
+				$.mobile.loading("show", {
+					text: "Loading ...",
+					textVisible: true,
+					textonly: false,
+					html: ""
+				});
+				//clear the table and leave the header
+				$('pgEditLancamentoCategoria').empty();
+				// create an empty string to contain all rows of the table
+				var n, CategoriaRec;
+				//get records from IndexedDB.
+				//define a transaction to read the records from the table
+				var tx = dbDatabase.transaction(["Categoria"], "readonly");
+				//get the object store for the table
+				var store = tx.objectStore("Categoria");
+				//open a cursor to read all the records
+				var request = store.openCursor();
+				request.onsuccess = function(e) {
+					//return the resultset
+					var cursor = e.target.result;
+					if (cursor) {
+						
+						//get each record
+						CategoriaRec = cursor.value;
+						//append each row to the table;
+						var option = '<option value="'+CategoriaRec.Nome+'">'+CategoriaRec.Nome+'</option>';
+						$('#pgEditLancamentoCategoria').append(option);
+						// process another record
+						cursor.continue();
+					}
+					$('#pgEditLancamentoCategoria option[value="' + Categoria + '"]').attr({ selected : "selected" });	
+					
+					// update the table
+					$('#pgEditLancamentoCategoria').selectmenu("refresh", true);
+					//$('#pgEditLancamentoCategoria').trigger("chosen:updated");
+				}
+				$.mobile.loading("hide");
+				request.onerror = function(e) {
+					$.mobile.loading("hide");
+					// just show the placeholder
+				}
+				
+			};
+		//}
+		
+		//{******Relatórios**********
+			lancamento.ResumoLancamentoCategoriaRpt = function () {
+				$.mobile.loading("show", {
+					text: "Loading report...",
+					textVisible: true, 
+					textonly: false, 
+					html: ""
+				});
+				//clear the table and leave the header
+				$('#RptResumoLancamentoCategoria tbody tr').remove();
+				// create an empty string to contain all rows of the table
+				var n, Rec, total=0.00, categoria;
+				//get records from IndexedDB.
+				//define a transaction to read the records from the table
+				var tx = dbDatabase.transaction(["Lancamento"], "readonly");
+				//get the object store for the table
+				var store = tx.objectStore("Lancamento").index('Categoria');
+				//open a cursor to read all the records
+				var request = store.openCursor();
+				
+				
+				request.onsuccess = function(e) {
+					//return the resultset
+					
+					var cursor = e.target.result;
+					
+					
+					if (cursor) {
+						n = cursor.key;
+						//get each record
+						Rec = cursor.value;
+						
+						if(!categoria)
+						categoria=Rec.Categoria;
+						
+						if(categoria == Rec.Categoria )
+						{
+							var valor = parseFloat(Rec.Valor.replace(",","."));
+						total+= valor;							}
+						else
+						{							
+							lancamento.ResumoLancamentoCategoriaRptGerarTable(categoria,total);
+							
+							categoria=Rec.Categoria;
+							total = parseFloat(Rec.Valor.replace(",","."));
+						}
+						// process another record
+						cursor.continue();
+					}
+					else
+					{
+						lancamento.ResumoLancamentoCategoriaRptGerarTable(categoria,total);
+					}
+				}
+				// refresh the table with new details
+				$('#RptResumoLancamentoCategoria').table('refresh');
+				$.mobile.loading("hide");
+			};
+			
+			lancamento.ResumoLancamentoCategoriaRptGerarTable = function (categoria,total) 
+			{
+				//create each row
+				var eachrow = '<tr>';
+				// eachrow += '<td class="ui-body-c">' + n + '</td>';
+				eachrow += '<td class="ui-body-c">' + categoria + '</td>';
+				eachrow += '<td class="ui-body-c" style="text-align:right;">' + total.toFixed(2) + '</td>';
+				eachrow += '</tr>';
+				//append each row to the table;
+				$('#RptResumoLancamentoCategoria').append(eachrow);				
+			}
+		//}
+		
+		lancamento.init();
+	})(Database);
+});

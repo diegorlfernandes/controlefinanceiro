@@ -56,8 +56,8 @@
     <script src="js/jqm/addtohomescreen.min.js" type="text/javascript"></script>
     <script src="js/jqm/remoteserver.js" type="text/javascript"></script>
     <script src="js/jqm/support.js" type="text/javascript"></script>
-    <script src="js/database.js" type="text/javascript"></script>
     <script src="js/funcoes.js" type="text/javascript"></script>
+    <script src="js/index.js" type="text/javascript"></script>
     <script src="js/categoria.js" type="text/javascript"></script>
     <script src="js/lancamento.js" type="text/javascript"></script>
     <style>
@@ -202,22 +202,10 @@
 			<li><a href="#pgRptResumoLancamentoCategoria">Resumo</a></li>
 		</ul>
         <footer id="pgMenuFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
-            <h1>Controle Financeiro Pessoal</h1>
+            <h1 id="pgMenuFtrH1">Controle Financeiro Pessoal</h1>
 		</footer>
 	</div>
 	
-	
-    <div id="pg" data-role="page" data-theme="b" class="backpicture">
-        <header id="pgHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-            <h1>Controle Financeiro > </h1>
-            <a data-role="button" id="Back" data-icon="carat-l" data-theme="a" data-transition="slide" href="#pgMenu" class="ui-btn-left">Back</a>
-		</header>
-        <div id="pgCnt" data-role="content">
-		</div>
-        <footer id="pgFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
-            <h1>Powered by Diego Fernandes 2017</h1>
-		</footer>
-	</div>
 	
 	<!-- Categoria -->
     <div id="pgCategoria" data-role="page">
@@ -292,21 +280,9 @@
 	
 	<!-- Lançamentos -->
 	
-	<!-- Listar Lançamentos -->
-    <div id="pg" data-role="page" data-theme="b" class="backpicture">
-        <header id="pgHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-            <h1>Controle Financeiro > </h1>
-            <a data-role="button" id="Back" data-icon="carat-l" data-theme="a" data-transition="slide" href="#pgMenu" class="ui-btn-left">Back</a>
-		</header>
-        <div id="pgCnt" data-role="content">
-		</div>
-        <footer id="pgFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
-            <h1>Powered by Diego Fernandes 2017</h1>
-		</footer>
-	</div>
     <div id="pgLancamento" data-role="page">
         <header id="pgLancamentoHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-            <h1>Controle Financeiro</h1>
+			<h1>Mes/Ano</h1>
             <a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>
             <a data-role="button" id="pgLancamentoNew" data-icon="plus" data-theme="b" class="ui-btn-right">Novo</a>
 		</header>
