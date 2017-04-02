@@ -1,9 +1,6 @@
 
 $(function() {
     (function(lancamento) {
-        // variable definitions go here
-        //var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
-        //var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2><p>DESCRIPTION</p><p><span class="ui-li-count">COUNTBUBBLE</span></p></a></li>';
         var LancamentoLi = '<li><a data-id="Z2"><h2>Z1</h2><p><span class="ui-li-count">COUNTBUBBLE</span></p></a></li>';
         var LancamentoLiRi = '<li><a data-id="Z2">Z1</a></li>';
         var LancamentoHdr = '<li data-role="list-divider">Seus Lancamentos</li>';
@@ -11,7 +8,7 @@ $(function() {
 		
 		
 		
-		lancamento.init = function() {
+		lancamento.iniciar = function() {
             // hide the address bar when the window is ready
             window.addEventListener("load", function() {
                 setTimeout(function() { window.scrollTo(0, 1) }, 0);
@@ -23,11 +20,11 @@ $(function() {
             request.onsuccess = function(e) {
                 dbDatabase = e.target.result;
 			}
-            lancamento.LancamentoBindings();
+            lancamento.ExecutarEventos();
 			
 		};
         // define events to be fired during app execution.
-        lancamento.LancamentoBindings = function() {
+        lancamento.ExecutarEventos = function() {
             // code to run before showing the page that lists the records.
             //run before the page is shown
             $(document).on('pagebeforechange', function(e, data) {
@@ -35,9 +32,6 @@ $(function() {
                 var toPage = data.toPage[0].id;
                 switch (toPage) {
                     case 'pgLancamento':
-					 // $('#pgLancamentoHdr').html("<h1>"+MesAno+"</h1>");		
-			         // $('#pgLancamentoHdr').html('<a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Voltar</a>');
-				     // $('#pgLancamentoHdr').html('<a data-role="button" id="pgLancamentoNew" data-icon="plus" data-theme="b" class="ui-btn-right">Novo</a>');
 					 $('#pgRptLancamentoBack').data('from', 'pgLancamento');
 
 					// restart the storage check
@@ -725,6 +719,6 @@ $(function() {
 			}
 		//}
 		
-		lancamento.init();
+		lancamento.iniciar();
 	})(Database);
 });
