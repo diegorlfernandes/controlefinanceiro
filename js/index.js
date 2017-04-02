@@ -1,22 +1,19 @@
 
-var Database = {};
-//variables to hold the indexedDB database.
-var dbDatabase;
-var dbNome = "dbCash";
-var dbVersion = 1;
-var pgtransition = 'slide';
+var BancoDeDados = {};
+//var BancoDeDados;
+var NomeDoBanco = "dbCash";
+var VersaoDoBanco = 1;
+var TransicaoDaPagina = 'slide';
 var DataAtual = new Date();
 var Mes =  String(DataAtual.getMonth()+1).padLeft("0",2); //monthNamesShort[DataAtual.getMonth()];
 var Ano = String(DataAtual.getFullYear());
 var MesAno = Mes+"/"+Ano
 
+//window.indexedDB.deleteDatabase(NomeDoBanco);
 
+var RetornoDaAberturaDoBanco = indexedDB.open(NomeDoBanco, VersaoDoBanco);
 
-//window.indexedDB.deleteDatabase(dbNome);
-
-var request = indexedDB.open(dbNome, dbVersion);
-
-request.onupgradeneeded = function(e) {
+RetornoDaAberturaDoBanco.onupgradeneeded = function(e) {
 	var thisDB = e.target.result;
 	var store = null;
 	
@@ -33,12 +30,9 @@ request.onupgradeneeded = function(e) {
 	}
 };
 
-
-//the database was opened successfully
-request.onsuccess = function(e) {
-	dbDatabase = e.target.result;
+RetornoDaAberturaDoBanco.onsuccess = function(e) {
+	BancoDeDados = e.target.result;
 }
-
 
 $(document).on('pagecontainershow', function(e, ui) {
 	var pageId = $(':mobile-pagecontainer').pagecontainer('getActivePage').attr('id');

@@ -16,7 +16,7 @@ $(function() {
 			});
 		}
 		configuracao.iniciar();
-    })(Database);
+    })(BancoDeDados);
 
 });
 

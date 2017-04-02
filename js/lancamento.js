@@ -13,12 +13,12 @@ $(function() {
             window.addEventListener("load", function() {
                 setTimeout(function() { window.scrollTo(0, 1) }, 0);
 			});
-            // open the indexedDB database
-            var request = indexedDB.open(dbNome, dbVersion);
+            // open the indexedDB BancoDeDados
+            var request = indexedDB.open(NomeDoBanco, VersaoDoBanco);
 			
-            //the database was opened successfully
+            //the BancoDeDados was opened successfully
             request.onsuccess = function(e) {
-                dbDatabase = e.target.result;
+                BancoDeDados = e.target.result;
 			}
             lancamento.ExecutarEventos();
 			
@@ -79,18 +79,18 @@ $(function() {
 					var pgFrom = $('#pgAddLancamento').data('from');
 					switch (pgFrom) {
 						case "pgSignIn":
-                        $.mobile.changePage('#pgSignIn', { transition: pgtransition });
+                        $.mobile.changePage('#pgSignIn', { transition: TransicaoDaPagina });
                         break;
 						default:
                         // go back to the records listing screen
-                        $.mobile.changePage('#pgLancamento', { transition: pgtransition });
+                        $.mobile.changePage('#pgLancamento', { transition: TransicaoDaPagina });
 					}
 				});
 				// Back click event from Add Multiple Page
 				$('#pgAddMultLancamentoBack').on('click', function(e) {
 					e.preventDefault();
 					e.stopImmediatePropagation();
-					$.mobile.changePage('#pgLancamento', { transition: pgtransition });
+					$.mobile.changePage('#pgLancamento', { transition: TransicaoDaPagina });
 				});
 				// code to run when the Save button is clicked on Add page.
 				// Save click event on Add page
@@ -134,7 +134,7 @@ $(function() {
 					//save id of record to edit;
 					$('#pgEditLancamento').data('id', href);
 					//change page to edit page.
-					$.mobile.changePage('#pgEditLancamento', { transition: pgtransition });
+					$.mobile.changePage('#pgEditLancamento', { transition: TransicaoDaPagina });
 				});
 				// code to run when New button on records listing is clicked.
 				// New button click on records listing page
@@ -144,10 +144,10 @@ $(function() {
 					//we are accessing a new record from records listing
 					$('#pgAddLancamento').data('from', 'pgLancamento');
 					// show the active and user type elements
-					$('#pgAddLancamentoheader h1').text('Lancamentos Database > Add Lancamento');
+					$('#pgAddLancamentoheader h1').text('Lancamentos BancoDeDados > Add Lancamento');
 					$('#pgAddLancamentoMenu').show();
 					// move to the add page screen
-					$.mobile.changePage('#pgAddLancamento', { transition: pgtransition });
+					$.mobile.changePage('#pgAddLancamento', { transition: TransicaoDaPagina });
 				});
 				//***** Listing Page - End *****
 				//***** Edit Page *****
@@ -157,7 +157,7 @@ $(function() {
 					e.preventDefault();
 					e.stopImmediatePropagation();
 					// go back to the listing screen
-					$.mobile.changePage('#pgLancamento', { transition: pgtransition });
+					$.mobile.changePage('#pgLancamento', { transition: TransicaoDaPagina });
 				});
 				// code to run when the Update button is clicked in the Edit Page.
 				// Update click event on Edit Page
@@ -208,17 +208,17 @@ $(function() {
 					var pgFrom = $('#pgRptLancamentoBack').data('from');
 					switch (pgFrom) {
 						case "pgAddLancamento":
-                        $.mobile.changePage('#pgLancamento', { transition: pgtransition });
+                        $.mobile.changePage('#pgLancamento', { transition: TransicaoDaPagina });
                         break;
 						case "pgEditLancamento":
-                        $.mobile.changePage('#pgLancamento', { transition: pgtransition });
+                        $.mobile.changePage('#pgLancamento', { transition: TransicaoDaPagina });
                         break;
 						case "pgLancamento":
-                        $.mobile.changePage('#pgLancamento', { transition: pgtransition });
+                        $.mobile.changePage('#pgLancamento', { transition: TransicaoDaPagina });
                         break;
 						default:
                         // go back to the listing screen
-                        $.mobile.changePage('#pgReports', { transition: pgtransition });
+                        $.mobile.changePage('#pgReports', { transition: TransicaoDaPagina });
 					}
 				}); //***** Report Page - End *****
 				//Our events are now fully defined.
@@ -232,9 +232,9 @@ $(function() {
 					html: ""
 				});
 				
-				// store the json object in the database
+				// store the json object in the BancoDeDados
 				//define a transaction to execute
-				var tx = dbDatabase.transaction(["Lancamento"], "readwrite");
+				var tx = BancoDeDados.transaction(["Lancamento"], "readwrite");
 				//get the record store to create a record on
 				var store = tx.objectStore("Lancamento");
 				// add to store
@@ -242,12 +242,12 @@ $(function() {
 				var request = store.add(LancamentoRec);
 				request.onsuccess = function(e) {
 					//show a toast message that the record has been added
-					toastr.success('Lancamento record successfully added.', 'Lancamentos Database');
+					toastr.success('Lancamento record successfully added.', 'Lancamentos BancoDeDados');
 					//find which page are we coming from, if from sign in go back to it
 					var pgFrom = $('#pgAddLancamento').data('from');
 					switch (pgFrom) {
 						case "pgSignIn":
-                        $.mobile.changePage('#pgSignIn', { transition: pgtransition });
+                        $.mobile.changePage('#pgSignIn', { transition: TransicaoDaPagina });
                         break;
 						default:
                         // clear the edit page form fields
@@ -257,7 +257,7 @@ $(function() {
 				}
 				request.onerror = function(e) {
 					//show a toast message that the record has not been added
-					toastr.error('Lancamento record NOT successfully added.', 'Lancamentos Database');
+					toastr.error('Lancamento record NOT successfully added.', 'Lancamentos BancoDeDados');
 				}
 				$.mobile.loading("hide");
 			};
@@ -272,7 +272,7 @@ $(function() {
 				});
 				
 				//define a transaction to execute
-				var tx = dbDatabase.transaction(["Lancamento"], "readwrite");
+				var tx = BancoDeDados.transaction(["Lancamento"], "readwrite");
 				//get the record store to create a record on
 				var store = tx.objectStore("Lancamento");
 				//get the record from the store
@@ -280,14 +280,14 @@ $(function() {
 					var request = store.put(LancamentoRec);
 					request.onsuccess = function(e) {
 						//record has been saved
-						toastr.success('Lancamento record updated.', 'Lancamentos Database');
+						toastr.success('Lancamento record updated.', 'Lancamentos BancoDeDados');
 						// clear the edit page form fields
 						pgEditLancamentoClear();
 						// show the records listing page.
-						$.mobile.changePage('#pgLancamento', { transition: pgtransition });
+						$.mobile.changePage('#pgLancamento', { transition: TransicaoDaPagina });
 					}
 					request.onerror = function(e) {
-						toastr.error('Lancamento record not updated, please try again.', 'Lancamentos Database');
+						toastr.error('Lancamento record not updated, please try again.', 'Lancamentos BancoDeDados');
 						return;
 					}
 				};
@@ -302,19 +302,19 @@ $(function() {
 					html: ""
 				});
 				//define a transaction to execute
-				var tx = dbDatabase.transaction(["Lancamento"], "readwrite");
+				var tx = BancoDeDados.transaction(["Lancamento"], "readwrite");
 				//get the record store to delete a record from
 				var store = tx.objectStore("Lancamento");
 				//delete record by primary key
 				var request = store.delete(parseInt(LancamentoID));
 				request.onsuccess = function(e) {
 					//record has been deleted
-					toastr.success('Lancamento record deleted.', 'Lancamentos Database');
+					toastr.success('Lancamento record deleted.', 'Lancamentos BancoDeDados');
 					// show the page to display after a record is deleted, this case listing page
-					$.mobile.changePage('#pgLancamento', { transition: pgtransition });
+					$.mobile.changePage('#pgLancamento', { transition: TransicaoDaPagina });
 				}
 				request.onerror = function(e) {
-					toastr.error('Lancamento record not deleted, please try again.', 'Lancamentos Database');
+					toastr.error('Lancamento record not deleted, please try again.', 'Lancamentos BancoDeDados');
 					return;
 				}
 				$.mobile.loading("hide");
@@ -381,7 +381,7 @@ $(function() {
 				//when returned, parse then as json object
 				var LancamentoObj = {};
 				//define a transaction to read the records from the table
-				var tx = dbDatabase.transaction(["Lancamento"], "readonly");
+				var tx = BancoDeDados.transaction(["Lancamento"], "readonly");
 				//get the object store for the table
 				var store = tx.objectStore("Lancamento");
 				//open a cursor to read all the records
@@ -427,7 +427,7 @@ $(function() {
 					//when returned, parse then as json object
 					var LancamentoObj = {};
 					//define a transaction to read the records from the table
-					var tx = dbDatabase.transaction(["Lancamento"], "readonly");
+					var tx = BancoDeDados.transaction(["Lancamento"], "readonly");
 					//get the object store for the table
 					var store = tx.objectStore("Lancamento");
 					//open a cursor to read all the records
@@ -463,7 +463,7 @@ $(function() {
 					var n, CategoriaRec;
 					//get records from IndexedDB.
 					//define a transaction to read the records from the table
-					var tx = dbDatabase.transaction(["Categoria"], "readonly");
+					var tx = BancoDeDados.transaction(["Categoria"], "readonly");
 					//get the object store for the table
 					var store = tx.objectStore("Categoria");
 					//open a cursor to read all the records
@@ -569,7 +569,7 @@ $(function() {
 				
 				var LancamentoRec = {};
 				//define a transaction to read the record from the table
-				var tx = dbDatabase.transaction(["Lancamento"], "readonly");
+				var tx = BancoDeDados.transaction(["Lancamento"], "readonly");
 				//get the object store for the table
 				var store = tx.objectStore("Lancamento");
 				//get the record by primary key
@@ -614,7 +614,7 @@ $(function() {
 				var n, CategoriaRec;
 				//get records from IndexedDB.
 				//define a transaction to read the records from the table
-				var tx = dbDatabase.transaction(["Categoria"], "readonly");
+				var tx = BancoDeDados.transaction(["Categoria"], "readonly");
 				//get the object store for the table
 				var store = tx.objectStore("Categoria");
 				//open a cursor to read all the records
@@ -661,7 +661,7 @@ $(function() {
 				var n, Rec, total=0.00, categoria;
 				//get records from IndexedDB.
 				//define a transaction to read the records from the table
-				var tx = dbDatabase.transaction(["Lancamento"], "readonly");
+				var tx = BancoDeDados.transaction(["Lancamento"], "readonly");
 				//get the object store for the table
 				var store = tx.objectStore("Lancamento").index('Categoria');
 				//open a cursor to read all the records
@@ -720,5 +720,5 @@ $(function() {
 		//}
 		
 		lancamento.iniciar();
-	})(Database);
+	})(BancoDeDados);
 });
