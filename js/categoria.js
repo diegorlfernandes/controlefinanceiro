@@ -3,6 +3,7 @@ $(function() {
     (function(categoria) {
         var MensagemNoCabecalhoDaLista = '<li data-role="list-divider">Suas Categorias</li>';
         var MensagemNaoTemRegistroNaLista = '<li id="noCategoria">Você Não Tem Registros</li>';
+        var MensagemNoCabecalhoDaListaDeCategoria = '<li data-role="list-divider">Suas Categorias</li>';
 				
         categoria.iniciar = function() 
 		{
@@ -68,11 +69,11 @@ $(function() {
 		
 		categoria.ExecutarEventosDaPaginaAdicionar = function()
 		{
-            $('#pgAddCategoriaBack').on('click', function(e) {
+            $('#pgAddCategoriaBack').on('click', function(e) 
+			{
                 e.preventDefault();
                 e.stopImmediatePropagation(); 
 				$.mobile.changePage('#pgCategoria', { transition: TransicaoDaPagina });
-				}
 			});
 
 			$('#pgAddCategoriaSave').on('click', function(e) 
@@ -174,7 +175,7 @@ $(function() {
             RetornoDaAberturaDoBanco.onerror = function(e) 
 			{
                 toastr.error('O Registro não foi adicionado.', 'Categorias BancoDeDados');
-				retu false;
+				return false;
 			};
             $.mobile.loading("hide");
 		};
@@ -202,7 +203,7 @@ $(function() {
 				{
                     toastr.success('Registro Atulizado com Sucesso.', 'Categorias BancoDeDados');
                     $.mobile.changePage('#pgCategoria', { transition: TransicaoDaPagina });
-					retu true;
+					return true;
 				}
                 RetornoDaAtualizacaoDoBanco.onerror = function(e) 
 				{
@@ -257,14 +258,13 @@ $(function() {
 
 				var nTitle = '';
 
-                nTitle = UmObjetoDeCategoria.split('-').join(' ');
+                nTitle = UmObjetoDeCategoria.Nome.split('-').join(' ');
 
 				NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z1/g, nTitle);
 
-				NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/DESCRIPTION/g, nDescription);
                 html += NovoItemDaListaDaPagina;
 			}
-            $('#pgCategoriaList').html(CategoriaHdr + html).listview('refresh');
+            $('#pgCategoriaList').html(MensagemNoCabecalhoDaListaDeCategoria + html).listview('refresh');
             $.mobile.loading("hide");
 		};
         // check IndexedDB for Records. This initializes IndexedDB if there are no records
@@ -299,7 +299,7 @@ $(function() {
                     categoria.MostrarListaDeCategoriasNaPaginaDeListarCategorias(ListaDeCategorias);
 					} else {
                     // nope, just show the placeholder
-                    $('#pgCategoriaList').html(CategoriaHdr + noCategoria).listview('refresh');
+                    $('#pgCategoriaList').html(MensagemNoCabecalhoDaListaDeCategoria + noCategoria).listview('refresh');
 				}
 			}
             $.mobile.loading("hide");
@@ -307,7 +307,7 @@ $(function() {
             RetornoDaAberturaDoBanco.onerror = function(e) {
                 $.mobile.loading("hide");
                 // just show the placeholder
-                $('#pgCategoriaList').html(CategoriaHdr + noCategoria).listview('refresh');
+                $('#pgCategoriaList').html(MensagemNoCabecalhoDaListaDeCategoria + noCategoria).listview('refresh');
 			}
 		};
 		
