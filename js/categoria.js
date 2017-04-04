@@ -225,7 +225,7 @@ $(function() {
             var Transacao = BancoDeDados.transaction(["Categoria"], "readwrite");
             var TabelaCategoria = Transacao.objectStore("Categoria");
 
-            var RetornoDeTransacaoNoBanco = store.delete(Nome);
+            var RetornoDeTransacaoNoBanco = TabelaCategoria.delete(Nome);
             RetornoDeTransacaoNoBanco.onsuccess = function(e) 
 			{
                 toastr.success('Registro Apagado.', 'Categorias BancoDeDados');

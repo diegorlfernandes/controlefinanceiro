@@ -507,7 +507,6 @@ $(function() {
 				function pgAddLancamentoClear() {
 					$('#pgAddLancamentoValor').val('');
 					$('#pgAddLancamentoDescricao').val('');
-					$('#pgAddLancamentoCategoria').empty();
 				}
 			//}
 			
@@ -658,7 +657,7 @@ $(function() {
 				//clear the table and leave the header
 				$('#RptResumoLancamentoCategoria tbody tr').remove();
 				// create an empty string to contain all rows of the table
-				var n, Rec, total=0.00, categoria;
+				var n, Rec, total=0.00, categoria, TotalGeral=0.00;
 				//get records from IndexedDB.
 				//define a transaction to read the records from the table
 				var tx = BancoDeDados.transaction(["Lancamento"], "readonly");
@@ -668,7 +667,8 @@ $(function() {
 				var request = store.openCursor();
 				
 				
-				request.onsuccess = function(e) {
+				request.onsuccess = function(e) 
+				{
 					//return the resultset
 					
 					var cursor = e.target.result;
@@ -681,24 +681,30 @@ $(function() {
 						
 						if(!categoria)
 						categoria=Rec.Categoria;
+
+						var valor =  Number(Rec.Valor.replace(".","").replace(",","."));
 						
 						if(categoria == Rec.Categoria )
 						{
-							var valor = parseFloat(Rec.Valor.replace(",","."));
-						total+= valor;							}
+							total+= valor;							
+							
+						}
 						else
 						{							
 							lancamento.ResumoLancamentoCategoriaRptGerarTable(categoria,total);
 							
 							categoria=Rec.Categoria;
-							total = parseFloat(Rec.Valor.replace(",","."));
+							total = valor;
 						}
-						// process another record
+						
+						TotalGeral += total;
+						
 						cursor.continue();
 					}
 					else
 					{
 						lancamento.ResumoLancamentoCategoriaRptGerarTable(categoria,total);
+						lancamento.ResumoLancamentoCategoriaRptGerarTable("Total",TotalGeral);
 					}
 				}
 				// refresh the table with new details
