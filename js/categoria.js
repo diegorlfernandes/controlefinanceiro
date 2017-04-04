@@ -254,7 +254,7 @@ $(function() {
                 UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split('-').join(' ');
 
                 var NovoItemDaListaDaPagina = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
-				NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z2/g, UmObjetoDeCategoria);
+				NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z2/g, UmObjetoDeCategoria.Nome);
 
 				var nTitle = '';
 
