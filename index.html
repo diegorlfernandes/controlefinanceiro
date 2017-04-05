@@ -282,7 +282,6 @@
             <div id="pgEditCategoriaFtrNavBar" data-role="navbar">
                 <ul>
                     <li><a data-transition="slide" id="pgEditCategoriaBack" data-icon="carat-l" href="#pgCategoria">Cancelar</a></li>
-                    <!-- <li><a type="submit" id="pgEditCategoriaUpdate" data-icon="action">Atualizar</a></li> -->
                     <li><a data-rel="popup" data-transition="pop" id="pgEditCategoriaDelete" data-icon="delete" href="#msgbox">Apagar</a></li>
 				</ul>
 			</div>
@@ -333,7 +332,15 @@
                 <div data-role="fieldcontain">
                     <label for="pgAddLancamentoValor">Valor<span class='red'>*</span></label>
                     <input required name="pgAddLancamentoValor" title="Digite o valor aqui." type="text"  id="pgAddLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
-					<!-- <input required name="pgAddLancamentoValor" title="Digite o valor aqui." type="number" pattern="[0-9.]*" step="0.01" min="0" id="pgAddLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input> -->
+				</div>
+				<div data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-type="horizontal">
+						<legend>Tipo <span class='red'>*</span></legend>
+						<input type="radio" name="pgAddLancamentoTipoA" id="pgAddLancamentoTipoA" value="on" checked="checked">
+						<label for="pgAddLancamentoTipoA">Despesa</label>
+						<input type="radio" name="pgAddLancamentoTipoB" id="pgAddLancamentoTipoB" value="off">
+						<label for="pgAddLancamentoTipoB">Receita</label>
+					</fieldset>					
 				</div>
 			</div>
 		</div>
