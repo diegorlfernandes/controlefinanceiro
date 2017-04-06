@@ -1,11 +1,10 @@
 
 var BancoDeDados = {};
-//var BancoDeDados;
 var NomeDoBanco = "dbCash";
 var VersaoDoBanco = 1;
 var TransicaoDaPagina = 'slide';
 var DataAtual = new Date();
-var Mes =  String(DataAtual.getMonth()+1).padLeft("0",2); //monthNamesShort[DataAtual.getMonth()];
+var Mes =  String(DataAtual.getMonth()+1).padLeft("0",2); 
 var Ano = String(DataAtual.getFullYear());
 var MesAno = Mes+"/"+Ano
 
@@ -38,18 +37,7 @@ $(document).on('pagecontainershow', function(e, ui) {
 	var pageId = $(':mobile-pagecontainer').pagecontainer('getActivePage').attr('id');
 	switch (pageId) {
 		case 'pgMenu':
-		$("#pgMenuFtrH1").html(MesAno);
-		break;
-		// case 'pgConfiguracao':
-		// $('.date-picker').datepicker( {
-			// changeMonth: true,
-			// changeYear: true,
-			// showButtonPanel: true,
-			// dateFormat: 'MM yy',
-			// onClose: function(dateText, inst) { 
-				// $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-			// }
-		// });
+		 $("#pgMenuMesAno").val(MesAno).change();
 		break;
 		default:
 	}
