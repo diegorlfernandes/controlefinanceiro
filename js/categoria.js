@@ -14,24 +14,24 @@ $(function() {
 			categoria.ExecutarEventosMensagens();
 		};
 
-		categoria.ExecutarEventosTodasAsPaginas = function()
-		{					
+		//Eventos
+		categoria.ExecutarEventosTodasAsPaginas = function(){					
             $(document).on('pagebeforechange', function(e, data) {
                 var toPage = data.toPage[0].id;
                 switch (toPage) {
                     case 'pgCategoria':
 					$('#pgRptCategoriaBack').data('from', 'pgCategoria');
-					categoria.checkForCategoriaStorage();
+					categoria.VerificaSeExistemRegistrosNaTabelaCategoriaEMostraMensagemNaPaginaDeListarCategorias();
 					break;
                     case 'pgEditCategoria':
 					$('#pgRptCategoriaBack').data('from', 'pgEditCategoria');
-					pgEditCategoriaClear();
+					LimparCamposDaPaginaEditarCategoria();
 					var Nome = $('#pgEditCategoria').data('id');
-					categoria.editCategoria(Nome);
+					PreencheCamposDaPaginaEditarCategoria(Nome);
 					break;
                     case 'pgAddCategoria':
 					$('#pgRptCategoriaBack').data('from', 'pgAddCategoria');
-					PaginaAdicionarCategoriaLimparCampos();
+					LimparCamposDaPaginaAdicionarCategoria();
 					break;
 				}
 			});
@@ -47,8 +47,7 @@ $(function() {
 			});
 		};
 		
-		categoria.ExecutarEventosDaPaginaListar = function()
-		{
+		categoria.ExecutarEventosDaPaginaListar = function(){
             $(document).on('click', '#pgCategoriaList a', function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
@@ -67,8 +66,7 @@ $(function() {
 			});
 		}
 		
-		categoria.ExecutarEventosDaPaginaAdicionar = function()
-		{
+		categoria.ExecutarEventosDaPaginaAdicionar = function()	{
             $('#pgAddCategoriaBack').on('click', function(e) 
 			{
                 e.preventDefault();
@@ -82,14 +80,11 @@ $(function() {
                 e.stopImmediatePropagation();
 				
                 var UmObjetoDeCategoria = PegarCamposDaPaginaDeAdicionarCategoriaETransformaEmRegistro();
-                if(categoria.AdicionarCategoriaAoBancoDeDados(UmObjetoDeCategoria))
-				{
-					PaginaAdicionarCategoriaLimparCampos();					
-				};
+                categoria.AdicionarCategoriaAoBancoDeDados(UmObjetoDeCategoria);
+				LimparCamposDaPaginaAdicionarCategoria();
 			});			
 		};
-		categoria.ExecutarEventosDaPaginaEditar = function()
-		{
+		categoria.ExecutarEventosDaPaginaEditar = function(){
             $('#pgEditCategoriaBack').on('click', function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
@@ -102,7 +97,7 @@ $(function() {
                 var UmObjetoDeCategoria = PegarCamposDaPaginaDeEditarCategoriaETransformaEmRegistro();
                 if(categoria.AtualizarCategoriaNoBancoDeDados(UmObjetoDeCategoria))
 				{
-                    pgEditCategoriaClear();					
+                    LimparCamposDaPaginaEditarCategoria();					
 				};
 			});
 			
@@ -122,8 +117,7 @@ $(function() {
                 $.mobile.changePage('#msgbox', { transition: 'pop' });
 			});			
 		};
-		categoria.ExecutarEventosMensagens = function() 
-		{
+		categoria.ExecutarEventosMensagens = function() {
 		
 			$('#msgboxyes').on('click', function (e) 
 			{
@@ -140,7 +134,6 @@ $(function() {
 				var nomethod = $('#msgboxno').data('method');
 				var noid = $('#msgboxno').data('id');
 				var toPage = $('#msgboxno').data('topage');
-				// show the page to display after a record is deleted
 				$.mobile.changePage('#' + toPage, {transition: TransicaoDaPagina});
 				categoria[nomethod](noid);
 			});
@@ -149,95 +142,10 @@ $(function() {
 				e.preventDefault();
 				e.stopImmediatePropagation();
 				var toPage = $('#alertboxok').data('topage');
-				// show the page to display after ok is clicked
 				$.mobile.changePage('#' + toPage, {transition: TransicaoDaPagina});
 			});
 		};
 						
-        categoria.AdicionarCategoriaAoBancoDeDados = function(UmObjetoDeCategoria) {
-            $.mobile.loading("show", {
-                text: "Creating record...",
-                textVisible: true,
-                textonly: false,
-                html: ""
-			});
-            UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split(' ').join('-');;
- 
-            var Transacao = BancoDeDados.transaction(["Categoria"], "readwrite");
-
-            var RetornoDaTransacaoDeInclusaoNoBanco = Transacao.objectStore("Categoria").add(UmObjetoDeCategoria);
-
-            RetornoDaTransacaoDeInclusaoNoBanco.onsuccess = function(e) 
-			{
-                toastr.success('Registro Adicionado com Sucesso.', 'Categorias BancoDeDados');
-				return true;
-			};
-            RetornoDaAberturaDoBanco.onerror = function(e) 
-			{
-                toastr.error('O Registro não foi adicionado.', 'Categorias BancoDeDados');
-				return false;
-			};
-            $.mobile.loading("hide");
-		};
-
-        categoria.AtualizarCategoriaNoBancoDeDados = function(UmObjetoDeCategoria) 
-		{
-            $.mobile.loading("show", {
-                text: "Update record...",
-                textVisible: true,
-                textonly: false,
-                html: ""
-			});
-
-            UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split(' ').join('-');
-
-            var Transacao = BancoDeDados.transaction(["Categoria"], "readwrite");
-
-            var TabelaCategoria = Transacao.objectStore("Categoria");
-
-            TabelaCategoria.get(UmObjetoDeCategoria.Nome).onsuccess = function(e) 
-			{                
-				var RetornoDaAtualizacaoDoBanco = TabelaCategoria.put(UmObjetoDeCategoria);
-                
-				RetornoDaAtualizacaoDoBanco.onsuccess = function(e) 
-				{
-                    toastr.success('Registro Atulizado com Sucesso.', 'Categorias BancoDeDados');
-                    $.mobile.changePage('#pgCategoria', { transition: TransicaoDaPagina });
-					return true;
-				}
-                RetornoDaAtualizacaoDoBanco.onerror = function(e) 
-				{
-                    toastr.error('Não foi possível atualizar o registro.', 'Categorias BancoDeDados');
-                    return false;
-				}
-			};
-            $.mobile.loading("hide");
-		};
-        categoria.ApagarCategoriaDoBancoDeDados = function(Nome) 
-		{
-            $.mobile.loading("show", {
-                text: "Deleting record...",
-                textVisible: true,
-                textonly: false,
-                html: ""
-			});
-            Nome = Nome.split(' ').join('-');
-            var Transacao = BancoDeDados.transaction(["Categoria"], "readwrite");
-            var TabelaCategoria = Transacao.objectStore("Categoria");
-
-            var RetornoDeTransacaoNoBanco = TabelaCategoria.delete(Nome);
-            RetornoDeTransacaoNoBanco.onsuccess = function(e) 
-			{
-                toastr.success('Registro Apagado.', 'Categorias BancoDeDados');
-                $.mobile.changePage('#pgCategoria', { transition: TransicaoDaPagina });
-			}
-            RetornoDaAberturaDoBanco.onerror = function(e) {
-                toastr.error('Registro Não Foi Apagado.', 'Categorias BancoDeDados');
-                return;
-			}
-            $.mobile.loading("hide");
-		};
-
         categoria.MostrarListaDeCategoriasNaPaginaDeListarCategorias = function(ListaDeCategorias) {
             $.mobile.loading("show", {
                 text: "Displaying records...",
@@ -267,53 +175,42 @@ $(function() {
             $('#pgCategoriaList').html(MensagemNoCabecalhoDaListaDeCategoria + html).listview('refresh');
             $.mobile.loading("hide");
 		};
-        // check IndexedDB for Records. This initializes IndexedDB if there are no records
-        //display records if they exist or tell user no records exist.
-        categoria.checkForCategoriaStorage = function() {
+        categoria.VerificaSeExistemRegistrosNaTabelaCategoriaEMostraMensagemNaPaginaDeListarCategorias = function() {
             $.mobile.loading("show", {
                 text: "Checking storage...",
                 textVisible: true,
                 textonly: false,
                 html: ""
 			});
-            //get records from IndexedDB.
-            //when returned, parse then as json object
             var ListaDeCategorias = {};
-            //define a transaction to read the records from the table
             var Transacao = BancoDeDados.transaction(["Categoria"], "readonly");
-            //get the object store for the table
             var store = Transacao.objectStore("Categoria");
-            //open a cursor to read all the records
             var RetornoDaAberturaDoBanco = store.openCursor();
+
             RetornoDaAberturaDoBanco.onsuccess = function(e) {
-                //return the resultset
                 var cursor = e.target.result;
                 if (cursor) {
                     ListaDeCategorias[cursor.key] = cursor.value;
-                    // process another record
+
                     cursor.continue();
 				}
-                // are there existing Categoria records?
+
                 if (!$.isEmptyObject(ListaDeCategorias)) {
-                    // yes there are. pass them off to be displayed
-                    categoria.MostrarListaDeCategoriasNaPaginaDeListarCategorias(ListaDeCategorias);
+
+					categoria.MostrarListaDeCategoriasNaPaginaDeListarCategorias(ListaDeCategorias);
 					} else {
-                    // nope, just show the placeholder
                     $('#pgCategoriaList').html(MensagemNoCabecalhoDaListaDeCategoria + noCategoria).listview('refresh');
 				}
 			}
             $.mobile.loading("hide");
-            // an error was encountered
             RetornoDaAberturaDoBanco.onerror = function(e) {
                 $.mobile.loading("hide");
-                // just show the placeholder
                 $('#pgCategoriaList').html(MensagemNoCabecalhoDaListaDeCategoria + noCategoria).listview('refresh');
 			}
 		};
 		
 		
-		// ***** Add Page *****
-        //read record from IndexedDB and display it on edit page.
+		// ***** Página de adicionar Categoria *****
         categoria.pgAddCategoriaeditCategoria = function(Nome) {
             $.mobile.loading("show", {
                 text: "Reading record...",
@@ -321,31 +218,25 @@ $(function() {
                 textonly: false,
                 html: ""
 			});
-            // clear the form fields
-            PaginaAdicionarCategoriaLimparCampos();
+
+            LimparCamposDaPaginaAdicionarCategoria();
             Nome = Nome.split(' ').join('-');
             var UmObjetoDeCategoria = {};
-            //define a transaction to read the record from the table
+
             var Transacao = BancoDeDados.transaction(["Categoria"], "readonly");
-            //get the object store for the table
             var store = Transacao.objectStore("Categoria");
-            //get the record by primary key
             var RetornoDaAberturaDoBanco = store.get(Nome);
             RetornoDaAberturaDoBanco.onsuccess = function(e) {
 				UmObjetoDeCategoria = e.target.result;
-				//everything is fine, continue
-				//make the record key read only
 				$('#pgAddCategoriaNome').attr('readonly', 'readonly');
-				//ensure the record key control cannot be clearable
 				$('#pgAddCategoriaNome').attr('data-clear-btn', 'false');
-				//update each control in the Edit page
-				//clean the primary key
+
 				var pkey = UmObjetoDeCategoria.Nome;
 				pkey = pkey.split('-').join(' ');
 				UmObjetoDeCategoria.Nome = pkey;
 				$('#pgAddCategoriaNome').val(UmObjetoDeCategoria.Nome);
 			}
-			// an error was encountered
+
             RetornoDaAberturaDoBanco.onerror = function(e) {
                 $('#alertboxheader h1').text('Categoria Error');
                 $('#alertboxtitle').text(Nome.split('-').join(' '));
@@ -357,27 +248,44 @@ $(function() {
 			}
             $.mobile.loading("hide");
 		};
-        // get the contents of the add screen controls and store them in an object.
-        //get the record to be saved and put it in a record array
-        //read contents of each form input
         function PegarCamposDaPaginaDeAdicionarCategoriaETransformaEmRegistro() {
-            //define the new record
-            var UmObjetoDeCategoria = {};
+
+			var UmObjetoDeCategoria = {};
             UmObjetoDeCategoria.Nome = $('#pgAddCategoriaNome').val().trim();
             return UmObjetoDeCategoria;
 		}
-        // clear the contents of the Add page controls
-        //clear the form controls for data entry
-        function PaginaAdicionarCategoriaLimparCampos() {
+
+        categoria.AdicionarCategoriaAoBancoDeDados = function(UmObjetoDeCategoria) {
+            $.mobile.loading("show", {
+                text: "Creating record...",
+                textVisible: true,
+                textonly: false,
+                html: ""
+			});
+            UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split(' ').join('-');;
+ 
+            var Transacao = BancoDeDados.transaction(["Categoria"], "readwrite");
+
+            var RetornoDaTransacaoDeInclusaoNoBanco = Transacao.objectStore("Categoria").add(UmObjetoDeCategoria);
+
+            RetornoDaTransacaoDeInclusaoNoBanco.onsuccess = function(e) 
+			{
+                toastr.success('Registro Adicionado com Sucesso.', 'Categorias BancoDeDados');
+			};
+            RetornoDaAberturaDoBanco.onerror = function(e) 
+			{
+                toastr.error('O Registro não foi adicionado.', 'Categorias BancoDeDados');
+			};
+            $.mobile.loading("hide");
+		};
+
+        function LimparCamposDaPaginaAdicionarCategoria() {
             $('#pgAddCategoriaNome').val('');
 		}
 		
-		
-		
-        // ***** Edit Page *****
-        // clear the contents of the Edit Page controls
-        //clear the form controls for data entry
-        function pgEditCategoriaClear() {
+			
+        // ***** Página Editar Categoria *****
+        function LimparCamposDaPaginaEditarCategoria() {
             $('#pgEditCategoriaNome').val('');
 		}
         
@@ -386,40 +294,34 @@ $(function() {
             UmObjetoDeCategoria.Nome = $('#pgEditCategoriaNome').val().trim();
             return UmObjetoDeCategoria;
 		}
-        // display content of selected record on Edit Page
-        //read record from IndexedDB and display it on edit page.
-        categoria.editCategoria = function(Nome) {
+
+        PreencheCamposDaPaginaEditarCategoria = function(Nome) {
             $.mobile.loading("show", {
                 text: "Reading record...",
                 textVisible: true,
                 textonly: false,
                 html: ""
 			});
-            // clear the form fields
-            pgEditCategoriaClear();
+
+            LimparCamposDaPaginaEditarCategoria();
             Nome = Nome.split(' ').join('-');
             var UmObjetoDeCategoria = {};
-            //define a transaction to read the record from the table
+
             var Transacao = BancoDeDados.transaction(["Categoria"], "readonly");
-            //get the object store for the table
+
             var store = Transacao.objectStore("Categoria");
-            //get the record by primary key
+
             var RetornoDaAberturaDoBanco = store.get(Nome);
             RetornoDaAberturaDoBanco.onsuccess = function(e) {
 				UmObjetoDeCategoria = e.target.result;
-				//everything is fine, continue
-				//make the record key read only
 				$('#pgEditCategoriaNome').attr('readonly', 'readonly');
-				//ensure the record key control cannot be clearable
 				$('#pgEditCategoriaNome').attr('data-clear-btn', 'false');
-				//update each control in the Edit page
-				//clean the primary key
 				var pkey = UmObjetoDeCategoria.Nome;
 				pkey = pkey.split('-').join(' ');
 				UmObjetoDeCategoria.Nome = pkey;
 				$('#pgEditCategoriaNome').val(UmObjetoDeCategoria.Nome);
 			}
-			// an error was encountered
+
             RetornoDaAberturaDoBanco.onerror = function(e) {
                 $('#alertboxheader h1').text('Categoria Error');
                 $('#alertboxtitle').text(Nome.split('-').join(' '));
@@ -432,6 +334,7 @@ $(function() {
             $.mobile.loading("hide");
 		};
 		
-        categoria.iniciar();
+        
+		categoria.iniciar();
 	})(BancoDeDados);
 });
