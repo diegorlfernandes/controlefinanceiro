@@ -23,12 +23,7 @@ $(function() {
                 switch (toPage) {
                     case 'pgLancamento':
 					$('#pgRptLancamentoBack').data('from', 'pgLancamento');
-					var  ListaDeLancamentos = lancamento.RetornarListaDeLancamentos();					
-					if(ListaDeLancamentos){
-					lancamento.MostrarLancamentosNaPaginaDeListarLancamentos(ListaDeLancamentos);
-					}else{
-					lancamento.MostrarMensagemNaPaginaDeListarLancamentos();
-					};										
+					lancamento.MostrarLancamentosNaPaginaDeListarLancamentos();
 					break;
                     case 'pgEditLancamento':
 					$('#pgRptLancamentoBack').data('from', 'pgEditLancamento');
@@ -136,34 +131,7 @@ $(function() {
 		
 		
 		// ***** Metodos da Página Listar Lançamentos *****
-		
-		lancamento.RetornarListaDeLancamentos = function() {
-			$.mobile.loading("show", {
-				text: "Checking storage...",
-				textVisible: true,
-				textonly: false,
-				html: ""
-			});
-			RetornoDaAberturaDoBanco = indexedDB.open(NomeDoBanco, VersaoDoBanco);
-			var ListaDeLancamentos = {};
-			var tx = BancoDeDados.transaction(["Lancamento"], "readonly");
-			var TabelaLancamento = tx.objectStore("Lancamento");
-			var RequisicaoNaTabelaLancamento = TabelaLancamento.openCursor();
-
-			RequisicaoNaTabelaLancamento.onsuccess = function(e) {
-				var cursor = e.target.result;
-				if (cursor) {
-					ListaDeLancamentos[cursor.key] = cursor.value;
-					cursor.continue();
-				}
-			}
-			$.mobile.loading("hide");
-			RequisicaoNaTabelaLancamento.onerror = function(e) {
-				$.mobile.loading("hide");
-			}
-			return ListaDeLancamentos;
-		};
-		
+				
 		lancamento.MostrarLancamentosNaPaginaDeListarLancamentos = function(ListaDeLancamentos) {
 			$.mobile.loading("show", {
 				text: "Displaying records...",
@@ -172,39 +140,59 @@ $(function() {
 				html: ""
 			});
 			
-			var html = '';
-			var n;
 			
-			for (n in ListaDeLancamentos) {
-				var UmObjetoLancamento = ListaDeLancamentos[n];
-				var nItem = MensagemNoCorpoDaLista;
-				nItem = nItem.replace(/Z2/g, String(UmObjetoLancamento.LancamentoID));
-				var nTitle = '';
-				nTitle = UmObjetoLancamento.Categoria;
-				if(UmObjetoLancamento.Descricao)
-				{
-					nTitle +=" --> ";
-					nTitle += UmObjetoLancamento.Descricao;
+			var ListaDeLancamentos = {};
+			var tx = BancoDeDados.transaction(["Lancamento"], "readonly");
+			var TabelaLancamento = tx.objectStore("Lancamento");
+			var RequisicaoNaTabelaLancamento = TabelaLancamento.openCursor();
+			
+			RequisicaoNaTabelaLancamento.onsuccess = function(e) {
+				var cursor = e.target.result;
+				if (cursor) {
+					ListaDeLancamentos[cursor.key] = cursor.value;
+					cursor.continue();
 				}
-				nItem = nItem.replace(/Z1/g, nTitle);
-				var nCountBubble = '';
-				nCountBubble += UmObjetoLancamento.Valor;
-				nItem = nItem.replace(/COUNTBUBBLE/g, nCountBubble);
-				var nDescription = '';
-				nDescription += UmObjetoLancamento.Categoria;
-				nItem = nItem.replace(/DESCRIPTION/g, nDescription);
-				html += nItem;
-			}
+				if (!$.isEmptyObject(ListaDeLancamentos)) {
+					var html = '';
+					var n;
+					for (n in ListaDeLancamentos) {
+						var UmObjetoLancamento = ListaDeLancamentos[n];
+						var nItem = MensagemNoCorpoDaLista;
+						nItem = nItem.replace(/Z2/g, String(UmObjetoLancamento.LancamentoID));
+						var nTitle = '';
+						nTitle = UmObjetoLancamento.Categoria;
+						if(UmObjetoLancamento.Descricao)
+						{
+							nTitle +=" --> ";
+							nTitle += UmObjetoLancamento.Descricao;
+						}
+						nItem = nItem.replace(/Z1/g, nTitle);
+						var nCountBubble = '';
+						nCountBubble += UmObjetoLancamento.Valor;
+						nItem = nItem.replace(/COUNTBUBBLE/g, nCountBubble);
+						var nDescription = '';
+						nDescription += UmObjetoLancamento.Categoria;
+						nItem = nItem.replace(/DESCRIPTION/g, nDescription);
+						html += nItem;
+					}
+					$('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + html).listview('refresh');
+					} else{
+                    $('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + MensagemNaoTemRegistroNaLista).listview('refresh');					
+				}
+				$.mobile.loading("hide");
+				RequisicaoNaTabelaLancamento.onerror = function(e) {
+                    $('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + MensagemNaoTemRegistroNaLista).listview('refresh');					
+					$.mobile.loading("hide");
+				}
+				
+				
+				
+				$('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + html).listview('refresh');
+				$.mobile.loading("hide");
+			};
+		};
 			
-			$('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + html).listview('refresh');
-			$.mobile.loading("hide");
-		};
-		
-		lancamento.MostrarMensagemNaPaginaDeListarLancamentos = function (){
-			$('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + MensagemNaoTemRegistroNaLista).listview('refresh');
-		};
-		
-		
+			
 		// ***** Metodos da Página Adicionar Lançamentos *****
 		lancamento.CriaListaDoCampoCategoriaNaPaginaAdicionarLancamento = function() {
 			$.mobile.loading("show", {
@@ -219,7 +207,7 @@ $(function() {
 			var TabelaLancamento = tx.objectStore("Categoria");
 			var RequisicaoNaTabelaLancamento = TabelaLancamento.openCursor();
 			
-			$('#pgAddLancamentoCategoria').append("<option value='0'>selecione ...</option>");
+			 $('#pgAddLancamentoCategoria').append("<option value='0'>Selecione ...</option>");
 			RequisicaoNaTabelaLancamento.onsuccess = function(e) {
 				var cursor = e.target.result;
 				if (cursor) {
@@ -229,10 +217,10 @@ $(function() {
 					var option = '<option value="'+CategoriaRec.Nome+'">'+CategoriaRec.Nome+'</option>';
 					$('#pgAddLancamentoCategoria').append(option);
 					cursor.continue();
-				}
-				$("#pgAddLancamentoCategoria option:first-child").attr('selected','selected');
-				//$('#pgAddLancamentoCategoria').trigger("chosen:updated");
+				}								
 			}
+			$('#pgAddLancamentoCategoria').selectmenu("refresh", true);
+
 			$.mobile.loading("hide");
 			RequisicaoNaTabelaLancamento.onerror = function(e) {
 				$.mobile.loading("hide");

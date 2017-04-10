@@ -21,7 +21,7 @@ $(function() {
                 switch (toPage) {
                     case 'pgCategoria':
 					$('#pgRptCategoriaBack').data('from', 'pgCategoria');
-					categoria.VerificaSeExistemRegistrosNaTabelaCategoriaEMostraMensagemNaPaginaDeListarCategorias();
+					categoria.MostraMensagemNaPaginaDeListarCategorias();
 					break;
                     case 'pgEditCategoria':
 					$('#pgRptCategoriaBack').data('from', 'pgEditCategoria');
@@ -148,30 +148,7 @@ $(function() {
         
 		//****** Página Listar Categoria ******
 
-		categoria.MostrarListaDeCategoriasNaPaginaDeListarCategorias = function() {
-            var html = '';
-            var UmObjetoDeCategoria;
-
-            for (UmObjetoDeCategoria in ListaDeCategorias) {
-                var UmObjetoDeCategoria = ListaDeCategorias[UmObjetoDeCategoria];
-
-                UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split('-').join(' ');
-
-                var NovoItemDaListaDaPagina = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
-				NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z2/g, UmObjetoDeCategoria.Nome);
-
-				var nTitle = '';
-
-                nTitle = UmObjetoDeCategoria.Nome.split('-').join(' ');
-
-				NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z1/g, nTitle);
-
-                html += NovoItemDaListaDaPagina;
-			}
-            $('#pgCategoriaList').html(MensagemNoCabecalhoDaLista + html).listview('refresh');
-            $.mobile.loading("hide");
-		};
-        categoria.VerificaSeExistemRegistrosNaTabelaCategoriaEMostraMensagemNaPaginaDeListarCategorias = function() {
+        categoria.MostraMensagemNaPaginaDeListarCategorias = function() {
             $.mobile.loading("show", {
                 text: "Checking storage...",
                 textVisible: true,
