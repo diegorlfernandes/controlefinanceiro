@@ -4,24 +4,24 @@ $(function() {
         var MensagemNoCabecalhoDaLista = '<li data-role="list-divider">Suas Categorias</li>';
         var MensagemNaoTemRegistroNaLista = '<li id="noCategoria">Você Não Tem Registros</li>';
         var MensagemNoCabecalhoDaListaDeCategoria = '<li data-role="list-divider">Suas Categorias</li>';
-				
-        categoria.iniciar = function() 
-		{
+		
+        categoria.iniciar = function(){
 			categoria.ExecutarEventosTodasAsPaginas();
 			categoria.ExecutarEventosDaPaginaListar();
 			categoria.ExecutarEventosDaPaginaAdicionar();
 			categoria.ExecutarEventosDaPaginaEditar();
 			categoria.ExecutarEventosMensagens();
 		};
-
-		categoria.ExecutarEventosTodasAsPaginas = function()
-		{					
+		
+		
+		//****** Eventos ******
+		categoria.ExecutarEventosTodasAsPaginas = function(){					
             $(document).on('pagebeforechange', function(e, data) {
                 var toPage = data.toPage[0].id;
                 switch (toPage) {
                     case 'pgCategoria':
 					$('#pgRptCategoriaBack').data('from', 'pgCategoria');
-					categoria.checkForCategoriaStorage();
+					//categoria.MostrarListaDeCategoriasNaPaginaDeListarCategorias();
 					break;
                     case 'pgEditCategoria':
 					$('#pgRptCategoriaBack').data('from', 'pgEditCategoria');
@@ -47,8 +47,7 @@ $(function() {
 			});
 		};
 		
-		categoria.ExecutarEventosDaPaginaListar = function()
-		{
+		categoria.ExecutarEventosDaPaginaListar = function(){
             $(document).on('click', '#pgCategoriaList a', function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
@@ -67,15 +66,14 @@ $(function() {
 			});
 		}
 		
-		categoria.ExecutarEventosDaPaginaAdicionar = function()
-		{
+		categoria.ExecutarEventosDaPaginaAdicionar = function(){
             $('#pgAddCategoriaBack').on('click', function(e) 
 			{
                 e.preventDefault();
                 e.stopImmediatePropagation(); 
 				$.mobile.changePage('#pgCategoria', { transition: TransicaoDaPagina });
 			});
-
+			
 			$('#pgAddCategoriaSave').on('click', function(e) 
 			{
                 e.preventDefault();
@@ -88,8 +86,7 @@ $(function() {
 				};
 			});			
 		};
-		categoria.ExecutarEventosDaPaginaEditar = function()
-		{
+		categoria.ExecutarEventosDaPaginaEditar = function(){
             $('#pgEditCategoriaBack').on('click', function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
@@ -122,9 +119,8 @@ $(function() {
                 $.mobile.changePage('#msgbox', { transition: 'pop' });
 			});			
 		};
-		categoria.ExecutarEventosMensagens = function() 
-		{
-		
+		categoria.ExecutarEventosMensagens = function(){
+			
 			$('#msgboxyes').on('click', function (e) 
 			{
 				e.preventDefault();
@@ -153,7 +149,9 @@ $(function() {
 				$.mobile.changePage('#' + toPage, {transition: TransicaoDaPagina});
 			});
 		};
-						
+		
+		
+		
         categoria.AdicionarCategoriaAoBancoDeDados = function(UmObjetoDeCategoria) {
             $.mobile.loading("show", {
                 text: "Creating record...",
@@ -162,11 +160,11 @@ $(function() {
                 html: ""
 			});
             UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split(' ').join('-');;
- 
+			
             var Transacao = BancoDeDados.transaction(["Categoria"], "readwrite");
-
+			
             var RetornoDaTransacaoDeInclusaoNoBanco = Transacao.objectStore("Categoria").add(UmObjetoDeCategoria);
-
+			
             RetornoDaTransacaoDeInclusaoNoBanco.onsuccess = function(e) 
 			{
                 toastr.success('Registro Adicionado com Sucesso.', 'Categorias BancoDeDados');
@@ -179,7 +177,7 @@ $(function() {
 			};
             $.mobile.loading("hide");
 		};
-
+		
         categoria.AtualizarCategoriaNoBancoDeDados = function(UmObjetoDeCategoria) 
 		{
             $.mobile.loading("show", {
@@ -188,13 +186,13 @@ $(function() {
                 textonly: false,
                 html: ""
 			});
-
+			
             UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split(' ').join('-');
-
+			
             var Transacao = BancoDeDados.transaction(["Categoria"], "readwrite");
-
+			
             var TabelaCategoria = Transacao.objectStore("Categoria");
-
+			
             TabelaCategoria.get(UmObjetoDeCategoria.Nome).onsuccess = function(e) 
 			{                
 				var RetornoDaAtualizacaoDoBanco = TabelaCategoria.put(UmObjetoDeCategoria);
@@ -224,7 +222,7 @@ $(function() {
             Nome = Nome.split(' ').join('-');
             var Transacao = BancoDeDados.transaction(["Categoria"], "readwrite");
             var TabelaCategoria = Transacao.objectStore("Categoria");
-
+			
             var RetornoDeTransacaoNoBanco = TabelaCategoria.delete(Nome);
             RetornoDeTransacaoNoBanco.onsuccess = function(e) 
 			{
@@ -237,76 +235,60 @@ $(function() {
 			}
             $.mobile.loading("hide");
 		};
+		
 
-        categoria.MostrarListaDeCategoriasNaPaginaDeListarCategorias = function(ListaDeCategorias) {
-            $.mobile.loading("show", {
-                text: "Displaying records...",
-                textVisible: true,
-                textonly: false,
-                html: ""
-			});
-            var html = '';
-            var UmObjetoDeCategoria;
-
-            for (UmObjetoDeCategoria in ListaDeCategorias) {
-                var UmObjetoDeCategoria = ListaDeCategorias[UmObjetoDeCategoria];
-
-                UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split('-').join(' ');
-
-                var NovoItemDaListaDaPagina = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
-				NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z2/g, UmObjetoDeCategoria.Nome);
-
-				var nTitle = '';
-
-                nTitle = UmObjetoDeCategoria.Nome.split('-').join(' ');
-
-				NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z1/g, nTitle);
-
-                html += NovoItemDaListaDaPagina;
-			}
-            $('#pgCategoriaList').html(MensagemNoCabecalhoDaListaDeCategoria + html).listview('refresh');
-            $.mobile.loading("hide");
-		};
-        // check IndexedDB for Records. This initializes IndexedDB if there are no records
-        //display records if they exist or tell user no records exist.
-        categoria.checkForCategoriaStorage = function() {
+		categoria.MostrarListaDeCategoriasNaPaginaDeListarCategorias = function() {
             $.mobile.loading("show", {
                 text: "Checking storage...",
                 textVisible: true,
                 textonly: false,
                 html: ""
 			});
-            //get records from IndexedDB.
-            //when returned, parse then as json object
-            var ListaDeCategorias = {};
-            //define a transaction to read the records from the table
-            var Transacao = BancoDeDados.transaction(["Categoria"], "readonly");
-            //get the object store for the table
-            var store = Transacao.objectStore("Categoria");
-            //open a cursor to read all the records
-            var RetornoDaAberturaDoBanco = store.openCursor();
+			
+			var ListaDeCategorias = {};
+			
+			var Transacao = BancoDeDados.transaction(["Categoria"], "readonly");
+			
+			var store = Transacao.objectStore("Categoria");
+			
+			var RetornoDaAberturaDoBanco = store.openCursor();
             RetornoDaAberturaDoBanco.onsuccess = function(e) {
-                //return the resultset
-                var cursor = e.target.result;
+				
+				var cursor = e.target.result;
                 if (cursor) {
                     ListaDeCategorias[cursor.key] = cursor.value;
-                    // process another record
                     cursor.continue();
 				}
-                // are there existing Categoria records?
-                if (!$.isEmptyObject(ListaDeCategorias)) {
-                    // yes there are. pass them off to be displayed
-                    categoria.MostrarListaDeCategoriasNaPaginaDeListarCategorias(ListaDeCategorias);
-					} else {
-                    // nope, just show the placeholder
+				
+				if (!$.isEmptyObject(ListaDeCategorias)) {
+					
+					var html = '';
+					var UmObjetoDeCategoria;
+					
+					for (UmObjetoDeCategoria in ListaDeCategorias) {
+						var UmObjetoDeCategoria = ListaDeCategorias[UmObjetoDeCategoria];
+						
+						UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split('-').join(' ');
+						
+						var NovoItemDaListaDaPagina = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
+						NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z2/g, UmObjetoDeCategoria.Nome);
+						
+						var nTitle = '';
+						
+						nTitle = UmObjetoDeCategoria.Nome.split('-').join(' ');
+						
+						NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z1/g, nTitle);
+						
+						html += NovoItemDaListaDaPagina;
+					}
+					$('#pgCategoriaList').html(MensagemNoCabecalhoDaListaDeCategoria + html).listview('refresh');
+					} else{
                     $('#pgCategoriaList').html(MensagemNoCabecalhoDaListaDeCategoria + noCategoria).listview('refresh');
 				}
 			}
             $.mobile.loading("hide");
-            // an error was encountered
             RetornoDaAberturaDoBanco.onerror = function(e) {
                 $.mobile.loading("hide");
-                // just show the placeholder
                 $('#pgCategoriaList').html(MensagemNoCabecalhoDaListaDeCategoria + noCategoria).listview('refresh');
 			}
 		};
