@@ -1,31 +1,4 @@
-﻿/// <reference path="~/Scripts/jQuery/jquery-1.7.1.js" />
-
-/************************************************************* 
-* SGI
-* ***********************************************************
-* Diversas funções úteis em JavaScript.
-* Usado e quase todas as telas.
-*
-* Obs.: Algumas coisas tranpostadas do FuncoesGlobais.js do AE.
-*
-* Dependências:
-*   - jquery-1.5.1.min.js
-* 
-* 
-* SGI - All rights reserved ©.
-* Criado por: Renan Siravegna Moreira
-* Data da Criação: ??/??/2011
-* Modificado por: --
-* Data da modificação: --
-* Observação: --
-* **********************************************************/
-
-/**************************************************************************************
-* Método extra para exibição de mensagens (popups, alertas, etc)
-*
-* Autor: Christian Bakargy de Souza
-* E-mail: cbsouza@fazenda.ms.gov.br
-*/
+﻿
 function Mensagem(options) {
 
     // botoes
