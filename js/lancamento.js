@@ -22,20 +22,18 @@ $(function() {
                 var toPage = data.toPage[0].id;
                 switch (toPage) {
                     case 'pgLancamento':
-					$('#pgRptLancamentoBack').data('from', 'pgLancamento');
-					lancamento.MostrarLancamentosNaPaginaDeListarLancamentos();
+						$('#pgRptLancamentoBack').data('from', 'pgLancamento');
+						lancamento.MostrarLancamentosNaPaginaDeListarLancamentos();
 					break;
                     case 'pgEditLancamento':
-					$('#pgRptLancamentoBack').data('from', 'pgEditLancamento');
-					var LancamentoID = parseInt($('#pgEditLancamento').data('id'));
-					lancamento.PreencheOsCamposDaTelaEditarLancamentoBuscandoDoBancoDeDados(LancamentoID);
+						$('#pgRptLancamentoBack').data('from', 'pgEditLancamento');
 					break;
                     case 'pgAddLancamento':
-					$('#pgRptLancamentoBack').data('from', 'pgAddLancamento');
+						$('#pgRptLancamentoBack').data('from', 'pgAddLancamento');
 					break;
                     case 'pgRptResumoLancamentoCategoria':
-					$('#pgRptLancamentoBack').data('from', 'pgAddLancamento');
-					lancamento.RelatorioDeResumoDeLancamentosPorCategoria();
+						$('#pgRptLancamentoBack').data('from', 'pgAddLancamento');
+						lancamento.RelatorioDeResumoDeLancamentosPorCategoria();
 					break;
 					default:
 				}
@@ -44,11 +42,14 @@ $(function() {
 				var pageId = $(':mobile-pagecontainer').pagecontainer('getActivePage').attr('id');
 				switch (pageId) {
 					case 'pgEditLancamento':
+						lancamento.LimparCamposDaPaginaEditarLancamentos();
+						var LancamentoID = parseInt($('#pgEditLancamento').data('id'));
+						lancamento.PreencheOsCamposDaTelaEditarLancamento(LancamentoID);
 					break;
 					case 'pgAddLancamento':
-					lancamento.LimparCamposDaPaginaAdicionarLancamentos();
-					lancamento.ValidarCamposDaPaginaAdicionarLancamentos();                        
-					lancamento.CriaListaDoCampoCategoriaNaPaginaAdicionarLancamento();
+						lancamento.LimparCamposDaPaginaAdicionarLancamentos();
+						lancamento.ValidarCamposDaPaginaAdicionarLancamentos();                        
+						lancamento.CriaListaDoCampoCategoriaNaPaginaAdicionarLancamento();
 					break;
 					default:
 				}
@@ -131,7 +132,7 @@ $(function() {
 		
 		
 		// ***** Metodos da Página Listar Lançamentos *****
-				
+		
 		lancamento.MostrarLancamentosNaPaginaDeListarLancamentos = function(ListaDeLancamentos) {
 			$.mobile.loading("show", {
 				text: "Displaying records...",
@@ -143,9 +144,9 @@ $(function() {
 			
 			var ListaDeLancamentos = {};
 			var tx = BancoDeDados.transaction(["Lancamento"], "readonly");
-			var TabelaLancamento = tx.objectStore("Lancamento");
-			var RequisicaoNaTabelaLancamento = TabelaLancamento.openCursor();
-			
+			var TabelaLancamento = tx.objectStore('Lancamento').index('MesAno, Categoria');
+			var RequisicaoNaTabelaLancamento = TabelaLancamento.openCursor(IDBKeyRange.bound([MesAno,"A"],[MesAno,"Z"]));
+		
 			RequisicaoNaTabelaLancamento.onsuccess = function(e) {
 				var cursor = e.target.result;
 				if (cursor) {
@@ -174,25 +175,20 @@ $(function() {
 						nDescription += UmObjetoLancamento.Categoria;
 						nItem = nItem.replace(/DESCRIPTION/g, nDescription);
 						html += nItem;
-					}
-					$('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + html).listview('refresh');
-					} else{
-                    $('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + MensagemNaoTemRegistroNaLista).listview('refresh');					
-				}
-				$.mobile.loading("hide");
-				RequisicaoNaTabelaLancamento.onerror = function(e) {
-                    $('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + MensagemNaoTemRegistroNaLista).listview('refresh');					
-					$.mobile.loading("hide");
-				}
-				
-				
-				
-				$('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + html).listview('refresh');
-				$.mobile.loading("hide");
+						$('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + html).listview('refresh');
+					};
+					}else{
+					$('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + MensagemNaoTemRegistroNaLista).listview('refresh');
+				};
+				$.mobile.loading("hide");				
 			};
+			RequisicaoNaTabelaLancamento.onerror = function(e) {
+				$('#pgLancamentoList').html(MensagemNoCabecalhoDaLista + MensagemNaoTemRegistroNaLista).listview('refresh');					
+				$.mobile.loading("hide");
+			}							
 		};
-			
-			
+		
+		
 		// ***** Metodos da Página Adicionar Lançamentos *****
 		lancamento.CriaListaDoCampoCategoriaNaPaginaAdicionarLancamento = function() {
 			$.mobile.loading("show", {
@@ -207,7 +203,7 @@ $(function() {
 			var TabelaLancamento = tx.objectStore("Categoria");
 			var RequisicaoNaTabelaLancamento = TabelaLancamento.openCursor();
 			
-			 $('#pgAddLancamentoCategoria').append("<option value='0'>Selecione ...</option>");
+			$('#pgAddLancamentoCategoria').append("<option value='0'>Selecione ...</option>");
 			RequisicaoNaTabelaLancamento.onsuccess = function(e) {
 				var cursor = e.target.result;
 				if (cursor) {
@@ -220,7 +216,7 @@ $(function() {
 				}								
 			}
 			$('#pgAddLancamentoCategoria').selectmenu("refresh", true);
-
+			
 			$.mobile.loading("hide");
 			RequisicaoNaTabelaLancamento.onerror = function(e) {
 				$.mobile.loading("hide");
@@ -243,7 +239,8 @@ $(function() {
 			$('#pgAddLancamentoCategoria').empty();
 			$('#pgAddLancamentoValor').val('');
 			$('#pgAddLancamentoDescricao').val('');
-			($("#pgAddLancamentoTipoA").prop(":checked"));
+			$("#pgAddLancamentoTipoA").prop('checked', true).checkboxradio("refresh");
+			$("#pgAddLancamentoTipoB").prop('checked', false).checkboxradio("refresh");
 		}
 		
 		lancamento.ValidarCamposDaPaginaAdicionarLancamentos = function() {				
@@ -289,30 +286,21 @@ $(function() {
 		// ***** Metodos da Página Editar Lançamentos *****
 		
 		lancamento.LimparCamposDaPaginaEditarLancamentos = function() {
-			($("#pgAddLancamentoTipoA").prop(":checked"));
 			$('#pgEditLancamentoDescricao').val("");
 			$('#pgEditLancamentoValor').val("");
+			$("#pgEditLancamentoTipoA").prop('checked', true).checkboxradio("refresh");
+			$("#pgEditLancamentoTipoB").prop('checked', false).checkboxradio("refresh");
 			
 		}
 		
-		lancamento.PegaCamposDaPaginaEditarLancamentosERetornaUmObjetoLancamento = function(){
-			var UmObjetoLancamento = {};
-			UmObjetoLancamento.LancamentoID = parseInt($('#pgEditLancamentoLancamentoID').val());
-			UmObjetoLancamento.Categoria = $('#pgEditLancamentoCategoria').val();
-			UmObjetoLancamento.Descricao = $('#pgEditLancamentoDescricao').val();
-			UmObjetoLancamento.Valor = $('#pgEditLancamentoValor').val();
-			return UmObjetoLancamento;
-		}
 		
-		lancamento.PreencheOsCamposDaTelaEditarLancamentoBuscandoDoBancoDeDados = function(LancamentoID) {
+		lancamento.PreencheOsCamposDaTelaEditarLancamento = function(LancamentoID) {
 			$.mobile.loading("show", {
 				text: "Reading record...",
 				textVisible: true,
 				textonly: false,
 				html: ""
-			});
-			lancamento.LimparCamposDaPaginaEditarLancamentos();
-			
+			});			
 			
 			var UmObjetoLancamento = {};
 			var tx = BancoDeDados.transaction(["Lancamento"], "readonly");
@@ -327,15 +315,23 @@ $(function() {
 				$('#pgEditLancamentoLancamentoID').val(UmObjetoLancamento.LancamentoID);
 				$('#pgEditLancamentoDescricao').val(UmObjetoLancamento.Descricao);
 				$('#pgEditLancamentoValor').val(UmObjetoLancamento.Valor);
+				if (parseInt(UmObjetoLancamento.Valor)>=0){
+					$("#pgEditLancamentoTipoA").prop('checked', false).checkboxradio("refresh");
+					$("#pgEditLancamentoTipoB").prop('checked', true).checkboxradio("refresh");
+				}else{
+					$("#pgEditLancamentoTipoA").prop('checked', true).checkboxradio("refresh");
+					$("#pgEditLancamentoTipoB").prop('checked', false).checkboxradio("refresh");
+				}
+					
 			}
 			request1.onerror = function(e) {
-				$('#alertboxheader h1').text('Lancamento Error');
-				$('#alertboxtitle').text(Nome.split('-').join(' '));
-				$('#alertboxprompt').text('An error was encountered trying to read this record, please try again!');
-				$('#alertboxok').data('topage', 'pgEditLancamento');
-				$('#alertboxok').data('id', Nome.split(' ').join('-'));
-				$.mobile.changePage('#alertbox', { transition: 'pop' });
-				return;
+				// $('#alertboxheader h1').text('Lancamento Error');
+				// $('#alertboxtitle').text(Nome.split('-').join(' '));
+				// $('#alertboxprompt').text('An error was encountered trying to read this record, please try again!');
+				// $('#alertboxok').data('topage', 'pgEditLancamento');
+				// $('#alertboxok').data('id', Nome.split(' ').join('-'));
+				// $.mobile.changePage('#alertbox', { transition: 'pop' });
+				// return;
 			}
 			$.mobile.loading("hide");
 		};
@@ -372,6 +368,21 @@ $(function() {
 			
 		};
 		
+		lancamento.PegaCamposDaPaginaEditarLancamentosERetornaUmObjetoLancamento = function(){
+			var UmObjetoLancamento = {};
+			UmObjetoLancamento.LancamentoID = parseInt($('#pgEditLancamentoLancamentoID').val());
+			UmObjetoLancamento.MesAno = MesAno;
+			UmObjetoLancamento.Categoria = $('#pgEditLancamentoCategoria').val();
+			UmObjetoLancamento.Descricao = $('#pgEditLancamentoDescricao').val();
+			
+			if ($("#pgEditLancamentoTipoA").is(":checked"))
+				UmObjetoLancamento.Valor = "-"+$('#pgEditLancamentoValor').val().trim();
+			else
+				UmObjetoLancamento.Valor = $('#pgEditLancamentoValor').val().trim();
+			
+			return UmObjetoLancamento;
+		}
+
 		lancamento.AtualizarObjetoLancamentoNoBancoDeDados = function(UmObjetoLancamento) {
 			$.mobile.loading("show", 
 			{
@@ -440,9 +451,9 @@ $(function() {
 			var ListaDeObjetosLancamentoAgrupadoPorCategoriaComValorNegativo = new Array();
 			
 			var transaction = BancoDeDados.transaction(['Lancamento'], "readonly");
-			var store = transaction.objectStore('Lancamento').index('Categoria');
+			var store = transaction.objectStore('Lancamento').index('MesAno, Categoria');
 			
-			store.openCursor().onsuccess = function(e) 
+			store.openCursor(IDBKeyRange.bound([MesAno,"A"],[MesAno,"Z"])).onsuccess = function(e) 
 			{
 				
 				var cursor = e.target.result;

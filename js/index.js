@@ -24,7 +24,7 @@ RetornoDaAberturaDoBanco.onupgradeneeded = function(e) {
 	if (!thisDB.objectStoreNames.contains("Lancamento")) {
 		store = thisDB.createObjectStore("Lancamento", { keyPath: "LancamentoID", autoIncrement:true });
 	    store.createIndex('Descricao', 'Descricao', {unique: false });
-		store.createIndex('Categoria', 'Categoria', {unique: false });
+		store.createIndex('MesAno, Categoria', ['MesAno', 'Categoria']);
 		store.createIndex('Valor', 'Valor', {unique: false });
 	}
 };
@@ -37,7 +37,10 @@ $(document).on('pagecontainershow', function(e, ui) {
 	var pageId = $(':mobile-pagecontainer').pagecontainer('getActivePage').attr('id');
 	switch (pageId) {
 		case 'pgMenu':
-		 $("#pgMenuMesAno").val(MesAno).change();
+		$("#pgMenuMesAno").val(MesAno).change();
+		$('#pgMenuMesAno').on('change', function() {
+			MesAno = $('#pgMenuMesAno').val();
+		})
 		break;
 		default:
 	}

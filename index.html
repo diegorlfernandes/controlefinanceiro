@@ -214,15 +214,15 @@
 		</ul>
         <footer id="pgMenuFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
             <!-- <h1 id="pgMenuFtrH1"></h1> -->
-				<div class="ui-field-contain" align = "center">
-					<select name="pgMenuMesAno" id="pgMenuMesAno">
+			<div class="ui-field-contain" align = "center">
+				<select name="pgMenuMesAno" id="pgMenuMesAno">
 					<option value="01/2017">01/2017 </option>
 					<option value="02/2017">02/2017 </option>
 					<option value="03/2017">03/2017 </option>
 					<option value="04/2017">04/2017 </option>
 					<option value="05/2017">05/2017 </option>
-					</select>
-				</div>
+				</select>
+			</div>
 			
 		</footer>
 	</div>
@@ -346,7 +346,6 @@
                     <input required name="pgAddLancamentoValor" title="Digite o valor aqui." type="text"  id="pgAddLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
 				</div>
 				<div data-role="fieldcontain">
-					<form>
 					<fieldset data-role="controlgroup" data-type="horizontal" name="pgAddLancamentoTipo">
 						<legend>Tipo <span class='red'>*</span></legend>
 						<input type="radio" name="pgAddLancamentoTipo" id="pgAddLancamentoTipoA" value="off" checked="checked">
@@ -357,12 +356,12 @@
 				</div>
 			</div>
 		</div>
-        <footer id="pgAddLancamentoFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
-            <div id="pgAddLancamentoFtrNavBar" data-role="navbar">
-                <ul>
-                    <li><a id="pgAddLancamentoBack" data-icon="carat-l">Cancelar</a>
+		<footer id="pgAddLancamentoFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
+			<div id="pgAddLancamentoFtrNavBar" data-role="navbar">
+				<ul>
+					<li><a id="pgAddLancamentoBack" data-icon="carat-l">Cancelar</a>
 					</li>
-                    <li><a type="submit" id="pgAddLancamentoSave" data-icon="action">Salvar</a>
+					<li><a type="submit" id="pgAddLancamentoSave" data-icon="action">Salvar</a>
 					</li>
 				</ul>
 			</div>
@@ -370,46 +369,55 @@
 	</div>
 	
 	<!-- editar Lancamento -->
-    <div data-url="LancamentoNome" id="pgEditLancamento" data-role="page">
-        <header id="pgEditLancamentoHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-		<h1>Cash</h1>
-		<a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Menu</a>
-		<a data-role="button" id="pgLancamentoNew" data-icon="plus" data-theme="b" class="ui-btn-right">Novo</a>
-	</header>
-	<div id="pgEditLancamentoCnt" data-role="content">
-		<h3>Editar Lancamento</h3>
-		<div id="pgEditLancamentoForm">
-			<div data-role="fieldcontain">
-				<input  name="pgEditLancamentoLancamentoID" type="hidden" id="pgEditLancamentoLancamentoID" </input>
-			</div>
-			<div class="ui-field-contain">
-				<label for="pgEditLancamentoCategoria" class="select">Categoria<span class='red'>*</span></label>
-				<select name="pgEditLancamentoCategoria" id="pgEditLancamentoCategoria">
-				</select>
-			</div>
-			
-			<div data-role="fieldcontain">
-				<label for="pgEditLancamentoDescricao">Descrição<span class='red'></span></label>
-				<input name="pgEditLancamentoDescricao" title="Digite a descrição aqui." type="text" id="pgEditLancamentoDescricao" placeholder="Digite a descrição aqui." autocomplete="off" data-clear-btn="true"></input>
-			</div>
-			<div data-role="fieldcontain">
-				<label for="pgEditLancamentoValor">Valor<span class='red'>*</span></label>
-				<input required name="pgEditLancamentoValor" title="Digite o valor aqui." type="text" id="pgEditLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
+	<div data-url="LancamentoNome" id="pgEditLancamento" data-role="page">
+		<header id="pgEditLancamentoHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
+			<h1>Cash</h1>
+			<a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Menu</a>
+			<a data-role="button" id="pgLancamentoNew" data-icon="plus" data-theme="b" class="ui-btn-right">Novo</a>
+		</header>
+		<div id="pgEditLancamentoCnt" data-role="content">
+			<h3>Editar Lancamento</h3>
+			<div id="pgEditLancamentoForm">
+				<div data-role="fieldcontain">
+					<input  name="pgEditLancamentoLancamentoID" type="hidden" id="pgEditLancamentoLancamentoID" </input>
+				</div>
+				<div class="ui-field-contain">
+					<label for="pgEditLancamentoCategoria" class="select">Categoria<span class='red'>*</span></label>
+					<select name="pgEditLancamentoCategoria" id="pgEditLancamentoCategoria">
+					</select>
+				</div>
+				
+				<div data-role="fieldcontain">
+					<label for="pgEditLancamentoDescricao">Descrição<span class='red'></span></label>
+					<input name="pgEditLancamentoDescricao" title="Digite a descrição aqui." type="text" id="pgEditLancamentoDescricao" placeholder="Digite a descrição aqui." autocomplete="off" data-clear-btn="true"></input>
+				</div>
+				<div data-role="fieldcontain">
+					<label for="pgEditLancamentoValor">Valor<span class='red'>*</span></label>
+					<input required name="pgEditLancamentoValor" title="Digite o valor aqui." type="text" id="pgEditLancamentoValor" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
+				</div>
+				<div data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-type="horizontal" name="pgEditLancamentoTipo">
+						<legend>Tipo <span class='red'>*</span></legend>
+						<input type="radio" name="pgEditLancamentoTipo" id="pgEditLancamentoTipoA" value="off" checked="checked">
+						<label for="pgEditLancamentoTipoA">Despesa</label>
+						<input type="radio" name="pgEditLancamentoTipo" id="pgEditLancamentoTipoB" value="off">
+						<label for="pgEditLancamentoTipoB">Receita</label>
+					</fieldset>					
+				</div>			
 			</div>
 		</div>
-	</div>
-	<footer id="pgEditLancamentoFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
-		<div id="pgEditLancamentoFtrNavBar" data-role="navbar">
-			<ul>
-				<li><a data-transition="slide" id="pgEditLancamentoBack" data-icon="carat-l" href="#pgLancamento">Cancelar</a>
-				</li>
-				<li><a type="submit" id="pgEditLancamentoUpdate" data-icon="action">Atualizar</a>
-				</li>
-				<li><a data-rel="popup" data-transition="pop" id="pgEditLancamentoDelete" data-icon="delete" href="#msgbox">Apagar</a>
-				</li>
-			</ul>
-		</div>
-	</footer>
+		<footer id="pgEditLancamentoFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
+			<div id="pgEditLancamentoFtrNavBar" data-role="navbar">
+				<ul>
+					<li><a data-transition="slide" id="pgEditLancamentoBack" data-icon="carat-l" href="#pgLancamento">Cancelar</a>
+					</li>
+					<li><a type="submit" id="pgEditLancamentoUpdate" data-icon="action">Atualizar</a>
+					</li>
+					<li><a data-rel="popup" data-transition="pop" id="pgEditLancamentoDelete" data-icon="delete" href="#msgbox">Apagar</a>
+					</li>
+				</ul>
+			</div>
+		</footer>
 	</div>
 	
 	
@@ -417,8 +425,8 @@
 	<div id="pgRptResumoLancamentoCategoria" data-role="page">
 		
 		<header id="pgRptResumoLancamentoCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-            <h1>Cash</h1>
-            <a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Menu</a>
+			<h1>Cash</h1>
+			<a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Menu</a>
 			<a data-role="button" download="Resumo.xls" onclick="return ExcellentExport.excel(this, 'RptResumoLancamentoCategoria', 'Lancamento');" id="pgRptResumoLancamentoCategoriaExport" data-icon="exportexcel" href="#">Exportar</a>
 		</header>
 		<div id="pgRptResumoLancamentoCategoriaCnt" data-role="content">
@@ -434,41 +442,7 @@
 				</tbody>
 				<tfoot>
 					<tr><td></td></tr>
-					<!-- <tr><td class='ui-body-c' colspan="3">Powered by JQM.Show - https://play.google.com/store/apps/details?id=com.b4a.JQMShow</td></tr></tfoot> -->
 				</table>
-			</div>
-		</div>
-		
-		<!-- Configurações -->
-		<div id="pgConfiguracao" data-role="page">
-			<header id="pgAddCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-				<h1>Cash</h1>
-				<a data-role="button" id="pgCategoriaBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Menu</a>
-			</header>
-			<div id="pgAltConfiguracaoCnt" data-role="content">
-				<h3>Alterar Configurações</h3>
-				<div id="pgAltConfiguracaoForm">				
-					<div data-role="fieldcontain">
-						<label for="pgAltConfiguracaoMesAno">Mês/Ano de Trabalho</label>
-						<!-- <input name="pgAltConfiguracaoMesAno" id="pgAltConfiguracaoMesAno" class="date-picker" />										 -->
-						<input required name="pgAltConfiguracaoMesAno"  type="text" id="pgAltConfiguracaoMesAno" placeholder="Digite o Mês/Ano aqui." autocomplete="off" data-clear-btn="true"></input>					
-					</div>	
-					<div data-role="fieldcontain">
-						<label for="pgAltConfiguracaoSaldoInicial">Saldo Inicial<span class='red'></span></label>
-						<input required name="pgAltConfiguracaoSaldoInicial"  type="text" id="pgAltConfiguracaoSaldoInicial" placeholder="Digite o valor aqui." autocomplete="off" data-clear-btn="true"></input>
-					</div>				
-				</div>
-				
-				<footer id="pgAltConfiguracaoFtr" data-role="footer" data-position="fixed" data-tap-toggle="false">
-					<div id="pgAltConfiguracaoFtrNavBar" data-role="navbar">
-						<ul>
-							<li><a id="pgAltConfiguracaoBack" data-icon="carat-l">Cancelar</a>
-							</li>
-							<li><a type="submit" id="pgAltConfiguracaoSave" data-icon="action">Salvar</a>
-							</li>
-						</ul>
-					</div>
-				</footer>
 			</div>
 		</div>
 		
@@ -515,5 +489,5 @@
 			</div>
 		</div>
 		
-	</body>
-</html>
+		</body>
+	</html>
