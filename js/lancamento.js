@@ -443,6 +443,7 @@ $(function() {
 			});
 			
 			$('#RptResumoLancamentoCategoria tbody tr').remove();
+			$('#pgRptResumoLancamentoCategoriaFoot td').remove();
 			
 			var  UmObjetoLancamento, ValorTotalDoLancamentoAgrupadoPorCategoria=0.00, categoria, ValorTotalDeTodosOsLancamentos=0.00;
 			
@@ -508,18 +509,15 @@ $(function() {
 		
 		lancamento.AdicionaUmaLinhaNaTabelaDaPaginaDoRelatorioDeResumo = function (value, index, ar) {
 			var eachrow = '<tr>';
-			eachrow += '<td class="ui-body-c">' + value[0] + '</td>';
-			eachrow += '<td class="ui-body-c" style="text-align:right;">' + value[1].toFixed(2) + '</td>';
-			eachrow += '</tr>';
+			eachrow+= '<th> <b class="ui-table-cell-label">Categoria</b>'+value[0]+'</th>';
+			eachrow+= '	<td> <b class="ui-table-cell-label">Valor</b>'+ value[1].toFixed(2) +'</td>';
+			eachrow+= '</tr>';
 			$('#RptResumoLancamentoCategoria').append(eachrow);				
 		}
 		
 		lancamento.AdicionaUmaLinhaDeTotalNaTabelaDaPaginaDoRelatorioDeResumo = function (ValorTotalDeTodosOsLancamentos) {
-			var eachrow = '<tr>';
-			eachrow += '<td class="ui-body-c" style="font-weight:bold"> Saldo </td>';
-			eachrow += '<td class="ui-body-c" style="text-align:right;font-weight:bold">' + ValorTotalDeTodosOsLancamentos.toFixed(2) + '</td>';
-			eachrow += '</tr>';
-			$('#RptResumoLancamentoCategoria').append(eachrow);				
+			var eachrow = '<td>Saldo Total: '+ValorTotalDeTodosOsLancamentos.toFixed(2)+'</td>';
+			$('#pgRptResumoLancamentoCategoriaFoot').append(eachrow);				
 		}
 		
 		

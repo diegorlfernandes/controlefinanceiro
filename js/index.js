@@ -1,5 +1,6 @@
 
-var BancoDeDados = {};
+var BancoDeDados = {} ;
+var ConexaoComBancoOK = false;
 var NomeDoBanco = "dbCash";
 var VersaoDoBanco = 1;
 var TransicaoDaPagina = 'slide';
@@ -16,8 +17,6 @@ RetornoDaAberturaDoBanco.onupgradeneeded = function(e) {
 	var thisDB = e.target.result;
 	var store = null;
 	
-	//create the necessary tables for the application
-	// create an indexedDB for IndexedDB-Categoria
 	if (!thisDB.objectStoreNames.contains("Categoria")) {
 		store = thisDB.createObjectStore("Categoria", { keyPath: "Nome"});
 	}
@@ -31,12 +30,15 @@ RetornoDaAberturaDoBanco.onupgradeneeded = function(e) {
 
 RetornoDaAberturaDoBanco.onsuccess = function(e) {
 	BancoDeDados = e.target.result;
-}
+	CriarListaDeMesAno();
+};
 
 $(document).on('pagecontainershow', function(e, ui) {
 	var pageId = $(':mobile-pagecontainer').pagecontainer('getActivePage').attr('id');
 	switch (pageId) {
 		case 'pgMenu':
+		if($.type(BancoDeDados)!="object")
+		CriarListaDeMesAno();
 		$("#pgMenuMesAno").val(MesAno).change();
 		$('#pgMenuMesAno').on('change', function() {
 			MesAno = $('#pgMenuMesAno').val();
@@ -45,6 +47,61 @@ $(document).on('pagecontainershow', function(e, ui) {
 		default:
 	}
 });
+
+CriarListaDeMesAno = function () {
+	$.mobile.loading("show", 
+	{
+		text: "Loading report...",
+		textVisible: true, 
+		textonly: false, 
+		html: ""
+	});
+	
+	$('#pgMenuMesAno').empty();
+	
+	var tx = BancoDeDados.transaction(['Lancamento'], "readonly");
+	var store = tx.objectStore('Lancamento').index('MesAno, Categoria');
+	var MesAnoTemporario;
+	
+	store.openCursor().onsuccess = function(e) 
+	{
+		
+		var cursor = e.target.result;
+		var ListaMesAno = new Array();
+		if (cursor) 
+		{
+			
+			UmObjetoLancamento = cursor.value;
+			
+			
+			if(MesAnoTemporario != UmObjetoLancamento.MesAno)
+			{
+				var option = '<option value="'+UmObjetoLancamento.MesAno+'">'+UmObjetoLancamento.MesAno+'</option>';
+				$('#pgMenuMesAno').append(option);
+				MesAnoTemporario=UmObjetoLancamento.MesAno;
+				ListaMesAno.push(new Array(UmObjetoLancamento.MesAno));
+			}
+			
+			cursor.continue();
+			}else{
+			var EncontrouNaLista = false;
+			for(var i=0;i<ListaMesAno.length;i++){
+				
+				if (ListaMesAno[i]==MesAno)
+				EncontrouNaLista = true;
+			}
+			if(!EncontrouNaLista){
+				option = '<option value="'+MesAno+'">'+MesAno+'</option>';
+				$('#pgMenuMesAno').append(option);
+			}
+			
+		}
+	}
+	
+	$('#pgMenuMesAno').selectmenu("refresh", true);
+	$("#pgMenuMesAno").val(MesAno).change();
+	$.mobile.loading("hide");
+};
 
 
 

@@ -216,11 +216,6 @@
             <!-- <h1 id="pgMenuFtrH1"></h1> -->
 			<div class="ui-field-contain" align = "center">
 				<select name="pgMenuMesAno" id="pgMenuMesAno">
-					<option value="01/2017">01/2017 </option>
-					<option value="02/2017">02/2017 </option>
-					<option value="03/2017">03/2017 </option>
-					<option value="04/2017">04/2017 </option>
-					<option value="05/2017">05/2017 </option>
 				</select>
 			</div>
 			
@@ -434,14 +429,13 @@
 				<caption>Resumo de Lançamentos</caption>
 				<thead>
 					<tr class="ui-bar-a">
-						<th class="ui-bar-a ui-body-c">Categoria</th>
-						<th data-priority="2" class="ui-bar-a ui-body-c" >Valor Total</th>
+						<th data-priority="1" class="ui-bar-a ui-body-c">Categoria</th>
+						<th data-priority="3" class="ui-bar-a ui-body-c" >Valor</th>
 					</tr>
 				</thead>
 				<tbody>
 				</tbody>
-				<tfoot>
-					<tr><td></td></tr>
+				<tfoot id="pgRptResumoLancamentoCategoriaFoot">
 				</table>
 			</div>
 		</div>
@@ -461,33 +455,34 @@
 				<br>
 				<div id="msgboxbuttons" class="centertext ui-grid-a">
 					<div class="ui-block-a">
-						<a data-method="" data-id="" data-topage="" id="msgboxyes" data-role="button" data-icon="check">Yes</a>
-					</div>
-					<div class="ui-block-b">
-						<a data-method="" data-id="" data-topage="" id="msgboxno" data-role="button" data-icon="delete" data-theme="b">No</a>
-					</div>
+					<a data-method="" data-id="" data-topage="" id="msgboxyes" data-role="button" data-icon="check">Yes</a>
+				</div>
+				<div class="ui-block-b">
+					<a data-method="" data-id="" data-topage="" id="msgboxno" data-role="button" data-icon="delete" data-theme="b">No</a>
 				</div>
 			</div>
 		</div>
-		<div data-dismissible="false" data-close-btn="none" data-transition="pop" id="alertbox" data-role="popup">
-			<header id="alertboxHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
-				<h1>Error</h1>
-			</header>
-			<div id="alertboxCnt" data-role="content">
-				<div id="alertboxtitle">
-				</div>
-				<br>
-				<div id="alertboxprompt">
-					<p>An error has been encountered!</p>
-				</div>
-				<br>
-				<div id="alertboxbuttons" class="centertext ui-grid-solo">
-					<div class="ui-block-a">
-						<a data-method="" data-id="" data-topage="" id="alertboxok" data-role="button" data-icon="check" data-theme="b">Ok</a>
-					</div>
+	</div>
+	<div data-dismissible="false" data-close-btn="none" data-transition="pop" id="alertbox" data-role="popup">
+		<header id="alertboxHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
+			<h1>Error</h1>
+		</header>
+		<div id="alertboxCnt" data-role="content">
+			<div id="alertboxtitle">
+			</div>
+			<br>
+			<div id="alertboxprompt">
+				<p>An error has been encountered!</p>
+			</div>
+			<br>
+			<div id="alertboxbuttons" class="centertext ui-grid-solo">
+				<div class="ui-block-a">
+					<a data-method="" data-id="" data-topage="" id="alertboxok" data-role="button" data-icon="check" data-theme="b">Ok</a>
 				</div>
 			</div>
+		</div>
 		</div>
 		
 		</body>
-	</html>
+		</html>
+				
