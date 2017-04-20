@@ -160,13 +160,33 @@ function GettAddFile(accesstoken,sharename){
      $.ajax({
              type: "POST",
              url: "https://open.ge.tt/1/files/"+sharename+"/create?accesstoken="+accesstoken,
-             data: '{"filename":"http://localhost/controlefinanceiro/cash.json"}',
+             data: '{"filename":"@d:/myfile.txt"}',
              contentType: "application/json; charset=utf-8",
              crossDomain: true,
              dataType: "json",
              success: function (data, status, jqXHR) {
 
-                 console.log("sucesso AddFile!");
+                 GettUploadFile(data.upload.posturl);
+				 console.log("sucesso AddFile!");
+             },
+
+             error: function (jqXHR, status) {
+                 console.log(jqXHR);
+             }
+          });
+    }
+	
+	function GettUploadFile(posturl){
+     $.ajax({
+             type: "POST",
+             url: posturl,
+             data: "",
+             contentType: "application/json; charset=utf-8",
+             crossDomain: true,
+             dataType: "json",
+             success: function (data, status, jqXHR) {
+
+                 console.log("sucesso Upload File!");
              },
 
              error: function (jqXHR, status) {
