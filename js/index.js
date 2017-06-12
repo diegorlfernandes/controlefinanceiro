@@ -37,12 +37,14 @@ $(document).on('pagecontainershow', function(e, ui) {
 	var pageId = $(':mobile-pagecontainer').pagecontainer('getActivePage').attr('id');
 	switch (pageId) {
 		case 'pgMenu':
-		if($.type(BancoDeDados)!="object")
-		CriarListaDeMesAno();
-		$("#pgMenuMesAno").val(MesAno).change();
-		$('#pgMenuMesAno').on('change', function() {
-			MesAno = $('#pgMenuMesAno').val();
-		})
+		if($.type(BancoDeDados)!="object"){
+			CriarListaDeMesAno();
+		}
+		// $('#pgMenuMesAno').on('change', function() {
+			// if($('#pgMenuMesAno').val()){
+				// MesAno = $('#pgMenuMesAno').val();
+			// }
+		// })
 		break;
 		default:
 	}
@@ -61,9 +63,10 @@ CriarListaDeMesAno = function () {
 	
 	var tx = BancoDeDados.transaction(['Lancamento'], "readonly");
 	var store = tx.objectStore('Lancamento').index('MesAno, Categoria');
+	var cursorReq = store.openCursor();
 	var MesAnoTemporario;
 	
-	store.openCursor().onsuccess = function(e) 
+	cursorReq.onsuccess = function(e) 
 	{
 		
 		var cursor = e.target.result;
@@ -83,23 +86,27 @@ CriarListaDeMesAno = function () {
 			}
 			
 			cursor.continue();
-			}else{
+		}else{
 			var EncontrouNaLista = false;
 			for(var i=0;i<ListaMesAno.length;i++){
 				
 				if (ListaMesAno[i]==MesAno)
 				EncontrouNaLista = true;
+
+				$('#pgMenuMesAno option[value="' + MesAno + '"]').attr({ selected : "selected" });	
+				$('#pgMenuMesAno').selectmenu("refresh", true);
 			}
 			if(!EncontrouNaLista){
 				option = '<option value="'+MesAno+'">'+MesAno+'</option>';
 				$('#pgMenuMesAno').append(option);
+				
+				$('#pgMenuMesAno option[value="' + MesAno + '"]').attr({ selected : "selected" });	
+				$('#pgMenuMesAno').selectmenu("refresh", true);
 			}
 			
 		}
 	}
 	
-	$('#pgMenuMesAno').selectmenu("refresh", true);
-	$("#pgMenuMesAno").val(MesAno).change();
 	$.mobile.loading("hide");
 };
 
