@@ -12,7 +12,7 @@ $(function() {
 			categoria.ExecutarEventosDaPaginaEditarCategoria();
 			categoria.ExecutarEventosMensagens();
 		};
-
+		
 		
 		//****** Eventos ******
 		categoria.ExecutarEventosTodasAsPaginas = function(){					
@@ -93,7 +93,7 @@ $(function() {
             $('#pgEditCategoriaUpdate').on('click', function(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                var UmObjetoDeCategoria = categoria.PegarCamposDaPaginaDeEditarCategoriaETransformaEmRegistro();
+                				var UmObjetoDeCategoria = categoria.PegarCamposDaPaginaDeEditarCategoriaETransformaEmRegistro();
                 if(categoria.AtualizarCategoriaNoBancoDeDados(UmObjetoDeCategoria))
 				{
                     categoria.LimparCamposDaPaginaEditarCategoria();					
@@ -117,7 +117,7 @@ $(function() {
 			});			
 		};
 		categoria.ExecutarEventosMensagens = function() {
-		
+			
 			$('#msgboxyes').on('click', function (e) 
 			{
 				e.preventDefault();
@@ -144,10 +144,10 @@ $(function() {
 				$.mobile.changePage('#' + toPage, {transition: TransicaoDaPagina});
 			});
 		};
-						
+		
         
 		//****** Página Listar Categoria ******
-
+		
         categoria.MostraMensagemNaPaginaDeListarCategorias = function() {
             $.mobile.loading("show", {
                 text: "Checking storage...",
@@ -155,7 +155,8 @@ $(function() {
                 textonly: false,
                 html: ""
 			});
-			var ListaDeCategorias = {};
+								
+			ListaDeCategorias = {};
 			
 			var Transacao = BancoDeDados.transaction(["Categoria"], "readonly");
 			
@@ -212,11 +213,11 @@ $(function() {
                 textonly: false,
                 html: ""
 			});
-
+			
             categoria.LimparCamposDaPaginaAdicionarCategoria();
             Nome = Nome.split(' ').join('-');
             var UmObjetoDeCategoria = {};
-
+			
             var Transacao = BancoDeDados.transaction(["Categoria"], "readonly");
             var store = Transacao.objectStore("Categoria");
             var RetornoDaAberturaDoBanco = store.get(Nome);
@@ -224,13 +225,13 @@ $(function() {
 				UmObjetoDeCategoria = e.target.result;
 				$('#pgAddCategoriaNome').attr('readonly', 'readonly');
 				$('#pgAddCategoriaNome').attr('data-clear-btn', 'false');
-
+				
 				var pkey = UmObjetoDeCategoria.Nome;
 				pkey = pkey.split('-').join(' ');
 				UmObjetoDeCategoria.Nome = pkey;
 				$('#pgAddCategoriaNome').val(UmObjetoDeCategoria.Nome);
 			}
-
+			
             RetornoDaAberturaDoBanco.onerror = function(e) {
                 $('#alertboxheader h1').text('Categoria Error');
                 $('#alertboxtitle').text(Nome.split('-').join(' '));
@@ -244,12 +245,12 @@ $(function() {
 		};
         
 		categoria.PegarCamposDaPaginaDeAdicionarCategoriaETransformaEmRegistro = function() {
-
+			
 			var UmObjetoDeCategoria = {};
             UmObjetoDeCategoria.Nome = $('#pgAddCategoriaNome').val().trim();
             return UmObjetoDeCategoria;
 		}
-
+		
         categoria.AdicionarCategoriaAoBancoDeDados = function(UmObjetoDeCategoria) {
             $.mobile.loading("show", {
                 text: "Creating record...",
@@ -258,14 +259,15 @@ $(function() {
                 html: ""
 			});
             UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split(' ').join('-');;
- 
+			
             var Transacao = BancoDeDados.transaction(["Categoria"], "readwrite");
-
+			
             var RetornoDaTransacaoDeInclusaoNoBanco = Transacao.objectStore("Categoria").add(UmObjetoDeCategoria);
-
+			
             RetornoDaTransacaoDeInclusaoNoBanco.onsuccess = function(e) 
 			{
-                toastr.success('Registro Adicionado com Sucesso.', 'Categorias BancoDeDados');
+                categoria.PostData(UmObjetoDeCategoria);
+				toastr.success('Registro Adicionado com Sucesso.', 'Categorias BancoDeDados');
 			};
             RetornoDaAberturaDoBanco.onerror = function(e) 
 			{
@@ -273,12 +275,12 @@ $(function() {
 			};
             $.mobile.loading("hide");
 		};
-
+		
         categoria.LimparCamposDaPaginaAdicionarCategoria = function() {
             $('#pgAddCategoriaNome').val('');
 		}
 		
-			
+		
         // ***** Página Editar Categoria *****
         categoria.LimparCamposDaPaginaEditarCategoria = function() {
             $('#pgEditCategoriaNome').val('');
@@ -289,7 +291,7 @@ $(function() {
             UmObjetoDeCategoria.Nome = $('#pgEditCategoriaNome').val().trim();
             return UmObjetoDeCategoria;
 		}
-
+		
         PreencheCamposDaPaginaEditarCategoria = function(Nome) {
             $.mobile.loading("show", {
                 text: "Reading record...",
@@ -297,15 +299,15 @@ $(function() {
                 textonly: false,
                 html: ""
 			});
-
+			
             categoria.LimparCamposDaPaginaEditarCategoria();
             Nome = Nome.split(' ').join('-');
             var UmObjetoDeCategoria = {};
-
+			
             var Transacao = BancoDeDados.transaction(["Categoria"], "readonly");
-
+			
             var store = Transacao.objectStore("Categoria");
-
+			
             var RetornoDaAberturaDoBanco = store.get(Nome);
             RetornoDaAberturaDoBanco.onsuccess = function(e) {
 				UmObjetoDeCategoria = e.target.result;
@@ -316,7 +318,7 @@ $(function() {
 				UmObjetoDeCategoria.Nome = pkey;
 				$('#pgEditCategoriaNome').val(UmObjetoDeCategoria.Nome);
 			}
-
+			
             RetornoDaAberturaDoBanco.onerror = function(e) {
                 $('#alertboxheader h1').text('Categoria Error');
                 $('#alertboxtitle').text(Nome.split('-').join(' '));
@@ -328,7 +330,7 @@ $(function() {
 			}
             $.mobile.loading("hide");
 		};
-
+		
 		categoria.AtualizarCategoriaNoBancoDeDados = function(UmObjetoDeCategoria){
             $.mobile.loading("show", {
                 text: "Update record...",
@@ -386,7 +388,28 @@ $(function() {
             $.mobile.loading("hide");
 		};
 		
-        
+		
+		categoria.PostData = function(UmObjetoDeCategoria){
+			$.ajax({
+				type: "POST",
+				url: "localhost:9000/api/post_lembretes",
+				data: '{"texto":"teste32"}',
+				contentType: "application/json; charset=utf-8",
+				crossDomain: true,
+				dataType: "json",
+				success: function (data, status, jqXHR) {
+					
+					console.log("sucesso!");
+				},
+				
+				error: function (jqXHR, status) {
+					console.log("Erro!");
+				}
+			});
+		}
+		
+		
+		
 		categoria.iniciar();
 	})(BancoDeDados);
 });
