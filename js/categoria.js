@@ -1,5 +1,5 @@
 
-$(document).ready(function() {
+$(document).ready(function(categoria) {
 
     var MensagemNoCabecalhoDaLista = '<li data-role="list-divider">Suas Categorias</li>';
     var MensagemNaoTemRegistroNaLista = '<li id="noCategoria">Você não tem registros</li>';
@@ -80,8 +80,8 @@ $(document).ready(function() {
         $('#msgboxheader h1').text('Confirm Delete');
         $('#msgboxtitle').text(Nome.split('-').join(' '));
         $('#msgboxprompt').text('Apagar a categoria?');
+        $('#msgboxyes').data('method', 'ApagarCategoria');
         $('#msgboxyes').data('id', Nome.split(' ').join('-'));
-        $('#msgboxno').data('id', Nome.split(' ').join('-'));
         $('#msgboxyes').data('topage', 'pgEditCategoria');
         $('#msgboxno').data('topage', 'pgEditCategoria');
         $.mobile.changePage('#msgbox', { transition: 'pop' });
@@ -92,16 +92,16 @@ $(document).ready(function() {
     $('#msgboxyes').on('click', function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
+        var yesmethod = $('#msgboxyes').data('method');
         var yesid = $('#msgboxyes').data('id');
-        ApagarCategoria(yesid);
+        categoria[yesmethod](yesid);
     });
     $('#msgboxno').on('click', function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        var noid = $('#msgboxno').data('id');
         var toPage = $('#msgboxno').data('topage');
         $.mobile.changePage('#' + toPage, { transition: TransicaoDaPagina });
-        editarCategoria(noid);
+
     });
     $('#alertboxok').on('click', function (e) {
         e.preventDefault();
@@ -109,6 +109,8 @@ $(document).ready(function() {
         var toPage = $('#alertboxok').data('topage');
         $.mobile.changePage('#' + toPage, { transition: TransicaoDaPagina });
     });
+
+
 
 
     //****** Página Listar Categoria ******
@@ -279,7 +281,7 @@ $(document).ready(function() {
         $.mobile.loading("hide");
     };
 
-    function ApagarCategoria(Nome) {
+     categoria.ApagarCategoria = function(Nome) {
         $.mobile.loading("show", {
             text: "Deleting record...",
             textVisible: true,
@@ -301,5 +303,7 @@ $(document).ready(function() {
         }
         $.mobile.loading("hide");
     };
+
+
 
 });
