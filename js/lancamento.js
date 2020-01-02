@@ -120,7 +120,7 @@ $(function() {
 				$('#msgboxheader h1').text('Confirm Delete');
 				$('#msgboxtitle').text(ID.split('-').join(' '));
 				$('#msgboxprompt').text('Are you sure that you want to delete this Lancamento? This action cannot be undone.');
-				$('#msgboxyes').data('method', 'deleteLancamento');
+				$('#msgboxyes').data('method', 'ApagaUmLancamentoDoBancoDeDados');
 				$('#msgboxno').data('method', 'editLancamento');
 				$('#msgboxyes').data('id', ID.split(' ').join('-'));
 				$('#msgboxno').data('id', ID.split(' ').join('-'));

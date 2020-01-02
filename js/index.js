@@ -129,7 +129,7 @@ SincronizarCategoria = function() {
 		if (cursor) {
 			var Categoria = cursor.value;
 			console.log(Categoria.Nome);
-			RequisicaoParaSincronizarCategoriaComServidor(Categoria.Nome);					
+			//RequisicaoParaSincronizarCategoriaComServidor(Categoria.Nome);					
 			cursor.continue();
 		}		
 	}
