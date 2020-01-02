@@ -31,7 +31,7 @@ RetornoDaAberturaDoBanco.onupgradeneeded = function(e) {
 RetornoDaAberturaDoBanco.onsuccess = function(e) {
 	BancoDeDados = e.target.result;
 	CriarListaDeMesAno();
-	SincronizarCategoria();
+	//SincronizarCategoria();
 };
 
 $(document).on('pagecontainershow', function(e, ui) {
@@ -129,7 +129,7 @@ SincronizarCategoria = function() {
 		if (cursor) {
 			var Categoria = cursor.value;
 			console.log(Categoria.Nome);
-			//RequisicaoParaSincronizarCategoriaComServidor(Categoria.Nome);					
+			RequisicaoParaSincronizarCategoriaComServidor(Categoria.Nome);					
 			cursor.continue();
 		}		
 	}
