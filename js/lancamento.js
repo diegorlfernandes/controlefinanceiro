@@ -140,8 +140,8 @@ $(document).ready(function (lancamento) {
 
 		var ListaDeLancamentos = {};
 		var tx = BancoDeDados.transaction(["Lancamento"], "readonly");
-		var TabelaLancamento = tx.objectStore('Lancamento').index('MesAno, Categoria');
-		var RequisicaoNaTabelaLancamento = TabelaLancamento.openCursor(IDBKeyRange.bound([MesAno, "A"], [MesAno, "Z"]));
+		var TabelaLancamento = tx.objectStore('Lancamento');
+		var RequisicaoNaTabelaLancamento = TabelaLancamento.openCursor();
 
 		RequisicaoNaTabelaLancamento.onsuccess = function (e) {
 			var cursor = e.target.result;
@@ -248,7 +248,7 @@ $(document).ready(function (lancamento) {
 		UmObjetoLancamento.Categoria = $('#pgAddLancamentoCategoria').val().trim();
 		UmObjetoLancamento.MesAno = MesAno;
 
-		if ($("#pgAddLancamentoTipoA").is(":checked") && $('#pgAddLancamentoValor').val() > 0)
+		if ($("#pgAddLancamentoTipoA").is(":checked") )
 			UmObjetoLancamento.Valor = "-" + $('#pgAddLancamentoValor').val().trim();
 		else
 			UmObjetoLancamento.Valor = $('#pgAddLancamentoValor').val().trim();

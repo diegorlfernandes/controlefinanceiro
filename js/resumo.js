@@ -23,7 +23,7 @@ $(document).ready(function(resumo) {
         var transaction = BancoDeDados.transaction(['Lancamento'], "readonly");
         var store = transaction.objectStore('Lancamento').index('MesAno, Categoria');
         
-        store.openCursor(IDBKeyRange.bound([MesAno,"A"],[MesAno,"Z"])).onsuccess = function(e) 
+        store.openCursor().onsuccess = function(e) 
         {
             
             var cursor = e.target.result;
@@ -93,10 +93,4 @@ $(document).ready(function(resumo) {
         eachrow+= '</tr>';
         $('#RptResumoLancamentoCategoria').append(eachrow);				
     }
-
-
-    // AdicionarTotal = function (TotalGeral) {
-    //     var eachrow = '<td>Saldo Total: '+TotalGeral.toFixed(2)+'</td>';
-    //     $('#pgRptResumoLancamentoCategoriaFoot').append(eachrow);				
-    // }		
 });
