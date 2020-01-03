@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Casch</title>
+    <title>Cash</title>
     <meta charset='utf-8' />
     <meta name='format-detection' content='telephone=no' />
     <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1, maximum-scale=1' />
@@ -12,12 +12,16 @@
 
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/excellentexport@3.4.0/dist/excellentexport.min.js"></script>
+	
 		
     <script src="js/db/dbcategoria.js" type="text/javascript"></script>
 	<script src="js/funcoes.js" type="text/javascript"></script>
     <script src="js/index.js" type="text/javascript"></script>
     <script src="js/categoria.js" type="text/javascript"></script>
     <script src="js/lancamento.js" type="text/javascript"></script>
+    <script src="js/resumo.js" type="text/javascript"></script>
 	<script src="js/configuracao.js" type="text/javascript"></script>
 	
 </head>
@@ -240,7 +244,7 @@
 	</div>
 	
 	
-	<!-- Relatórios -->
+	<!-- Resumo -->
 	<div id="pgRptResumoLancamentoCategoria" data-role="page">
 		
 		<header id="pgRptResumoLancamentoCategoriaHdr" data-role="header" data-position="fixed" data-tap-toggle="false">
@@ -248,20 +252,19 @@
 			<a data-role="button" id="pgLancamentoBack" data-icon="carat-l" data-transition="slide" href="#pgMenu" class="ui-btn-left">Menu</a>
 			<a data-role="button" download="Resumo.xls" onclick="return ExcellentExport.excel(this, 'RptResumoLancamentoCategoria', 'Lancamento');" id="pgRptResumoLancamentoCategoriaExport" data-icon="exportexcel" href="#">Exportar</a>
 		</header>
-		<div id="pgRptResumoLancamentoCategoriaCnt" data-role="content">
-			<table id="RptResumoLancamentoCategoria"  data-role="table"  data-column-popup-theme="a" class="ui-responsive table-stroke table-stripe ui-shadow">
-				<caption>Resumo de Lançamentos</caption>
+		<!-- <div id="pgRptResumoLancamentoCategoriaCnt" data-role="content"> -->
+			<table id="RptResumoLancamentoCategoria"  data-role="table" data-mode="reflow"  class="ui-responsive">
 				<thead>
-					<tr class="ui-bar-a">
-						<th data-priority="1" class="ui-bar-a ui-body-c">Categoria</th>
-						<th data-priority="3" class="ui-bar-a ui-body-c" >Valor</th>
+					<tr >
+						<th data-priority="1" >Categoria</th>
+						<th data-priority="2"  >Valor</th>
 					</tr>
 				</thead>
 				<tbody>
 				</tbody>
 				<tfoot id="pgRptResumoLancamentoCategoriaFoot">
 				</table>
-			</div>
+			<!-- </div> -->
 		</div>
 		
 		<!-- Mensagens -->
