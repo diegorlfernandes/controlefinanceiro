@@ -154,6 +154,10 @@ $(document).ready(function (lancamento) {
 				var n;
 				for (n in ListaDeLancamentos) {
 					var UmObjetoLancamento = ListaDeLancamentos[n];
+					
+					if(UmObjetoLancamento.MesAno!=MesAno )
+						continue;
+							
 					var nItem = MensagemNoCorpoDaLista;
 					nItem = nItem.replace(/Z2/g, String(UmObjetoLancamento.LancamentoID));
 					var nTitle = '';

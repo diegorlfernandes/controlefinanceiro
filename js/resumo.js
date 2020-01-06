@@ -33,6 +33,10 @@ $(document).ready(function(resumo) {
                 
                 UmObjetoLancamento = cursor.value;
                 
+        		if(UmObjetoLancamento.MesAno==MesAno )
+        		{
+				
+                
                 
                 if(!categoria)
                 categoria=UmObjetoLancamento.Categoria;
@@ -56,7 +60,7 @@ $(document).ready(function(resumo) {
                 }
                 
                 TotalGeral += TotalPorCategoria;
-                
+                }
                 cursor.continue();
             }
             else
