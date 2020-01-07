@@ -171,23 +171,12 @@ $(document).ready(function(categoria) {
             html: ""
         });
 
-        var UmObjetoDeCategoria = {};
-        UmObjetoDeCategoria.Nome = $('#pgAddCategoriaNome').val().trim();
+        var nome = $('#pgAddCategoriaNome').val().trim();
 
-        UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split(' ').join('-');;
+        nome = nome.split(' ').join('-');;
+
+        addCategoria(nome);
         
-        var Transacao = BancoDeDados.transaction(["Categoria"], "readwrite");
-        
-        var retorno = Transacao.objectStore("Categoria").add(UmObjetoDeCategoria);
-        
-        retorno.onsuccess = function(e) 
-        {
-            toastr.success('Registro Adicionado com Sucesso.', 'Categorias BancoDeDados');
-        };
-        retorno.onerror = function(e) 
-        {
-            toastr.error('O Registro não foi adicionado.', 'Categorias BancoDeDados');
-        };
         $.mobile.loading("hide");
     };
     

@@ -5,10 +5,10 @@ addCategoria = function(nome){
 		nome: nome
 	})
 	.then(function(docRef) {
-		console.log("Document written with ID: ", docRef.id);
+		toastr.success('Registro Adicionado com Sucesso.', 'Cash');
 	})
 	.catch(function(error) {
-		console.error("Error adding document: ", error);
+		toastr.error('O Registro não foi adicionado. - erro: '+error, 'Cash');
 	});
 }
 
