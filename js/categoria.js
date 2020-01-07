@@ -115,7 +115,7 @@ $(document).ready(function(categoria) {
 
     //****** Página Listar Categoria ******
 
-    function ListarCategorias() {
+   function ListarCategorias() {
         $.mobile.loading("show", {
             text: "Checking storage...",
             textVisible: true,
@@ -123,54 +123,44 @@ $(document).ready(function(categoria) {
             html: ""
         });
 
-        ListaDeCategorias = {};
 
-        var Transacao = BancoDeDados.transaction(["Categoria"], "readonly");
-
-        var store = Transacao.objectStore("Categoria");
-
-        var RetornoDaAberturaDoBanco = store.openCursor();
-        RetornoDaAberturaDoBanco.onsuccess = function (e) {
-
-            var cursor = e.target.result;
-            if (cursor) {
-                ListaDeCategorias[cursor.key] = cursor.value;
-                cursor.continue();
-            }
-
-            if (!$.isEmptyObject(ListaDeCategorias)) {
+        listarCategoria( (resultado)=>{
 
                 var html = '';
                 var UmObjetoDeCategoria;
 
-                for (UmObjetoDeCategoria in ListaDeCategorias) {
-                    var UmObjetoDeCategoria = ListaDeCategorias[UmObjetoDeCategoria];
+                if(resultado.size > 0){
 
-                    UmObjetoDeCategoria.Nome = UmObjetoDeCategoria.Nome.split('-').join(' ');
+                resultado.forEach(function(doc) {
+                console.log(doc.id, " => ", doc.data().nome);
+           
+               var UmObjetoDeCategoria = doc.data();
 
-                    var NovoItemDaListaDaPagina = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
-                    NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z2/g, UmObjetoDeCategoria.Nome);
+                UmObjetoDeCategoria.nome = UmObjetoDeCategoria.nome.split('-').join(' ');
 
-                    var nTitle = '';
+                var NovoItemDaListaDaPagina = '<li><a data-id="Z2"><h2>Z1</h2></a></li>';
+                NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z2/g, UmObjetoDeCategoria.nome);
 
-                    nTitle = UmObjetoDeCategoria.Nome.split('-').join(' ');
+                var nTitle = '';
 
-                    NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z1/g, nTitle);
+                nTitle = UmObjetoDeCategoria.nome.split('-').join(' ');
 
-                    html += NovoItemDaListaDaPagina;
-                }
-                $('#pgCategoriaList').html(MensagemNoCabecalhoDaLista + html).listview('refresh');
-            } else {
+                NovoItemDaListaDaPagina = NovoItemDaListaDaPagina.replace(/Z1/g, nTitle);
+
+                html += NovoItemDaListaDaPagina;
+
+     
+            });
+
+            $('#pgCategoriaList').html(MensagemNoCabecalhoDaLista + html).listview('refresh');
+
+            }else{
                 $('#pgCategoriaList').html(MensagemNoCabecalhoDaLista + MensagemNaoTemRegistroNaLista).listview('refresh');
-            }
-        }
-        $.mobile.loading("hide");
-        RetornoDaAberturaDoBanco.onerror = function (e) {
-            $.mobile.loading("hide");
-            $('#pgCategoriaList').html(MensagemNoCabecalhoDaLista + MensagemNaoTemRegistroNaLista).listview('refresh');
-        }
-    };
+            };
 
+        });
+
+    };
     // ***** Página Adicionar Categoria *****
     
     function AdicionarCategoria() {

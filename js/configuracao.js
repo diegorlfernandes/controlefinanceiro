@@ -45,7 +45,7 @@ $(function() {
 		
 		
 		configuracao.iniciar();
-	})(BancoDeDados);
+	})();
 	
 });
 
